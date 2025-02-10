@@ -1,8 +1,8 @@
-package com.mps.snapCart.services;
+package com.evolotek.slipstr.services;
 
-import com.mps.snapCart.entities.Category;
-import com.mps.snapCart.exceptions.CategoryNotFoundException;
-import com.mps.snapCart.repositories.CategoryRepository;
+import com.evolotek.slipstr.entities.Category;
+import com.evolotek.slipstr.exceptions.CategoryNotFoundException;
+import com.evolotek.slipstr.repositories.CategoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

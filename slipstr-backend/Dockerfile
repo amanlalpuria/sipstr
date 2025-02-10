@@ -5,10 +5,10 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the compiled JAR file into the container at /app
-COPY target/snapCart-0.0.1-SNAPSHOT.jar /app/snapCart.jar
+COPY target/slipStr-0.0.1-SNAPSHOT.jar /app/slipStr.jar
 
 # Make port 8080 available to the world outside this container
 EXPOSE 8080
 
 # Run the JAR file
-CMD ["java", "-jar", "snapCart.jar"]
+CMD ["java", "-jar", "slipStr.jar"]
