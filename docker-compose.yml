@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: sipstr_rw_user           # Set database user
+      POSTGRES_PASSWORD: sipstr_rw_user       # Set database password
+      POSTGRES_DB: sipStr                     # Set database name
+    ports:
+      - "5432:5432"                             # Expose Postgres port to host
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persist data
+    networks:
+      - backend
+
+  redis:
+    image: redis:latest
+    container_name: redis-container
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+
+#  backend:
+#    build:
+#      context: ./snapCart-backend  # Specify the directory where Dockerfile is located
+#      dockerfile: Dockerfile
+#    container_name: backend-service
+#    environment:
+#      DB_HOST: db
+#      DB_PORT: 5432
+#      DB_USER: snapCart_rw_user
+#      DB_PASSWORD: snapCart_rw_user
+#      DB_NAME: snapCart
+#    depends_on:
+#      - postgres
+#      - redis
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - backend
+
+volumes:
+  postgres_data: {}
+
+networks:
+  backend:
+    driver: bridge

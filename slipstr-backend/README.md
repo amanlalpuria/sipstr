@@ -36,3 +36,13 @@ docker-compose down
 ```
 
 This will stop and remove the containers, networks, and volumes defined in your `docker-compose.yml`. To preserve your data, you can use the `--volumes` option to also remove volumes (if needed).
+
+
+##
+
+Need to filter out the product according to the
+1. Inventory
+2. Near by store
+3. Price
+
+4. Store will have minimum order fees
