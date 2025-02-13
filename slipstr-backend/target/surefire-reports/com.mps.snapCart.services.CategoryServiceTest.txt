@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.mps.snapCart.services.CategoryServiceTest
--------------------------------------------------------------------------------
-Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.064 s -- in com.mps.snapCart.services.CategoryServiceTest

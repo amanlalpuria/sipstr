@@ -25,15 +25,15 @@ services:
 
 #  backend:
 #    build:
-#      context: ./snapCart-backend  # Specify the directory where Dockerfile is located
+#      context: ./sipstr-backend  # Specify the directory where Dockerfile is located
 #      dockerfile: Dockerfile
 #    container_name: backend-service
 #    environment:
 #      DB_HOST: db
 #      DB_PORT: 5432
-#      DB_USER: snapCart_rw_user
-#      DB_PASSWORD: snapCart_rw_user
-#      DB_NAME: snapCart
+#      DB_USER: sipstr_rw_user
+#      DB_PASSWORD: sipstr_rw_user
+#      DB_NAME: sipstr
 #    depends_on:
 #      - postgres
 #      - redis

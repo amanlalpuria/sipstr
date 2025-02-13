@@ -24,3 +24,7 @@ hs_err_pid*
 replay_pid*
 
 .idea
+
+sipstr-backend/target/
+sipstr_fronted/node_modules
+target
