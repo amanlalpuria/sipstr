@@ -1,7 +1,7 @@
 import React from "react";
 import { TextInput } from "react-native";
-import { globalStyles } from "../styles";
-import { colors } from "../colors";
+import { globalStyles } from "./styles";
+import { colors } from "./colors";
 
 const CommonTextField = ({
   placeholder,

@@ -1,7 +1,7 @@
 import React from "react";
 import { TouchableOpacity, Text } from "react-native";
-import { globalStyles } from "../styles";
-import { colors } from "../colors"; // Import color constants
+import { globalStyles } from "./styles";
+import { colors } from "./colors";
 
 const CommonButton = ({ title, onPress, style, textStyle }) => {
   return (
