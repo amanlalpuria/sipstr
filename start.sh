@@ -1,20 +1,19 @@
 #!/bin/bash
 
-# Exit on error
+# Exit on any error
 set -e
 
 echo "🚀 Starting docker-compose..."
 docker-compose up -d
 
 echo "⏳ Waiting for Postgres & Redis to be healthy..."
-while ! docker exec postgres_db pg_isready -U sipstr_rw_user; do
+while ! docker exec postgres_db pg_isready -U sipstr_rw_user > /dev/null 2>&1; do
   echo "🔄 Waiting for Postgres..."
   sleep 3
 done
 
 echo "✅ Postgres is ready!"
 
-# (Optional) Check if Redis is running
 while ! docker exec redis-container redis-cli ping | grep -q "PONG"; do
   echo "🔄 Waiting for Redis..."
   sleep 3
@@ -22,9 +21,12 @@ done
 
 echo "✅ Redis is ready!"
 
-echo "⚙️  Building backend image..."
+echo "⚙️  Building JAR file using Maven Wrapper..."
 cd sipstr-backend
-docker build -t sipstr-backend .
+chmod +x mvnw  # Ensure the wrapper is executable
+./mvnw clean package -DskipTests
 
-echo "🚀 Running backend container..."
-docker run --name sipstr-backend-container -p 8080:8080
+echo "🐳 Restarting backend service..."
+docker-compose up --build -d backend
+
+echo "✅ Everything is up and running!"

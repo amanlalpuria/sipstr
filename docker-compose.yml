@@ -18,7 +18,6 @@ services:
       retries: 5
       start_period: 30s
 
-
   redis:
     image: redis:latest
     container_name: redis-container
@@ -31,27 +30,27 @@ services:
       interval: 10s
       retries: 5
 
-
-  # backend:
-  #   build:
-  #     context: ./sipstr-backend
-  #     dockerfile: Dockerfile
-  #   container_name: backend-service
-  #   environment:
-  #     DB_HOST: postgres
-  #     DB_PORT: 5432
-  #     DB_USER: sipstr_rw_user
-  #     DB_PASSWORD: sipstr_rw_user
-  #     DB_NAME: sipStr
-  #   depends_on:
-  #     postgres:
-  #       condition: service_healthy
-  #     redis:
-  #       condition: service_healthy
-  #   ports:
-  #     - "8080:8080"
-  #   networks:
-  #     - backend
+  backend:
+    build:
+      context: ./sipstr-backend
+      dockerfile: Dockerfile
+    container_name: backend-service
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: sipstr_rw_user
+      DB_PASSWORD: sipstr_rw_user
+      DB_NAME: sipStr
+      JWT_SECRET: 3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
 
 volumes:
   postgres_data: {}
