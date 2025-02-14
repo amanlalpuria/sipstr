@@ -1,19 +1,23 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:latest
     container_name: postgres_db
     environment:
-      POSTGRES_USER: sipstr_rw_user           # Set database user
-      POSTGRES_PASSWORD: sipstr_rw_user       # Set database password
-      POSTGRES_DB: sipStr                     # Set database name
+      POSTGRES_USER: sipstr_rw_user
+      POSTGRES_PASSWORD: sipstr_rw_user
+      POSTGRES_DB: sipStr
     ports:
-      - "5432:5432"                             # Expose Postgres port to host
+      - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data # Persist data
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - backend
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "sipstr_rw_user"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+
 
   redis:
     image: redis:latest
@@ -22,25 +26,32 @@ services:
       - "6379:6379"
     networks:
       - backend
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      retries: 5
 
-#  backend:
-#    build:
-#      context: ./sipstr-backend  # Specify the directory where Dockerfile is located
-#      dockerfile: Dockerfile
-#    container_name: backend-service
-#    environment:
-#      DB_HOST: db
-#      DB_PORT: 5432
-#      DB_USER: sipstr_rw_user
-#      DB_PASSWORD: sipstr_rw_user
-#      DB_NAME: sipstr
-#    depends_on:
-#      - postgres
-#      - redis
-#    ports:
-#      - "8080:8080"
-#    networks:
-#      - backend
+
+  # backend:
+  #   build:
+  #     context: ./sipstr-backend
+  #     dockerfile: Dockerfile
+  #   container_name: backend-service
+  #   environment:
+  #     DB_HOST: postgres
+  #     DB_PORT: 5432
+  #     DB_USER: sipstr_rw_user
+  #     DB_PASSWORD: sipstr_rw_user
+  #     DB_NAME: sipStr
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   ports:
+  #     - "8080:8080"
+  #   networks:
+  #     - backend
 
 volumes:
   postgres_data: {}
