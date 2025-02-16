@@ -16,13 +16,14 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long addressId;
 
-    private String apartmentNumber;
-    private String street;
+    private String customerName;
+    private String address1;
+    private String address2;
     private String city;
     private String state;
     private String zipcode;
     private String country;
-    private String contactNumber;
+    private String phone;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

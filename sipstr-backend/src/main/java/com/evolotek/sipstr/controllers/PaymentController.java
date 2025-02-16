@@ -1,32 +1,32 @@
 package com.evolotek.sipstr.controllers;
 
-import com.evolotek.sipstr.entities.Payment;
-import com.evolotek.sipstr.services.PaymentService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.Parameter;
-import lombok.RequiredArgsConstructor;
+import com.evolotek.sipstr.dtos.PaymentRequestDTO;
+import com.evolotek.sipstr.services.StripePaymentService;
+import com.stripe.exception.StripeException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-
 @RestController
 @RequestMapping("/payments")
-@RequiredArgsConstructor
-@Tag(name = "Payment Controller", description = "APIs for processing payments")
 public class PaymentController {
-    private final PaymentService paymentService;
 
-    @Operation(summary = "Make a payment", description = "Processes a payment for an order.")
-    @PostMapping("/pay")
-    public ResponseEntity<Payment> makePayment(
-            @Parameter(description = "Order ID for the payment") @RequestParam Long orderId,
-            @Parameter(description = "Payment mode (e.g., UPI, CARD, COD)") @RequestParam String paymentMode,
-            @Parameter(description = "Payment amount") @RequestParam BigDecimal amount,
-            @Parameter(description = "Transaction ID for the payment") @RequestParam String transactionId) {
+    private final StripePaymentService stripePaymentService;
 
-        Payment payment = paymentService.processPayment(orderId, paymentMode, amount, transactionId);
-        return ResponseEntity.ok(payment);
+    public PaymentController(StripePaymentService stripePaymentService) {
+        this.stripePaymentService = stripePaymentService;
+    }
+
+    @PostMapping("/create-payment-intent")
+    public ResponseEntity<String> createPaymentIntent(@RequestBody PaymentRequestDTO request) {
+        try {
+            String paymentIntentId = stripePaymentService.createPaymentIntent(
+                    request.getAmount(),
+                    request.getCurrency(),
+                    request.getPaymentMethodId()
+            );
+            return ResponseEntity.ok(paymentIntentId);
+        } catch (StripeException e) {
+            return ResponseEntity.badRequest().body("Payment failed: " + e.getMessage());
+        }
     }
 }

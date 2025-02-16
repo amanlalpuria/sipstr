@@ -24,11 +24,14 @@ public class StoreProduct {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @ManyToOne
+    @JoinColumn(name = "variant_id", nullable = false)
+    private ProductVariant productVariant;
+
     private Integer quantity;
-//    Size
+
     private BigDecimal sellerPrice;
 
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    // Need to order requirement
 }

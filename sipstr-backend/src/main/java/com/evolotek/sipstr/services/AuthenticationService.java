@@ -7,6 +7,8 @@ import com.evolotek.sipstr.entities.RoleEnum;
 import com.evolotek.sipstr.entities.User;
 import com.evolotek.sipstr.repositories.RoleRepository;
 import com.evolotek.sipstr.repositories.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +26,8 @@ public class AuthenticationService {
 
     private final AuthenticationManager authenticationManager;
 
+    private Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
+
     public AuthenticationService(
             RoleRepository roleRepository, UserRepository userRepository,
             AuthenticationManager authenticationManager,
@@ -38,6 +42,7 @@ public class AuthenticationService {
     public User signup(RegisterUserDto input) {
         // Validate the role input (default to USER if null)
         RoleEnum roleEnum = (input.getRoleEnum() != null) ? input.getRoleEnum() : RoleEnum.USER;
+        logger.atDebug().addArgument(roleEnum).log("Inserting user for role :: {}");
 
         // Fetch role from the database
         /*TODO: We may reduce this DB call for better performance, and use the enum defineed in code. But if we want to modify the roleEnum run time this can help*/

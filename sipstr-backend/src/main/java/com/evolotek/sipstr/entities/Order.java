@@ -19,11 +19,24 @@ public class Order {
 
     private LocalDateTime orderDate;
 
+    private BigDecimal subTotal;
+    private BigDecimal tax;
+    private BigDecimal tip;
+    private BigDecimal deliveryFee;
+    private BigDecimal storeDiscounts;
+    private BigDecimal sipstrDiscounts;
     private BigDecimal orderTotal;
 
-    private String orderStatus;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OrderStatusEnum orderStatus = OrderStatusEnum.CREATED;
 
     private LocalDateTime estimatedDeliveryTime;
+    private LocalDateTime scheduled_delivery_time;
+    private LocalDateTime orderGeneratedTime;
+    private LocalDateTime orderDeliveredTime;
+    private LocalDateTime orderCompletionTime;
+    private String giftMessage;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)

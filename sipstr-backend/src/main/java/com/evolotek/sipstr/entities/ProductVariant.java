@@ -27,11 +27,11 @@ public class ProductVariant {
     private int quantity; // e.g., 4, 12 (Number of cans/bottles)
 
     @Column(nullable = false)
-    private BigDecimal volumePerUnit; // e.g., 12 (for 12Oz)
+    private String volumePerUnit; // e.g., 12 (for 12Oz)
 
     @Column(nullable = false)
-    private BigDecimal totalVolume; // e.g., 48 (for 4×12Oz)
+    private String totalVolume; // e.g., 48 (for 4×12Oz)
 
     @Column(nullable = false)
-    private BigDecimal price;
+    private BigDecimal unitPrice;
 }

@@ -52,7 +52,7 @@ public class ProductService {
                 .quantity(variant.getQuantity())
                 .volumePerUnit(variant.getVolumePerUnit())
                 .totalVolume(variant.getTotalVolume())
-                .price(variant.getPrice())
+                .price(variant.getUnitPrice())
                 .build();
     }
 

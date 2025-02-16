@@ -5,6 +5,7 @@ import com.evolotek.sipstr.repositories.StoreProductRepository;
 import com.evolotek.sipstr.repositories.StoreRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,10 +14,12 @@ public class StoreService {
 
     private final StoreProductRepository storeProductRepository;
     private final StoreRepository storeRepository;
+    private final GeocodingService geocodingService;
 
-    public StoreService(StoreProductRepository storeProductRepository, StoreRepository storeRepository) {
+    public StoreService(StoreProductRepository storeProductRepository, StoreRepository storeRepository, GeocodingService geocodingService) {
         this.storeProductRepository = storeProductRepository;
         this.storeRepository = storeRepository;
+        this.geocodingService = geocodingService;
     }
 
     public void deleteStore(Long storeId) {
@@ -25,6 +28,19 @@ public class StoreService {
     }
 
     public Store createStore(Store store) {
+        return storeRepository.save(store);
+    }
+
+    public Store createStore(String storeName, String address) {
+        double[] coordinates = geocodingService.getCoordinates(address);
+
+        Store store = Store.builder()
+                .storeName(storeName)
+                .latitude(coordinates[0])
+                .longitude(coordinates[1])
+                .createdAt(LocalDateTime.now())
+                .build();
+
         return storeRepository.save(store);
     }
 

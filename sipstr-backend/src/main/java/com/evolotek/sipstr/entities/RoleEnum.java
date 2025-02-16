@@ -3,7 +3,7 @@ package com.evolotek.sipstr.entities;
 public enum RoleEnum {
     USER,
     DELIVERY_PERSON,
-    GROCERY_STORE,
+    SUPPLIER,
     ADMIN,
     SUPER_ADMIN
 }

@@ -22,13 +22,13 @@ public class StoreController {
         this.storeService = storeService;
     }
 
-    @Operation(summary = "Create a New Store", description = "Allows a GROCERY_STORE user to register a store.")
+    @Operation(summary = "Create a New Store", description = "Allows a SUPPLIER user to register a store.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Store created successfully"),
-            @ApiResponse(responseCode = "403", description = "Access denied (Only GROCERY_STORE users can create stores)")
+            @ApiResponse(responseCode = "403", description = "Access denied (Only SUPPLIER users can create stores)")
     })
     @PostMapping
-    @PreAuthorize("hasRole('GROCERY_STORE')")
+    @PreAuthorize("hasRole('SUPPLIER')")
     public ResponseEntity<Store> createStore(@RequestBody Store store) {
         Store createdStore = storeService.createStore(store);
         return ResponseEntity.ok(createdStore);
@@ -53,27 +53,27 @@ public class StoreController {
         return ResponseEntity.ok(store);
     }
 
-    @Operation(summary = "Update Store", description = "Allows the store owner (GROCERY_STORE role) to update their store information.")
+    @Operation(summary = "Update Store", description = "Allows the store owner (SUPPLIER role) to update their store information.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Store updated successfully"),
             @ApiResponse(responseCode = "403", description = "Access denied (Only store owners can update)"),
             @ApiResponse(responseCode = "404", description = "Store not found")
     })
     @PutMapping("/{storeId}")
-    @PreAuthorize("hasRole('GROCERY_STORE')")
+    @PreAuthorize("hasRole('SUPPLIER')")
     public ResponseEntity<Store> updateStore(@PathVariable Long storeId, @RequestBody Store store) {
         Store updatedStore = storeService.updateStore(storeId, store);
         return ResponseEntity.ok(updatedStore);
     }
 
-    @Operation(summary = "Delete Store", description = "Allows the store owner (GROCERY_STORE role) to delete their store.")
+    @Operation(summary = "Delete Store", description = "Allows the store owner (SUPPLIER role) to delete their store.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Store deleted successfully"),
             @ApiResponse(responseCode = "403", description = "Access denied (Only store owners can delete)"),
             @ApiResponse(responseCode = "404", description = "Store not found")
     })
     @DeleteMapping("/{storeId}")
-    @PreAuthorize("hasRole('GROCERY_STORE')")
+    @PreAuthorize("hasRole('SUPPLIER')")
     public ResponseEntity<Void> deleteStore(@PathVariable Long storeId) {
         storeService.deleteStore(storeId);
         return ResponseEntity.noContent().build();

@@ -13,7 +13,7 @@ public class ProductVariantDTO {
     private Long variantId;
     private MeasurementUnit unit;
     private int quantity;
-    private BigDecimal volumePerUnit;
-    private BigDecimal totalVolume;
+    private String volumePerUnit;
+    private String totalVolume;
     private BigDecimal price;
 }

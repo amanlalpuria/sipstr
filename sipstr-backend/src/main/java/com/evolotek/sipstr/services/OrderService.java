@@ -31,7 +31,7 @@ public class OrderService {
         Order order = Order.builder()
                 .customer(customer)
                 .deliveryAddress(deliveryAddress)
-                .orderStatus("PENDING")
+                .orderStatus(OrderStatusEnum.CREATED)
                 .orderTotal(totalAmount)
                 .orderDate(LocalDateTime.now())
                 .build();

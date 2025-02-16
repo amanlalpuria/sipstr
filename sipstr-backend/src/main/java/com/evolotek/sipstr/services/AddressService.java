@@ -7,7 +7,6 @@ import com.evolotek.sipstr.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AddressService {
@@ -21,12 +20,10 @@ public class AddressService {
     }
 
     public Address addAddress(Integer userId, Address address) {
-        Optional<User> userOptional = userRepository.findByUserId(userId);
-        if (userOptional.isEmpty()) {
-            throw new RuntimeException("User not found");
-        }
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        address.setUser(userOptional.get());
+        address.setUser(user);
         return addressRepository.save(address);
     }
 
@@ -37,18 +34,22 @@ public class AddressService {
     public Address updateAddress(Long addressId, Address updatedAddress) {
         return addressRepository.findById(addressId)
                 .map(existingAddress -> {
-                    existingAddress.setApartmentNumber(updatedAddress.getApartmentNumber());
-                    existingAddress.setStreet(updatedAddress.getStreet());
+                    existingAddress.setCustomerName(updatedAddress.getCustomerName());
+                    existingAddress.setAddress1(updatedAddress.getAddress1());
+                    existingAddress.setAddress2(updatedAddress.getAddress2());
                     existingAddress.setCity(updatedAddress.getCity());
                     existingAddress.setState(updatedAddress.getState());
                     existingAddress.setZipcode(updatedAddress.getZipcode());
                     existingAddress.setCountry(updatedAddress.getCountry());
-                    existingAddress.setContactNumber(updatedAddress.getContactNumber());
+                    existingAddress.setPhone(updatedAddress.getPhone());
                     return addressRepository.save(existingAddress);
                 }).orElseThrow(() -> new RuntimeException("Address not found"));
     }
 
     public void deleteAddress(Long addressId) {
+        if (!addressRepository.existsById(addressId)) {
+            throw new RuntimeException("Address not found");
+        }
         addressRepository.deleteById(addressId);
     }
 }

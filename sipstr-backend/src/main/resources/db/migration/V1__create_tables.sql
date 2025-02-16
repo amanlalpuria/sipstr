@@ -46,13 +46,14 @@ EXECUTE FUNCTION update_timestamp();
 -- =====================================
 CREATE TABLE address (
     address_id SERIAL PRIMARY KEY,
-    apartment_number VARCHAR(255),
-    street VARCHAR(255),
+    customer_name VARCHAR(255),
+    address1 VARCHAR(255),
+    address2 VARCHAR(255),
     city VARCHAR(255) NOT NULL,
     state VARCHAR(255) NOT NULL,
     zipcode VARCHAR(20) NOT NULL,
     country VARCHAR(100) NOT NULL DEFAULT 'USA',
-    contact_number VARCHAR(15),
+    phone VARCHAR(15),
     user_id INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 );
@@ -63,7 +64,9 @@ CREATE TABLE address (
 CREATE TABLE category (
     category_id SERIAL PRIMARY KEY,
     category_name VARCHAR(255) NOT NULL,
-    description VARCHAR(255)
+    description VARCHAR(255),
+    parent_id BIGINT DEFAULT NULL,
+    CONSTRAINT fk_category_parent FOREIGN KEY (parent_id) REFERENCES category(category_id) ON DELETE SET NULL
 );
 
 -- =====================================
@@ -94,11 +97,11 @@ CREATE TABLE product (
 CREATE TABLE product_variant (
     variant_id BIGSERIAL PRIMARY KEY,
     product_id BIGINT NOT NULL,
-    unit measurement_unit NOT NULL,
+    unit VARCHAR(255) NOT NULL,
     quantity INT NOT NULL,
-    volume_per_unit DECIMAL(10,2) NOT NULL,
-    total_volume DECIMAL(10,2) NOT NULL,
-    price DECIMAL(10,2) NOT NULL,
+    volume_per_unit VARCHAR(255) NOT NULL,
+    total_volume VARCHAR(255) NOT NULL,
+    unit_price DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE
 );
 
@@ -115,12 +118,13 @@ EXECUTE FUNCTION update_timestamp();
 CREATE TABLE store (
     store_id SERIAL PRIMARY KEY,
     store_name VARCHAR(255) NOT NULL,
-    seller_id INTEGER NOT NULL,
-    address_id INTEGER NOT NULL,
-    latitude DECIMAL(9,6) NOT NULL,
-    longitude DECIMAL(9,6) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    seller_id BIGINT,
+    address_id BIGINT,
+    latitude DECIMAL(9, 6) NOT NULL,
+    longitude DECIMAL(9, 6) NOT NULL,
+    min_order_amount DECIMAL(10, 2) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (seller_id) REFERENCES users(user_id),
     FOREIGN KEY (address_id) REFERENCES address(address_id)
 );
@@ -136,15 +140,17 @@ EXECUTE FUNCTION update_timestamp();
 -- =====================================
 CREATE TABLE store_product (
     store_product_id SERIAL PRIMARY KEY,
-    store_id INTEGER NOT NULL,
-    product_id INTEGER NOT NULL,
-    quantity INTEGER NOT NULL DEFAULT 0,
-    seller_price DECIMAL(10,2) NOT NULL,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    store_id BIGINT NOT NULL,
+    product_id BIGINT NOT NULL,
+    variant_id BIGINT NOT NULL,
+    quantity INTEGER DEFAULT 0,
+    seller_price DECIMAL(10, 2),
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (store_id) REFERENCES store(store_id),
     FOREIGN KEY (product_id) REFERENCES product(product_id),
-    UNIQUE (store_id, product_id)
+    FOREIGN KEY (variant_id) REFERENCES product_variant(variant_id)
 );
+
 
 -- Trigger to auto-update updated_at
 CREATE TRIGGER update_store_product_timestamp
@@ -157,10 +163,21 @@ EXECUTE FUNCTION update_timestamp();
 -- =====================================
 CREATE TABLE orders (
     order_id SERIAL PRIMARY KEY,
-    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    order_total DECIMAL(10,2) NOT NULL,
-    order_status VARCHAR(255) DEFAULT 'PENDING',
-    estimated_delivery_time TIMESTAMP NULL,
+    order_date TIMESTAMP,
+    sub_total DECIMAL(10, 2),
+    tax DECIMAL(10, 2),
+    tip DECIMAL(10, 2),
+    delivery_fee DECIMAL(10, 2),
+    store_discounts DECIMAL(10, 2),
+    sipstr_discounts DECIMAL(10, 2),
+    order_total DECIMAL(10, 2) NOT NULL,
+    order_status VARCHAR(255) NOT NULL DEFAULT 'CREATED',
+    scheduled_delivery_time TIMESTAMP
+    estimated_delivery_time TIMESTAMP,
+    order_generated_time TIMESTAMP,
+    order_delivered_time TIMESTAMP,
+    order_completion_time AS (order_delivered_time - order_generated_time) STORED,
+    gift_message VARCHAR(255),
     customer_id INTEGER NOT NULL,
     delivery_partner_id INTEGER,
     delivery_address_id INTEGER NOT NULL,

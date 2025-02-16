@@ -3,6 +3,7 @@ package com.evolotek.sipstr.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,7 +21,9 @@ public class Store {
 
     private Long sellerId;
     private Long addressId;
+    @Column(nullable = false)
     private Double latitude;
+    @Column(nullable = false)
     private Double longitude;
 
     @Column(nullable = false, updatable = false)
@@ -28,5 +31,5 @@ public class Store {
 
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    // Need to keep minimum order price
+    private BigDecimal minOrderAmount;
 }

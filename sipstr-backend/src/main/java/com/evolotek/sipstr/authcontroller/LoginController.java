@@ -30,9 +30,9 @@ public class LoginController {
     }
 
     /**
-     * Signup for USER, DELIVERY_PERSON, GROCERY_STORE
+     * Signup for USER, DELIVERY_PERSON, SUPPLIER
      */
-    @Operation(summary = "User Signup", description = "Register a new user with a specific role - USER, DELIVERY_PERSON, GROCERY_STORE")
+    @Operation(summary = "User Signup", description = "Register a new user with a specific role - USER, DELIVERY_PERSON, SUPPLIER")
     @PostMapping("/signup")
     public ResponseEntity<User> register(@RequestBody RegisterUserDto registerUserDto) {
         User registeredUser = authenticationService.signup(registerUserDto);
