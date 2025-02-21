@@ -30,9 +30,6 @@ public class Product {
 
     private BigDecimal abvPercentage;
 
-    @Column(nullable = false)
-    private BigDecimal MRP;
-
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;

@@ -16,7 +16,6 @@ public class ProductDTO {
     private String description;
     private boolean isAlcoholic;
     private BigDecimal abvPercentage;
-    private BigDecimal mrp;
     private String imageUrl;
     private List<ProductVariantDTO> variants;
 }

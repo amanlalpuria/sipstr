@@ -39,7 +39,6 @@ public class ProductService {
                 .description(product.getDescription())
                 .isAlcoholic(product.isAlcoholic())
                 .abvPercentage(product.getAbvPercentage())
-                .mrp(product.getMRP())
                 .imageUrl(product.getImageUrl())
                 .variants(variantDTOs)
                 .build();
@@ -65,7 +64,6 @@ public class ProductService {
                 .orElseThrow(() -> new ResourceNotFoundException("Product with ID " + productId + " not found"));
 
         product.setProductName(productDetails.getProductName());
-        product.setMRP(productDetails.getMRP());
         product.setBrand(productDetails.getBrand());
         product.setImageUrl(productDetails.getImageUrl());
         return productRepository.save(product);
