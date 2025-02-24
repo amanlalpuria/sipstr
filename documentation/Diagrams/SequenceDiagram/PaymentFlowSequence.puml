@@ -1,0 +1,55 @@
+sequenceDiagram
+    actor Customer
+    participant App
+    participant PaymentService
+    participant PaymentGateway
+    participant OrderService
+    participant LoyaltyService
+    participant NotificationService
+
+    rect rgb(200, 220, 240)
+        Note over Customer,NotificationService: Payment Initiation
+        Customer->>App: Select payment method
+        App->>PaymentService: Initialize payment
+        PaymentService->>PaymentGateway: Create payment intent
+        PaymentGateway-->>App: Payment token
+        
+        alt Credit Card Payment
+            Customer->>App: Enter card details
+            App->>PaymentGateway: Process payment
+        else Saved Card
+            Customer->>App: Select saved card
+            App->>PaymentGateway: Process with token
+        else Digital Wallet
+            Customer->>App: Authorize wallet
+            App->>PaymentGateway: Process wallet payment
+        end
+    end
+
+    rect rgb(220, 240, 200)
+        Note over Customer,NotificationService: Payment Processing
+        PaymentGateway-->>PaymentService: Payment result
+        
+        alt Payment Successful
+            PaymentService->>OrderService: Update order status
+            PaymentService->>LoyaltyService: Award points
+            PaymentService->>NotificationService: Send confirmation
+            NotificationService->>Customer: Payment confirmation
+        else Payment Failed
+            PaymentService->>OrderService: Mark payment failed
+            PaymentService->>NotificationService: Send failure notice
+            NotificationService->>Customer: Retry payment
+        end
+    end
+
+    rect rgb(240, 220, 200)
+        Note over Customer,NotificationService: Refund Process
+        Customer->>App: Request refund
+        App->>PaymentService: Process refund
+        PaymentService->>PaymentGateway: Initiate refund
+        PaymentGateway-->>PaymentService: Refund status
+        PaymentService->>OrderService: Update order
+        PaymentService->>LoyaltyService: Adjust points
+        PaymentService->>NotificationService: Send refund notification
+        NotificationService->>Customer: Refund confirmation
+    end

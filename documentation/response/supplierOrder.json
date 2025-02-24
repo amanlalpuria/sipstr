@@ -1,0 +1,114 @@
+{
+    "id": "6f2f4284-6c4a-4857-b4da-68c3dc3bac88",
+    "number": "1674333328517",
+    "state": "delivered",
+    "notes": "",
+    "driver_id": null,
+    "has_engraving": false,
+    "custom_tags": [],
+    "delivery_method": {
+        "type": "on_demand",
+        "maximum_delivery_expectation": 60
+    },
+    "created_at": "2023-01-21T15:35:46-05:00",
+    "confirmed_at": "2023-01-21T15:36:48-05:00",
+    "canceled_at": null,
+    "delivered_at": "2023-01-21T16:25:09-05:00",
+    "en_route_at": "2023-01-21T16:25:04-05:00",
+    "order_time": "2023-01-21T15:35:46-05:00",
+    "is_pre_sale": false,
+    "is_back_order": false,
+    "is_standard": true,
+    "customer_placement": "standard",
+    "amounts": {
+        "total": 175.79,
+        "subtotal": 147.68,
+        "bottle_fee": 0.0,
+        "tax_no_bottle_fee": 13.11,
+        "tax": 13.11,
+        "tip": 15.0,
+        "minibar_promos": 0.0,
+        "store_discounts": 0.0,
+        "delivery_fee": 0.0
+    },
+    "extras": [],
+    "billing": {
+        "cc_type": "American Express",
+        "last_digits": "8012"
+    },
+    "birthdate": null,
+    "address": {
+        "address1": "103 Norfolk Street",
+        "address2": null,
+        "city": "Manhattan",
+        "state": "NY",
+        "zip_code": "10002",
+        "coords": {
+            "lat": 40.718826,
+            "lng": -73.98731579999999
+        }
+    },
+    "recipient_info": {
+        "short_name": "Anne Buovolo",
+        "long_name": "Anne Buovolo - Gny",
+        "phone": "9173120398"
+    },
+    "customer_name": "Anne Buovolo",
+    "type_tags": {
+        "gift": false,
+        "out_of_hours": false,
+        "vip": false,
+        "corporate": null,
+        "scheduled": false,
+        "allow_substitution": false,
+        "new_customer": false,
+        "engraving": false
+    },
+    "order_items": [
+        {
+            "id": 11715282,
+            "name": "Bag of Ice",
+            "item_size": "30lb",
+            "sku": "freshcowh6258",
+            "item_options": null,
+            "volume": "30lb",
+            "unit_price": 14.63,
+            "quantity": 6,
+            "engraving_location": null,
+            "delivery_expectation": null,
+            "maximum_delivery_expectation": null
+        },
+        {
+            "id": 11715283,
+            "name": "Solo Clear Plastic Cups",
+            "item_size": "24 pack, 16oz",
+            "sku": "freshcowh5077",
+            "item_options": null,
+            "volume": "24 pack, 16oz",
+            "unit_price": 5.99,
+            "quantity": 10,
+            "engraving_location": null,
+            "delivery_expectation": null,
+            "maximum_delivery_expectation": null
+        }
+    ],
+    "comment_ids": [],
+    "order_adjustment_ids": [],
+    "using_delivery_service": false,
+    "delivery_service": null,
+    "show_dsp_flipper": false,
+    "primary_delivery_service": null,
+    "secondary_delivery_service": null,
+    "tracking_details": {
+        "carrier": null,
+        "tracking_number": null
+    },
+    "substitutions": [],
+    "packages": [],
+    "storefront": {
+        "id": 1,
+        "name": "Minibar",
+        "logo_url": "https://s3.amazonaws.com/cdn.minibardelivery.com/storefronts/logo_files/000/000/001/original/desktop-logo.svg?1647433466",
+        "favicon_url": "https://s3.amazonaws.com/cdn.minibardelivery.com/storefronts/favicon_files/000/000/001/original/favicon.svg?1647433002"
+    }
+}
