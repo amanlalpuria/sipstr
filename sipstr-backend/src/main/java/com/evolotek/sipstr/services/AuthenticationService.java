@@ -3,7 +3,6 @@ package com.evolotek.sipstr.services;
 import com.evolotek.sipstr.dtos.LoginUserDto;
 import com.evolotek.sipstr.dtos.RegisterUserDto;
 import com.evolotek.sipstr.entities.Role;
-import com.evolotek.sipstr.entities.RoleEnum;
 import com.evolotek.sipstr.entities.User;
 import com.evolotek.sipstr.repositories.RoleRepository;
 import com.evolotek.sipstr.repositories.UserRepository;
@@ -40,15 +39,10 @@ public class AuthenticationService {
     }
 
     public User signup(RegisterUserDto input) {
-        // Validate the role input (default to USER if null)
-        RoleEnum roleEnum = (input.getRoleEnum() != null) ? input.getRoleEnum() : RoleEnum.USER;
-        logger.atDebug().addArgument(roleEnum).log("Inserting user for role :: {}");
-
         // Fetch role from the database
-        /*TODO: We may reduce this DB call for better performance, and use the enum defineed in code. But if we want to modify the roleEnum run time this can help*/
-        Optional<Role> optionalRole = roleRepository.findByName(roleEnum);
+        Optional<Role> optionalRole = roleRepository.findByName(input.getRoleEnum());
         if (optionalRole.isEmpty()) {
-            throw new IllegalArgumentException("Invalid role: " + roleEnum);
+            throw new IllegalArgumentException("Invalid role: " + input.getRoleEnum());
         }
 
         // Create user with the selected role
@@ -56,7 +50,7 @@ public class AuthenticationService {
                 .setFullName(input.getFullName())
                 .setEmail(input.getEmail())
                 .setMobileNumber(input.getMobileNumber())
-                .setPassword(passwordEncoder.encode(input.getPassword()))
+                .setPasswordHash(passwordEncoder.encode(input.getPassword()))
                 .setRole(optionalRole.get());
 
         return userRepository.save(user);

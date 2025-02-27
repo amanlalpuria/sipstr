@@ -1,52 +1,57 @@
 package com.evolotek.sipstr.entities;
 
+import com.evolotek.sipstr.configs.JsonbConverter;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.PreUpdate;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import java.util.Date;
 
-@Table(name = "roles")
+import java.time.LocalDateTime;
+import java.util.Map;
+
 @Entity
+@Table(name = "roles")
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Role {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable = false)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(unique = true, nullable = false)
-    @Enumerated(EnumType.STRING)
-    private RoleEnum name;
+    @Column(nullable = false, unique = true)
+    private String name;
 
-    @Column(nullable = false)
     private String description;
 
-    @CreationTimestamp
-    @Column(updatable = false, name = "created_at")
-    private Date createdAt;
+    @Column(columnDefinition = "jsonb", nullable = false)
+    @Convert(converter = JsonbConverter.class)
+    private Map<String, Object> permissions;
 
-    @UpdateTimestamp
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
+
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
-    public Role setName(RoleEnum name){
-        this.name = name;
-        return this;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
-
-    public Role setDescription(String description){
-        this.description = description;
-        return this;
-    }
-
 }

@@ -1,19 +1,21 @@
 package com.evolotek.sipstr.dtos;
 
-import com.evolotek.sipstr.entities.MeasurementUnit;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class ProductVariantDTO {
     private Long variantId;
-    private MeasurementUnit unit;
-    private int quantity;
+    private String unit;
+    private int packOf;
     private String volumePerUnit;
     private String totalVolume;
-    private BigDecimal price;
+    private BigDecimal unitPrice;
 }

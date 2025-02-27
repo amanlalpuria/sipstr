@@ -1,15 +1,17 @@
 package com.evolotek.sipstr.authcontroller;
 
-import com.evolotek.sipstr.dtos.RegisterUserDto;
 import com.evolotek.sipstr.dtos.LoginUserDto;
+import com.evolotek.sipstr.dtos.RegisterUserDto;
 import com.evolotek.sipstr.entities.User;
 import com.evolotek.sipstr.responses.LoginResponse;
+import com.evolotek.sipstr.security.CustomUserDetails;
 import com.evolotek.sipstr.services.AuthenticationService;
 import com.evolotek.sipstr.services.JwtService;
 import com.evolotek.sipstr.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/auth")
@@ -30,7 +32,7 @@ public class LoginController {
     }
 
     /**
-     * Signup for USER, DELIVERY_PERSON, SUPPLIER
+     * Signup for USER, DELIVERY_PERSON, STORE_ADMIN, STORE_MANAGER
      */
     @Operation(summary = "User Signup", description = "Register a new user with a specific role - USER, DELIVERY_PERSON, SUPPLIER")
     @PostMapping("/signup")
@@ -56,8 +58,9 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
         User authenticatedUser = authenticationService.authenticate(loginUserDto);
-
-        String jwtToken = jwtService.generateToken(authenticatedUser);
+        // Convert User to CustomUserDetails
+        UserDetails userDetails = new CustomUserDetails(authenticatedUser);
+        String jwtToken = jwtService.generateToken(userDetails);
         Long expirationTime = jwtService.getExpirationTime();
 
         LoginResponse loginResponse = new LoginResponse()

@@ -1,6 +1,7 @@
 package com.evolotek.sipstr.services;
 
 import com.evolotek.sipstr.entities.User;
+import com.evolotek.sipstr.security.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -42,7 +43,10 @@ public class JwtService {
     }
 
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        User user = (User) userDetails;
+        if (!(userDetails instanceof CustomUserDetails)) {
+            throw new IllegalArgumentException("UserDetails must be an instance of CustomUserDetails");
+        }
+        User user = ((CustomUserDetails) userDetails).getUser();
         extraClaims.put("role", user.getRole().getName().toString());
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }

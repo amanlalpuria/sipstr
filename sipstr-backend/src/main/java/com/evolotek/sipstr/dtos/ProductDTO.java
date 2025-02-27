@@ -1,21 +1,23 @@
 package com.evolotek.sipstr.dtos;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class ProductDTO {
     private Long productId;
+    private UUID uuid;
     private String productName;
-    private String brand;
     private String description;
+    private String brand;
     private boolean isAlcoholic;
-    private BigDecimal abvPercentage;
-    private String imageUrl;
     private List<ProductVariantDTO> variants;
 }

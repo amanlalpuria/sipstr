@@ -1,6 +1,5 @@
 package com.evolotek.sipstr.dtos;
 
-import com.evolotek.sipstr.entities.RoleEnum;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -25,7 +24,7 @@ public class RegisterUserDto {
     @NotEmpty(message = "The mobile number is required.")
     private String mobileNumber;
 
-    private RoleEnum roleEnum;
+    private String roleEnum;
 
     // Ensure the setters return the object itself for chaining
     public RegisterUserDto setFullName(String fullName) {
@@ -48,7 +47,7 @@ public class RegisterUserDto {
         return this;
     }
 
-    public RegisterUserDto setRoleEnum(RoleEnum roleEnum) {
+    public RegisterUserDto setRoleEnum(String roleEnum) {
         this.roleEnum = roleEnum;
         return this;
     }

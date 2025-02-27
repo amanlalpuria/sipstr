@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Tag(name = "Store Management", description = "APIs for managing grocery stores")
 @RestController
@@ -61,7 +62,7 @@ public class StoreController {
     })
     @PutMapping("/{storeId}")
     @PreAuthorize("hasRole('SUPPLIER')")
-    public ResponseEntity<Store> updateStore(@PathVariable Long storeId, @RequestBody Store store) {
+    public ResponseEntity<Store> updateStore(@PathVariable UUID storeId, @RequestBody Store store) {
         Store updatedStore = storeService.updateStore(storeId, store);
         return ResponseEntity.ok(updatedStore);
     }
@@ -79,7 +80,7 @@ public class StoreController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Find Nearby Stores", description = "Retrieve stores within a given radius based on user location.")
+    /*@Operation(summary = "Find Nearby Stores", description = "Retrieve stores within a given radius based on user location.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Nearby stores retrieved successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid location parameters")
@@ -92,5 +93,5 @@ public class StoreController {
 
         List<Store> nearbyStores = storeService.findNearbyStores(latitude, longitude, radius);
         return ResponseEntity.ok(nearbyStores);
-    }
+    }*/
 }

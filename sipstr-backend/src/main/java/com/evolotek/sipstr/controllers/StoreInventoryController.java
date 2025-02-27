@@ -1,7 +1,7 @@
 package com.evolotek.sipstr.controllers;
 
-import com.evolotek.sipstr.entities.StoreProduct;
-import com.evolotek.sipstr.services.StoreProductService;
+import com.evolotek.sipstr.entities.StoreInventory;
+import com.evolotek.sipstr.services.StoreInventoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,11 +14,11 @@ import java.util.List;
 @Tag(name = "Store Product Management", description = "APIs for managing products in a store")
 @RestController
 @RequestMapping("/stores/{storeId}/products")
-public class StoreProductController {
-    private final StoreProductService storeProductService;
+public class StoreInventoryController {
+    private final StoreInventoryService StoreInventoryService;
 
-    public StoreProductController(StoreProductService storeProductService) {
-        this.storeProductService = storeProductService;
+    public StoreInventoryController(StoreInventoryService StoreInventoryService) {
+        this.StoreInventoryService = StoreInventoryService;
     }
 
     @Operation(summary = "Get Store Products", description = "Retrieve all products available in a specific store.")
@@ -27,8 +27,8 @@ public class StoreProductController {
             @ApiResponse(responseCode = "404", description = "Store not found")
     })
     @GetMapping
-    public ResponseEntity<List<StoreProduct>> getStoreProducts(@PathVariable Long storeId) {
-        List<StoreProduct> products = storeProductService.getProductsByStore(storeId);
+    public ResponseEntity<List<StoreInventory>> getStoreInventorys(@PathVariable Long storeId) {
+        List<StoreInventory> products = StoreInventoryService.getProductsByStore(storeId);
         return ResponseEntity.ok(products);
     }
 
@@ -38,8 +38,8 @@ public class StoreProductController {
             @ApiResponse(responseCode = "403", description = "Access denied (Only store owners can add products)")
     })
     @PostMapping
-    public ResponseEntity<StoreProduct> addStoreProduct( @RequestBody StoreProduct storeProduct) {
-        StoreProduct createdProduct = storeProductService.addStoreProduct(storeProduct);
+    public ResponseEntity<StoreInventory> addStoreInventory( @RequestBody StoreInventory StoreInventory) {
+        StoreInventory createdProduct = StoreInventoryService.addStoreInventory(StoreInventory);
         return ResponseEntity.ok(createdProduct);
     }
 
@@ -50,8 +50,8 @@ public class StoreProductController {
             @ApiResponse(responseCode = "404", description = "Product not found")
     })
     @PutMapping("/{productId}")
-    public ResponseEntity<StoreProduct> updateStoreProduct(@PathVariable Long productId, @RequestBody StoreProduct details) {
-        StoreProduct updatedProduct = storeProductService.updateStoreProduct(productId, details);
+    public ResponseEntity<StoreInventory> updateStoreInventory(@PathVariable Long productId, @RequestBody StoreInventory details) {
+        StoreInventory updatedProduct = StoreInventoryService.updateStoreInventory(productId, details);
         return ResponseEntity.ok(updatedProduct);
     }
 
@@ -62,8 +62,8 @@ public class StoreProductController {
             @ApiResponse(responseCode = "404", description = "Product not found")
     })
     @DeleteMapping("/{productId}")
-    public ResponseEntity<Void> deleteStoreProduct(@PathVariable Long storeId, @PathVariable Long productId) {
-        storeProductService.deleteStoreProduct(storeId, productId);
+    public ResponseEntity<Void> deleteStoreInventory(@PathVariable Long storeId, @PathVariable Long productId) {
+        StoreInventoryService.deleteStoreInventory(storeId, productId);
         return ResponseEntity.noContent().build();
     }
 }

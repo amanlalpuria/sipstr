@@ -2,32 +2,52 @@ package com.evolotek.sipstr.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "category")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
+@Table(name = "category")
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer categoryId;
-
-    @Column(nullable = false, unique = true)
-    private String categoryName;
-
-    private String description;
+    private Long categoryId;
 
     @ManyToOne
-    @JoinColumn(name = "parent_id")
+    @JoinColumn(name = "parent_category_id")
     private Category parentCategory;
 
-    public Category(Integer categoryId, String categoryName, String description) {
-        this.categoryId = categoryId;
-        this.categoryName = categoryName;
-        this.description = description;
+    @Column(nullable = false, length = 255)
+    private String categoryName;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @Column(length = 255)
+    private String imageUrl;
+
+    @Column(nullable = false)
+    private Boolean isActive = true;
+
+    private Integer displayOrder;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 }

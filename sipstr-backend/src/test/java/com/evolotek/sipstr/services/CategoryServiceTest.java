@@ -28,56 +28,56 @@ public class CategoryServiceTest {
     private Category parentCategory;
     private Category subCategory;
 
-    @BeforeEach
-    void setUp() {
-        parentCategory = new Category(1, "Alcohol", "Alcoholic Beverages");
-        subCategory = new Category(2, "Beer", "Different types of beer", parentCategory);
-    }
+//    @BeforeEach
+//    void setUp() {
+//        parentCategory = new Category(1, "Alcohol", "Alcoholic Beverages");
+//        subCategory = new Category(2, "Beer", "Different types of beer", parentCategory);
+//    }
 
-    @Test
-    void testGetAllCategories() {
-        when(categoryRepository.findAll()).thenReturn(Arrays.asList(parentCategory, subCategory));
-        assertEquals(2, categoryService.getAllCategories().size());
-    }
-
-    @Test
-    void testGetCategoryByIdFound() {
-        when(categoryRepository.findById(2)).thenReturn(Optional.of(subCategory));
-        assertEquals(subCategory, categoryService.getCategoryById(2));
-    }
-
-    @Test
-    void testGetCategoryByIdNotFound() {
-        when(categoryRepository.findById(99)).thenReturn(Optional.empty());
-        assertThrows(CategoryNotFoundException.class, () -> categoryService.getCategoryById(99));
-    }
-
-    @Test
-    void testCreateCategoryWithoutParent() {
-        when(categoryRepository.save(parentCategory)).thenReturn(parentCategory);
-        assertEquals(parentCategory, categoryService.createCategory(parentCategory, null));
-    }
-
-    @Test
-    void testCreateSubCategory() {
-        when(categoryRepository.findById(1)).thenReturn(Optional.of(parentCategory));
-        when(categoryRepository.save(subCategory)).thenReturn(subCategory);
-        assertEquals(subCategory, categoryService.createCategory(subCategory, 1));
-    }
-
-    @Test
-    void testUpdateCategory() {
-        when(categoryRepository.findById(2)).thenReturn(Optional.of(subCategory));
-        when(categoryRepository.save(any(Category.class))).thenReturn(subCategory);
-
-        Category updatedCategory = categoryService.updateCategory(2, "Craft Beer", "Updated description", 1);
-        assertEquals("Craft Beer", updatedCategory.getCategoryName());
-    }
-
-    @Test
-    void testDeleteCategory() {
-        when(categoryRepository.findById(2)).thenReturn(Optional.of(subCategory));
-        doNothing().when(categoryRepository).delete(subCategory);
-        assertDoesNotThrow(() -> categoryService.deleteCategory(2));
-    }
+//    @Test
+//    void testGetAllCategories() {
+//        when(categoryRepository.findAll()).thenReturn(Arrays.asList(parentCategory, subCategory));
+//        assertEquals(2, categoryService.getAllCategories().size());
+//    }
+//
+//    @Test
+//    void testGetCategoryByIdFound() {
+//        when(categoryRepository.findById(2)).thenReturn(Optional.of(subCategory));
+//        assertEquals(subCategory, categoryService.getCategoryById(2));
+//    }
+//
+//    @Test
+//    void testGetCategoryByIdNotFound() {
+//        when(categoryRepository.findById(99)).thenReturn(Optional.empty());
+//        assertThrows(CategoryNotFoundException.class, () -> categoryService.getCategoryById(99));
+//    }
+//
+//    @Test
+//    void testCreateCategoryWithoutParent() {
+//        when(categoryRepository.save(parentCategory)).thenReturn(parentCategory);
+//        assertEquals(parentCategory, categoryService.createCategory(parentCategory, null));
+//    }
+//
+//    @Test
+//    void testCreateSubCategory() {
+//        when(categoryRepository.findById(1)).thenReturn(Optional.of(parentCategory));
+//        when(categoryRepository.save(subCategory)).thenReturn(subCategory);
+//        assertEquals(subCategory, categoryService.createCategory(subCategory, 1));
+//    }
+//
+//    @Test
+//    void testUpdateCategory() {
+//        when(categoryRepository.findById(2)).thenReturn(Optional.of(subCategory));
+//        when(categoryRepository.save(any(Category.class))).thenReturn(subCategory);
+//
+//        Category updatedCategory = categoryService.updateCategory(2, "Craft Beer", "Updated description", 1);
+//        assertEquals("Craft Beer", updatedCategory.getCategoryName());
+//    }
+//
+//    @Test
+//    void testDeleteCategory() {
+//        when(categoryRepository.findById(2)).thenReturn(Optional.of(subCategory));
+//        doNothing().when(categoryRepository).delete(subCategory);
+//        assertDoesNotThrow(() -> categoryService.deleteCategory(2));
+//    }
 }

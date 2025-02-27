@@ -1,6 +1,7 @@
 package com.evolotek.sipstr.configs;
 
 import com.evolotek.sipstr.repositories.UserRepository;
+import com.evolotek.sipstr.security.CustomUserDetails;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,6 +23,7 @@ public class ApplicationConfiguration {
     @Bean
     UserDetailsService userDetailsService() {
         return username -> userRepository.findByEmail(username)
+                .map(CustomUserDetails::new) // Convert User to CustomUserDetails
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 

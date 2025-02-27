@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/addresses")
@@ -22,18 +24,29 @@ public class AddressController {
     }
 
     @Operation(summary = "Add a new address", description = "Adds a new address for a specific user")
-    @PostMapping("/{userId}")
+    @PostMapping("/user/{userId}")
     public ResponseEntity<Address> addAddress(
-            @Parameter(description = "User ID for whom the address is being added") @PathVariable Integer userId,
+            @Parameter(description = "User ID for whom the address is being added") @PathVariable Long userId,
             @RequestBody Address address) {
-        return ResponseEntity.ok(addressService.addAddress(userId, address));
+        Address createdAddress = addressService.addAddress(userId, address);
+        return ResponseEntity.status(201).body(createdAddress);
     }
 
-    @Operation(summary = "Get user addresses", description = "Retrieves all addresses for a given user")
-    @GetMapping("/{userId}")
+    @Operation(summary = "Get all addresses for a user", description = "Retrieves all addresses associated with a user")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<List<Address>> getUserAddresses(
             @Parameter(description = "User ID whose addresses are to be retrieved") @PathVariable Long userId) {
-        return ResponseEntity.ok(addressService.getUserAddresses(userId));
+        List<Address> addresses = addressService.getUserAddresses(userId);
+        return ResponseEntity.ok(addresses);
+    }
+
+    @Operation(summary = "Get address by UUID", description = "Fetch an address using its UUID")
+    @GetMapping("/uuid/{uuid}")
+    public ResponseEntity<Address> getAddressByUuid(
+            @Parameter(description = "UUID of the address") @PathVariable UUID uuid) {
+        Optional<Address> address = addressService.getAddressByUuid(uuid);
+        return address.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Update an address", description = "Updates an existing address by ID")
@@ -41,14 +54,15 @@ public class AddressController {
     public ResponseEntity<Address> updateAddress(
             @Parameter(description = "Address ID to be updated") @PathVariable Long addressId,
             @RequestBody Address address) {
-        return ResponseEntity.ok(addressService.updateAddress(addressId, address));
+        Address updatedAddress = addressService.updateAddress(addressId, address);
+        return ResponseEntity.ok(updatedAddress);
     }
 
     @Operation(summary = "Delete an address", description = "Deletes an address by ID")
     @DeleteMapping("/{addressId}")
-    public ResponseEntity<String> deleteAddress(
+    public ResponseEntity<Void> deleteAddress(
             @Parameter(description = "Address ID to be deleted") @PathVariable Long addressId) {
         addressService.deleteAddress(addressId);
-        return ResponseEntity.ok("Address deleted successfully");
+        return ResponseEntity.noContent().build();
     }
 }

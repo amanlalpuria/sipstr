@@ -2,10 +2,10 @@ package com.evolotek.sipstr.bootstrap;
 
 import com.evolotek.sipstr.dtos.RegisterUserDto;
 import com.evolotek.sipstr.entities.Role;
-import com.evolotek.sipstr.entities.RoleEnum;
 import com.evolotek.sipstr.entities.User;
 import com.evolotek.sipstr.repositories.RoleRepository;
 import com.evolotek.sipstr.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +20,14 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
 
     private final PasswordEncoder passwordEncoder;
 
+    @Value("${super.admin.fullName}")
+    private String fullName;
+    @Value("${super.admin.email}")
+    private String email;
+    @Value("${super.admin.password}")
+    private String password;
+    @Value("${super.admin.mobileNumber}")
+    private String mobileNumber;
 
     public AdminSeeder(
             RoleRepository roleRepository,
@@ -38,12 +46,12 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
 
     private void createSuperAdministrator() {
         RegisterUserDto userDto = new RegisterUserDto();
-        userDto.setFullName("Super Admin")
-                .setEmail("super.admin@email.com")
-                .setPassword("123456")
-                .setMobileNumber("0987654321");
+        userDto.setFullName(fullName)
+                .setEmail(email)
+                .setPassword(password)
+                .setMobileNumber(mobileNumber);
 
-        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.SUPER_ADMIN);
+        Optional<Role> optionalRole = roleRepository.findByName("SUPER_ADMIN");
         Optional<User> optionalUser = userRepository.findByEmail(userDto.getEmail());
 
         if (optionalRole.isEmpty() || optionalUser.isPresent()) {
@@ -53,7 +61,7 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
         User user = new User()
                 .setFullName(userDto.getFullName())
                 .setEmail(userDto.getEmail())
-                .setPassword(passwordEncoder.encode(userDto.getPassword()))
+                .setPasswordHash(passwordEncoder.encode(userDto.getPassword()))
                 .setMobileNumber(userDto.getMobileNumber())
                 .setRole(optionalRole.get());
 
