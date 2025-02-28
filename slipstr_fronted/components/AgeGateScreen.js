@@ -1,15 +1,16 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import CommonButton from "../components/CommonButton";
 
 export default function AgeGateScreen({ onYesPress, onNoPress }) {
   return (
     <View style={styles.container}>
-      {/* Logo */}
-      <View style={styles.logoBox}>
-        <Text style={styles.icon}>🍸</Text>
-        <Text style={styles.logoText}>SIPSTR</Text>
-      </View>
+      {/* Logo Placeholder */}
+      <Image
+        source={require("../assets/images/logo.png")}
+        style={styles.logo}
+        resizeMode="contain"
+      />
 
       {/* Heading + subtext */}
       <Text style={styles.ageTitle}>Are you over 21?</Text>
@@ -42,22 +43,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: 20,
   },
-  logoBox: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 2,
-    borderColor: "#000",
-    paddingHorizontal: 25,
-    paddingVertical: 10,
-    marginBottom: 40,
-  },
-  icon: {
-    fontSize: 28,
-    marginRight: 8,
-  },
-  logoText: {
-    fontSize: 24,
-    fontFamily: "Poppins-SemiBold",
+  logo: {
+    width: 200,
+    height: 100,
+    marginBottom: 50,
   },
   ageTitle: {
     fontSize: 20,

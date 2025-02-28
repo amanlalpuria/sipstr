@@ -1,36 +1,63 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import CommonButton from "../components/CommonButton";
+import React from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
+import CommonButton from '../components/CommonButton';
 
-export default function LoginScreen({ onLoginPress = () => {} }) {
+export default function LoginScreen({
+  onLoginPress = () => {},
+  onSignupPress = () => {},
+}) {
   return (
     <View style={styles.container}>
-      {/* Logo or Title */}
+      {/* App Logo / Title */}
       <Text style={styles.mainTitle}>Sipstr</Text>
 
+      {/* Heading */}
       <Text style={styles.welcomeText}>Welcome</Text>
 
-      {/* Example input placeholders.
-          Swap to <CommonTextField> or your custom text fields as needed */}
+      {/* Email / Phone Input */}
       <View style={styles.inputBox}>
-        <Text style={styles.fieldLabel}>Enter Mobile Number/Email</Text>
-      </View>
-      <View style={styles.inputBox}>
-        <Text style={styles.fieldLabel}>Enter Password</Text>
+        <TextInput
+          style={styles.textInput}
+          placeholder='Enter Mobile Number/Email'
+          placeholderTextColor='#999'
+        />
       </View>
 
-      <Text style={styles.forgotText}>Forgot Password</Text>
+      {/* Password Input */}
+      <View style={styles.inputBox}>
+        <TextInput
+          style={styles.textInput}
+          placeholder='Enter Password'
+          placeholderTextColor='#999'
+          secureTextEntry
+        />
+      </View>
 
+      {/* Forgot Password */}
+      <TouchableOpacity style={styles.forgotPasswordContainer}>
+        <Text style={styles.forgotText}>Forgot Password</Text>
+      </TouchableOpacity>
+
+      {/* Login Button */}
       <CommonButton
-        title="Login"
-        // Calls onLoginPress if passed from App.js
+        title='Login'
         onPress={onLoginPress}
-        style={{ marginVertical: 20 }}
+        style={[styles.buttonStyle, { marginVertical: 20 }]}
+        textStyle={styles.buttonTextStyle}
       />
 
+      {/* Signup Link */}
       <Text style={styles.signupText}>
-        Don’t have an account?
-        <Text style={{ fontWeight: "bold" }}> Signup</Text>
+        Don’t have an account?{' '}
+        <Text onPress={onSignupPress} style={styles.signupLink}>
+          Signup
+        </Text>
       </Text>
     </View>
   );
@@ -39,42 +66,63 @@ export default function LoginScreen({ onLoginPress = () => {} }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFF",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#FFF',
+    alignItems: 'center',
+    justifyContent: 'center',
     paddingHorizontal: 20,
   },
   mainTitle: {
     fontSize: 32,
-    fontFamily: "ReggaeOne-Regular",
+    fontFamily: 'ReggaeOne-Regular',
     marginBottom: 20,
   },
   welcomeText: {
     fontSize: 20,
-    fontFamily: "Poppins-SemiBold",
+    fontFamily: 'Poppins-SemiBold',
     marginBottom: 25,
   },
   inputBox: {
-    width: "100%",
+    width: '100%',
     borderWidth: 1,
-    borderColor: "#000",
-    borderRadius: 8,
-    padding: 12,
+    borderColor: '#CCC',
+    borderRadius: 30, // Rounded corners
+    paddingHorizontal: 15,
+    paddingVertical: 10,
     marginBottom: 12,
   },
-  fieldLabel: {
+  textInput: {
     fontSize: 14,
-    fontFamily: "Poppins-Regular",
-    color: "#AAA",
+    fontFamily: 'Poppins-Regular',
+    color: '#333',
+  },
+  forgotPasswordContainer: {
+    alignSelf: 'flex-end',
   },
   forgotText: {
-    alignSelf: "flex-end",
     fontSize: 14,
-    fontFamily: "Poppins-SemiBold",
+    fontFamily: 'Poppins-SemiBold',
+    color: '#FF6B00', // or your brand color
     marginTop: 4,
+  },
+  buttonStyle: {
+    backgroundColor: '#FF6B00', // make button orange
+    paddingVertical: 12,
+    borderRadius: 30, // Rounded corners
+    width: '100%',
+  },
+  buttonTextStyle: {
+    color: '#FFF',
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 16,
+    textAlign: 'center',
   },
   signupText: {
     fontSize: 14,
-    fontFamily: "Poppins-Regular",
+    fontFamily: 'Poppins-Regular',
+    marginTop: 10,
+  },
+  signupLink: {
+    fontWeight: 'bold',
+    color: '#FF6B00',
   },
 });
