@@ -30,3 +30,5 @@ replay_pid*
 sipstr-backend/target/
 sipstr_fronted/node_modules/
 target
+
+**/.expo
