@@ -1,0 +1,172 @@
+sequenceDiagram
+    actor Customer
+    participant App
+    participant OrderService
+    participant CartService
+    participant InventoryService
+    participant PricingService
+    participant StoreService
+    participant DeliveryService
+    participant PaymentService
+    participant NotificationService
+    actor Store
+    actor Driver
+
+    %% Browse and Cart Management
+    rect rgb(200, 220, 240)
+        Note over Customer,Driver: Product Browse & Cart
+        Customer->>App: Browse store
+        App->>StoreService: Get store status
+        
+        alt Store Closed
+            StoreService-->>App: Store unavailable
+            App-->>Customer: Show closing time
+        else Store Open
+            App->>StoreService: Get products
+            StoreService->>InventoryService: Check availability
+            StoreService-->>App: Available products
+            
+            Customer->>App: Add to cart
+            App->>CartService: Update cart
+            CartService->>InventoryService: Check stock
+            
+            alt Out of Stock
+                InventoryService-->>CartService: Stock unavailable
+                CartService-->>App: Item unavailable
+                App-->>Customer: Show alternatives
+            else In Stock
+                CartService->>InventoryService: Reserve items
+                CartService->>PricingService: Calculate prices
+                CartService-->>App: Cart updated
+                App-->>Customer: Show cart summary
+            end
+        end
+    end
+
+    %% Checkout Process
+    rect rgb(220, 240, 200)
+        Note over Customer,Driver: Checkout Process
+        Customer->>App: Initiate checkout
+        App->>OrderService: Validate cart
+        OrderService->>StoreService: Check store status
+        OrderService->>InventoryService: Verify inventory
+        OrderService->>DeliveryService: Check delivery area
+        
+        alt Validation Failed
+            OrderService-->>App: Validation errors
+            App-->>Customer: Show issues
+        else Cart Valid
+            OrderService->>PricingService: Calculate final price
+            PricingService->>OrderService: Price breakdown
+            OrderService-->>App: Order summary
+            App-->>Customer: Confirm order
+        end
+
+        Customer->>App: Confirm order
+        App->>PaymentService: Process payment
+        
+        alt Payment Failed
+            PaymentService-->>App: Payment error
+            App-->>Customer: Retry payment
+        else Payment Success
+            PaymentService-->>OrderService: Payment confirmed
+            OrderService->>InventoryService: Lock inventory
+            OrderService->>StoreService: Create store order
+            OrderService->>NotificationService: Notify store
+            OrderService-->>App: Order confirmed
+            App-->>Customer: Show tracking
+        end
+    end
+
+    %% Store Processing
+    rect rgb(240, 220, 200)
+        Note over Customer,Driver: Store Processing
+        Store->>App: View new order
+        
+        alt Order Rejected
+            Store->>App: Reject order
+            App->>OrderService: Cancel order
+            OrderService->>PaymentService: Process refund
+            OrderService->>InventoryService: Release inventory
+            OrderService->>NotificationService: Notify customer
+            NotificationService-->>Customer: Order cancelled
+        else Order Accepted
+            Store->>App: Accept order
+            App->>OrderService: Update status
+            OrderService->>NotificationService: Notify customer
+            NotificationService-->>Customer: Order preparing
+            
+            Store->>App: Order ready
+            App->>DeliveryService: Request driver
+        end
+    end
+
+    %% Delivery Assignment
+    rect rgb(200, 240, 220)
+        Note over Customer,Driver: Delivery Assignment
+        DeliveryService->>DeliveryService: Find nearby drivers
+        DeliveryService-->>Driver: Delivery request
+        
+        alt No Drivers Available
+            DeliveryService-->>OrderService: Assignment failed
+            OrderService->>NotificationService: Notify delay
+            NotificationService-->>Customer: Delivery delayed
+        else Driver Found
+            Driver->>DeliveryService: Accept delivery
+            DeliveryService->>OrderService: Update driver
+            OrderService->>NotificationService: Notify customer
+            NotificationService-->>Customer: Driver assigned
+        end
+    end
+
+    %% Delivery Process
+    rect rgb(220, 200, 240)
+        Note over Customer,Driver: Delivery Execution
+        Driver->>App: Arrived at store
+        App->>OrderService: Update status
+        
+        Driver->>App: Confirm pickup
+        App->>OrderService: Update status
+        OrderService->>NotificationService: Notify customer
+        
+        loop Until Delivered
+            Driver->>App: Location update
+            App->>OrderService: Update location
+            OrderService-->>Customer: Real-time tracking
+        end
+        
+        Driver->>App: Arrived at customer
+        App->>OrderService: Update status
+        OrderService->>NotificationService: Notify customer
+        
+        alt Delivery Failed
+            Driver->>App: Cannot deliver
+            App->>OrderService: Failed delivery
+            OrderService->>NotificationService: Notify customer
+            OrderService->>DeliveryService: Reassign delivery
+        else Delivery Success
+            Driver->>App: Delivery complete
+            App->>OrderService: Complete order
+            OrderService->>NotificationService: Request feedback
+            NotificationService-->>Customer: Rate order
+        end
+    end
+
+    %% Order Completion
+    rect rgb(240, 200, 220)
+        Note over Customer,Driver: Order Completion
+        Customer->>App: Rate experience
+        App->>OrderService: Save ratings
+        OrderService->>StoreService: Update store rating
+        OrderService->>DeliveryService: Update driver rating
+        
+        alt Issues Reported
+            Customer->>App: Report issue
+            App->>OrderService: Create complaint
+            OrderService->>NotificationService: Notify support
+            NotificationService-->>Customer: Support response
+        else Successful Completion
+            OrderService->>PaymentService: Release payment
+            OrderService->>NotificationService: Thank you message
+        end
+    end

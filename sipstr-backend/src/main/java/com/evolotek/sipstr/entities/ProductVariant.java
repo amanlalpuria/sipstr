@@ -1,37 +1,49 @@
 package com.evolotek.sipstr.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 
 @Entity
-@Data
+@Table(name = "product_variant")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class ProductVariant {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long variantId;
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false)
+    @JsonBackReference
     private Product product;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private MeasurementUnit unit; // e.g., CAN, PINT, BOTTLE
-
-    @Column(nullable = false)
-    private int quantity; // e.g., 4, 12 (Number of cans/bottles)
-
-    @Column(nullable = false)
-    private String volumePerUnit; // e.g., 12 (for 12Oz)
-
-    @Column(nullable = false)
-    private String totalVolume; // e.g., 48 (for 4×12Oz)
-
-    @Column(nullable = false)
+    private BigDecimal abvPercentage;
+    private String imageUrl;
+    private String unit;
+    private int packOf;
+    private String volumePerUnit;
+    private String totalVolume;
     private BigDecimal unitPrice;
+    private Integer shelfLifeDays;
+    private BigDecimal weightGrams;
+
+    @Column(columnDefinition = "jsonb")
+    private String dimensionsCm;
+
+    @Column(columnDefinition = "TEXT")
+    private String storageInstructions;
+
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    private LocalDateTime updatedAt = LocalDateTime.now();
 }

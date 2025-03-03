@@ -2,60 +2,65 @@ package com.evolotek.sipstr.controllers;
 
 import com.evolotek.sipstr.dtos.ProductDTO;
 import com.evolotek.sipstr.entities.Product;
+import com.evolotek.sipstr.entities.ProductVariant;
 import com.evolotek.sipstr.services.ProductService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Product Management", description = "APIs for managing products")
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/products")
+@RequiredArgsConstructor
 public class ProductController {
+
     private final ProductService productService;
 
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
-
-    @Operation(summary = "Get All Products", description = "Retrieve a paginated list of all products with variants.")
-    @ApiResponse(responseCode = "200", description = "Products retrieved successfully")
     @GetMapping
-    public Page<ProductDTO> getAllProducts(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return productService.getAllProducts(page, size);
+    public ResponseEntity<Page<ProductDTO>> getAllProducts(@RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(productService.getAllProducts(page, size));
     }
 
-    @Operation(summary = "Add a New Product", description = "Create and add a new product to the inventory.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Product created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid product data provided")
-    })
+    @GetMapping("/{uuid}")
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable UUID uuid) {
+        return ResponseEntity.ok(productService.getProductById(uuid));
+    }
+
     @PostMapping
-    public Product addProduct(@RequestBody Product product) {
-        return productService.addProduct(product);
+    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+        return ResponseEntity.ok(productService.addProduct(product));
     }
 
-    @Operation(summary = "Update Product", description = "Modify details of an existing product.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Product updated successfully"),
-            @ApiResponse(responseCode = "404", description = "Product not found")
-    })
-    @PutMapping("/{productId}")
-    public Product updateProduct(@PathVariable Long productId, @RequestBody Product productDetails) {
-        return productService.updateProduct(productId, productDetails);
+    @PutMapping("/{uuid}")
+    public ResponseEntity<Product> updateProduct(@PathVariable UUID uuid, @RequestBody Product productDetails) {
+        return ResponseEntity.ok(productService.updateProduct(uuid, productDetails));
     }
 
-    @Operation(summary = "Delete Product", description = "Remove a product from the inventory.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Product deleted successfully"),
-            @ApiResponse(responseCode = "404", description = "Product not found")
-    })
-    @DeleteMapping("/{productId}")
-    public void deleteProduct(@PathVariable Long productId) {
-        productService.deleteProduct(productId);
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable UUID uuid) {
+        productService.deleteProduct(uuid);
+        return ResponseEntity.noContent().build();
+    }
+
+    // Product Variant Endpoints
+    @PostMapping("/{productId}/variants")
+    public ResponseEntity<ProductVariant> addProductVariant(@PathVariable Long productId,
+                                                            @RequestBody ProductVariant variant) {
+        return ResponseEntity.ok(productService.addProductVariant(productId, variant));
+    }
+
+    @PutMapping("/variants/{variantId}")
+    public ResponseEntity<ProductVariant> updateProductVariant(@PathVariable Long variantId,
+                                                               @RequestBody ProductVariant variantDetails) {
+        return ResponseEntity.ok(productService.updateProductVariant(variantId, variantDetails));
+    }
+
+    @DeleteMapping("/variants/{variantId}")
+    public ResponseEntity<Void> deleteProductVariant(@PathVariable Long variantId) {
+        productService.deleteProductVariant(variantId);
+        return ResponseEntity.noContent().build();
     }
 }

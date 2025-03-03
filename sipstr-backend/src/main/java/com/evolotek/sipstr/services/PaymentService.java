@@ -22,7 +22,7 @@ public class PaymentService {
 
         Payment payment = Payment.builder()
                 .order(order)
-                .user(order.getCustomer())
+                .user(order.getUser())
                 .paymentMode(paymentMode)
                 .paymentStatus("COMPLETED")
                 .amountPaid(amount)

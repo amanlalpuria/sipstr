@@ -1,0 +1,152 @@
+sequenceDiagram
+    actor User
+    participant App
+    participant AuthService
+    participant UserService
+    participant SecurityService
+    participant UserDB
+    participant SMSService
+    participant EmailService
+    participant AuditLog
+
+    %% Registration Flow with Validation
+    rect rgb(200, 220, 240)
+        Note over User,AuditLog: Registration with Validation
+        User->>App: Register (email, phone, password)
+        App->>SecurityService: Validate password strength
+        App->>AuthService: Validate input format
+        AuthService->>UserDB: Check email exists
+        AuthService->>UserDB: Check phone exists
+        
+        alt Invalid Input
+            AuthService-->>App: Validation errors
+            App-->>User: Show specific errors
+        else Email/Phone Exists
+            AuthService-->>App: Account exists error
+            App-->>User: Suggest login/recovery
+        else Valid Input
+            AuthService->>SecurityService: Hash password
+            AuthService->>UserDB: Create user record
+            AuthService->>SMSService: Send OTP
+            AuthService->>EmailService: Send verification
+            AuthService->>AuditLog: Log registration
+            AuthService-->>App: Registration success
+            App-->>User: Verify email & phone
+        end
+    end
+
+    %% Verification Flow
+    rect rgb(220, 240, 200)
+        Note over User,AuditLog: Account Verification
+        User->>App: Enter SMS OTP
+        App->>AuthService: Verify OTP
+        
+        alt Invalid OTP
+            AuthService-->>App: Invalid OTP
+            App-->>User: Retry or resend
+        else OTP Expired
+            AuthService-->>App: OTP expired
+            App-->>User: Request new OTP
+        else Valid OTP
+            AuthService->>UserDB: Update phone verification
+            AuthService->>AuditLog: Log verification
+        end
+
+        User->>App: Click email link
+        App->>AuthService: Verify email token
+        
+        alt Invalid/Expired Token
+            AuthService-->>App: Invalid token
+            App-->>User: Request new email
+        else Valid Token
+            AuthService->>UserDB: Update email verification
+            AuthService->>AuditLog: Log verification
+            AuthService-->>App: Account verified
+            App-->>User: Account activated
+        end
+    end
+
+    %% Login Flow with Security
+    rect rgb(240, 220, 200)
+        Note over User,AuditLog: Secure Login Process
+        User->>App: Login attempt
+        App->>SecurityService: Check rate limiting
+        
+        alt Rate Limit Exceeded
+            SecurityService-->>App: Too many attempts
+            App-->>User: Try again later
+        else Proceed
+            App->>AuthService: Authenticate
+            AuthService->>UserDB: Verify credentials
+            
+            alt Invalid Credentials
+                AuthService->>UserDB: Increment failed attempts
+                AuthService-->>App: Auth failed
+                App-->>User: Invalid credentials
+            else Account Locked
+                AuthService-->>App: Account locked
+                App-->>User: Contact support
+            else Valid Credentials
+                alt 2FA Required
+                    AuthService->>SMSService: Send 2FA code
+                    SMSService-->>User: SMS with code
+                    User->>App: Enter 2FA code
+                    App->>AuthService: Verify 2FA
+                end
+                AuthService->>UserDB: Update last login
+                AuthService->>SecurityService: Generate JWT
+                AuthService->>AuditLog: Log successful login
+                AuthService-->>App: Return JWT
+                App-->>User: Login successful
+            end
+        end
+    end
+
+    %% Session Management
+    rect rgb(200, 240, 220)
+        Note over User,AuditLog: Session Management
+        User->>App: Access protected resource
+        App->>SecurityService: Validate JWT
+        
+        alt Token Expired
+            SecurityService-->>App: Token expired
+            App->>AuthService: Refresh token
+            alt Valid Refresh
+                AuthService-->>App: New JWT
+                App-->>User: Continue session
+            else Invalid Refresh
+                App-->>User: Re-login required
+            end
+        else Invalid Token
+            SecurityService-->>App: Invalid token
+            App-->>User: Force logout
+        end
+    end
+
+    %% Account Recovery
+    rect rgb(220, 200, 240)
+        Note over User,AuditLog: Account Recovery
+        User->>App: Reset password
+        App->>AuthService: Initialize reset
+        AuthService->>SecurityService: Generate reset token
+        AuthService->>EmailService: Send reset link
+        EmailService-->>User: Reset email
+        
+        User->>App: Click reset link
+        App->>AuthService: Verify reset token
+        
+        alt Token Valid
+            User->>App: Enter new password
+            App->>SecurityService: Validate password
+            App->>AuthService: Update password
+            AuthService->>SecurityService: Hash password
+            AuthService->>UserDB: Save new password
+            AuthService->>SecurityService: Invalidate sessions
+            AuthService->>AuditLog: Log password reset
+            AuthService-->>App: Reset successful
+            App-->>User: Password updated
+        else Token Invalid/Expired
+            AuthService-->>App: Invalid reset
+            App-->>User: Request new reset
+        end
+    end

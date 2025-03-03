@@ -1,0 +1,87 @@
+sequenceDiagram
+    actor Customer
+    participant App
+    participant DisputeService
+    participant OrderService
+    participant PaymentService
+    participant SupportService
+    participant NotificationService
+    participant AuditService
+    actor SupportAgent
+
+    %% Dispute Initiation
+    rect rgb(200, 220, 240)
+        Note over Customer,SupportAgent: Dispute Initiation Process
+        Customer->>App: Open dispute
+        App->>DisputeService: Create dispute ticket
+        DisputeService->>OrderService: Fetch order details
+        DisputeService->>PaymentService: Check payment status
+        
+        alt Invalid Dispute Period
+            DisputeService-->>App: Period expired
+            App-->>Customer: Cannot dispute
+        else Valid Dispute
+            DisputeService->>SupportService: Create case
+            DisputeService->>NotificationService: Notify customer
+            DisputeService->>AuditService: Log dispute
+            DisputeService-->>App: Dispute created
+            App-->>Customer: Show dispute status
+        end
+    end
+
+    %% Evidence Collection
+    rect rgb(220, 240, 200)
+        Note over Customer,SupportAgent: Evidence Collection
+        Customer->>App: Upload evidence
+        App->>DisputeService: Store evidence
+        DisputeService->>SupportService: Update case
+        
+        SupportAgent->>SupportService: Review evidence
+        SupportService->>DisputeService: Request more info
+        
+        alt More Info Needed
+            DisputeService->>NotificationService: Request details
+            NotificationService-->>Customer: Submit more info
+        else Evidence Complete
+            SupportService->>DisputeService: Begin investigation
+        end
+    end
+
+    %% Resolution Process
+    rect rgb(240, 220, 200)
+        Note over Customer,SupportAgent: Dispute Resolution
+        SupportAgent->>SupportService: Make decision
+        
+        alt Dispute Approved
+            SupportService->>DisputeService: Approve dispute
+            DisputeService->>PaymentService: Process refund
+            DisputeService->>OrderService: Update order
+            DisputeService->>NotificationService: Notify resolution
+            DisputeService->>AuditService: Log resolution
+        else Dispute Rejected
+            SupportService->>DisputeService: Reject dispute
+            DisputeService->>NotificationService: Send explanation
+            DisputeService->>AuditService: Log rejection
+        else Partial Resolution
+            SupportService->>DisputeService: Partial approval
+            DisputeService->>PaymentService: Partial refund
+            DisputeService->>NotificationService: Explain decision
+            DisputeService->>AuditService: Log partial resolution
+        end
+    end
+
+    %% Appeal Process
+    rect rgb(200, 240, 220)
+        Note over Customer,SupportAgent: Appeal Handling
+        Customer->>App: Submit appeal
+        App->>DisputeService: Create appeal
+        DisputeService->>SupportService: Escalate case
+        
+        alt Appeal Valid
+            SupportService->>DisputeService: Review appeal
+            DisputeService->>NotificationService: Update status
+        else Appeal Invalid
+            DisputeService-->>App: Appeal rejected
+            App-->>Customer: Final decision
+        end
+    end
