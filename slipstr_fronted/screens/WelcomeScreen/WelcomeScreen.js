@@ -1,8 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
-import CommonButton from "../components/CommonButton";
+import CommonButton from "../../components/CommonButton";
+import CommonTextView from "../../components/CommonTextView";
 
-export default function AgeGateScreen({ onYesPress, onNoPress }) {
+export default function WelcomeScreen({ onYesPress, onNoPress }) {
   return (
     <View style={styles.container}>
       {/* Logo Placeholder */}
@@ -13,10 +14,10 @@ export default function AgeGateScreen({ onYesPress, onNoPress }) {
       />
 
       {/* Heading + subtext */}
-      <Text style={styles.ageTitle}>Are you over 21?</Text>
-      <Text style={styles.ageDesc}>
+      <CommonTextView style={styles.ageTitle}>Are you over 21?</CommonTextView>
+      <CommonTextView style={styles.ageDesc}>
         You must confirm that you are of legal drinking age to enter
-      </Text>
+      </CommonTextView>
 
       {/* Buttons side-by-side */}
       <View style={styles.buttonRow}>
@@ -50,7 +51,6 @@ const styles = StyleSheet.create({
   },
   ageTitle: {
     fontSize: 20,
-    fontFamily: "Poppins-SemiBold",
     marginBottom: 12,
     textAlign: "center",
   },

@@ -1,21 +1,26 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
-export default function SorryScreen() {
+const SorryScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.logoBox}>
-        <Text style={styles.icon}>🍸</Text>
-        <Text style={styles.logoText}>SIPSTR</Text>
-      </View>
+      {/* Logo */}
+      <Image source={require("../assets/images/logo.png")} style={styles.logo} />
 
-      <Text style={[styles.sorryTitle, { marginBottom: 8 }]}>Sorry!</Text>
-      <Text style={styles.sorryDesc}>
+      {/* Sorry Message */}
+      <CommonTextView style={styles.title}>Sorry!</CommonTextView>
+      <CommonTextView style={styles.message}>
         You should be over 21 years old to be able to access this website.
-      </Text>
+      </CommonTextView>
+
+      {/* Back Button (Optional - Navigate to Home or Exit) */}
+      <CommonButton
+        title="Go Back"
+        onPress={() => navigation.navigate("Welcome")}
+      />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -55,3 +60,5 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
+
+export default SorryScreen;
