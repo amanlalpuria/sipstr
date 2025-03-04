@@ -1,61 +1,70 @@
-import { useFonts } from "expo-font";
-import { useCallback } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import CommonTextView from "./components/CommonTextView";
-import CommonButton from "./components/CommonButton";
-import CommonTextField from "./components/CommonTextField";
+import React, { useState } from 'react';
+import { useFonts } from 'expo-font';
+
+import AgeGateScreen from './components/AgeGateScreen';
+import SorryScreen from './components/SorryScreen';
+import LoginScreen from './components/LoginScreen';
+import SignUpScreen from './components/SignUpScreen';
+import HomeScreen from './components/HomeScreen';
+import ProductDetailsScreen from './components/ProductDetailsScreen';
 
 export default function App() {
+  const [currentScreen, setCurrentScreen] = useState('ageGate');
+
+  // Load custom fonts
   const [fontsLoaded] = useFonts({
-    "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
-    "Poppins-SemiBold": require("./assets/fonts/Poppins-SemiBold.ttf"),
-    "ReggaeOne-Regular": require("./assets/fonts/ReggaeOne-Regular.ttf"),
+    'Poppins-Regular': require('./assets/fonts/Poppins-Regular.ttf'),
+    'Poppins-SemiBold': require('./assets/fonts/Poppins-SemiBold.ttf'),
+    'ReggaeOne-Regular': require('./assets/fonts/ReggaeOne-Regular.ttf'),
   });
+  if (!fontsLoaded) return null;
 
-  if (!fontsLoaded) {
-    return null; // Prevent rendering until fonts are ready
+  switch (currentScreen) {
+    case 'ageGate':
+      return (
+        <AgeGateScreen
+          onYesPress={() => setCurrentScreen('login')}
+          onNoPress={() => setCurrentScreen('sorry')}
+        />
+      );
+
+    case 'sorry':
+      return <SorryScreen />;
+
+    case 'login':
+      return (
+        <LoginScreen
+          onLoginPress={() => setCurrentScreen('home')}
+          onSignupPress={() => setCurrentScreen('signup')}
+        />
+      );
+
+    case 'signup':
+      return (
+        <SignUpScreen
+          // If signup is successful, go to Home
+          onSignupSuccess={() => setCurrentScreen('home')}
+          // If user wants to go back to login
+          onBackToLogin={() => setCurrentScreen('login')}
+        />
+      );
+
+    case 'home':
+      return (
+        <HomeScreen 
+          onProductDetailsPress={() => setCurrentScreen('productDetails')}
+        />
+      );
+
+    case 'productDetails':
+      return (
+        <ProductDetailsScreen 
+          // If you want to allow going back:
+          onBackPress={() => setCurrentScreen('home')}
+        />
+      );
+
+    default:
+      return null; // Fallback (should never happen)
   }
-
-  return (
-    <View style={styles.container}>
-      <CommonTextView>Hello World! - Common Style from Styles</CommonTextView>
-      <CommonTextView style={{ fontSize: 26, color: "red", marginBottom: 15 }}>
-        Custom Styling overriding from default styling
-      </CommonTextView>
-
-      <CommonButton
-        title="Custom Style Button"
-        onPress={() => console.log("Clicked!")}
-        style={{ backgroundColor: "blue", borderRadius: 20, marginBottom: 15 }} // Overrides button style
-        textStyle={{ fontSize: 22 }} // Overrides text size
-      />
-      <CommonButton
-        title="Login"
-        onPress={() => console.log("Default designed Login button clicked")}
-      />
-
-      <CommonTextField
-        placeholder="Demo Textfield with default style + new style"
-        style={{
-          margin: 15,
-        }}
-        onChangeText={() => console.log("OnChangeText Called")}
-      />
-
-      <CommonTextField
-        placeholder="Demo Textfield with default style"
-        onChangeText={() => console.log("OnChangeText Called")}
-      />
-    </View>
-  );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    padding: 20,
-  },
-});
