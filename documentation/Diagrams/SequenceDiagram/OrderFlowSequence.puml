@@ -1,0 +1,63 @@
+sequenceDiagram
+    actor Customer
+    participant App
+    participant OrderService
+    participant CartService
+    participant StoreService
+    participant InventoryService
+    participant DeliveryService
+    actor Store
+    actor Driver
+
+    rect rgb(200, 220, 240)
+        Note over Customer,Driver: Order Creation Process
+        Customer->>App: Browse store
+        App->>StoreService: Get products
+        StoreService->>InventoryService: Check availability
+        StoreService-->>App: Available products
+        
+        Customer->>App: Add to cart
+        App->>CartService: Update cart
+        CartService->>InventoryService: Reserve items
+        CartService-->>App: Cart updated
+        
+        Customer->>App: Checkout
+        App->>OrderService: Create order
+        OrderService->>StoreService: Verify store status
+        OrderService->>InventoryService: Lock inventory
+        OrderService->>DeliveryService: Calculate delivery fee
+        OrderService-->>App: Order summary
+    end
+
+    rect rgb(220, 240, 200)
+        Note over Customer,Driver: Store Processing
+        OrderService->>Store: New order notification
+        Store->>App: Accept order
+        App->>OrderService: Update status
+        Store->>App: Order being prepared
+        App->>Customer: Preparation update
+    end
+
+    rect rgb(240, 220, 200)
+        Note over Customer,Driver: Delivery Assignment
+        Store->>App: Order ready
+        App->>DeliveryService: Find nearby drivers
+        DeliveryService->>Driver: Delivery request
+        Driver->>DeliveryService: Accept delivery
+        DeliveryService->>App: Driver assigned
+        App->>Customer: Driver details
+    end
+
+    rect rgb(220, 200, 240)
+        Note over Customer,Driver: Delivery Process
+        Driver->>App: Picked up order
+        App->>Customer: Order picked up
+        Driver->>App: Update location
+        App->>Customer: Real-time tracking
+        Driver->>App: Arrived at location
+        App->>Customer: Driver arrived
+        Driver->>App: Delivery complete
+        App->>Customer: Delivery confirmation
+        Customer->>App: Confirm receipt
+        App->>OrderService: Close order
+    end

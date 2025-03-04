@@ -23,5 +23,17 @@
 hs_err_pid*
 replay_pid*
 
+<<<<<<< HEAD
 /slipstr-backend/.idea/
 /slipstr-backend/.mvn/
+=======
+.idea
+.run
+
+**/target/
+sipstr-backend/target/
+sipstr_fronted/node_modules/
+target
+
+**/.expo
+>>>>>>> master

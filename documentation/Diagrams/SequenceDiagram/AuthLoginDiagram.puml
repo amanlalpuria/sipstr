@@ -1,0 +1,62 @@
+sequenceDiagram
+    actor User
+    participant App
+    participant AuthService
+    participant UserDB
+    participant SMSService
+    participant EmailService
+
+    %% Registration Flow
+    rect rgb(200, 220, 240)
+        Note over User,EmailService: Registration Process
+        User->>App: Register (email, phone, password)
+        App->>AuthService: Validate Input
+        AuthService->>UserDB: Check if user exists
+        UserDB-->>AuthService: User status
+        AuthService->>UserDB: Create user record
+        AuthService->>SMSService: Send OTP
+        AuthService->>EmailService: Send verification email
+        AuthService-->>App: Registration successful
+        App-->>User: Verify your email & phone
+        User->>App: Enter SMS OTP
+        App->>AuthService: Verify OTP
+        AuthService->>UserDB: Update phone verification
+        User->>App: Click email verification link
+        App->>AuthService: Verify email token
+        AuthService->>UserDB: Update email verification
+        AuthService-->>App: Account fully verified
+        App-->>User: Account activated
+    end
+
+    %% Login Flow
+    rect rgb(220, 240, 200)
+        Note over User,EmailService: Login Process
+        User->>App: Login (email/phone + password)
+        App->>AuthService: Authenticate
+        AuthService->>UserDB: Verify credentials
+        alt 2FA Enabled
+            AuthService->>SMSService: Send 2FA code
+            SMSService-->>User: SMS with code
+            User->>App: Enter 2FA code
+            App->>AuthService: Verify 2FA
+        end
+        AuthService->>UserDB: Update last login
+        AuthService-->>App: Return JWT token
+        App-->>User: Login successful
+    end
+
+    %% Password Reset
+    rect rgb(240, 220, 200)
+        Note over User,EmailService: Password Reset
+        User->>App: Request password reset
+        App->>AuthService: Initialize reset
+        AuthService->>EmailService: Send reset link
+        EmailService-->>User: Reset email
+        User->>App: Click reset link
+        App->>AuthService: Verify reset token
+        User->>App: Enter new password
+        App->>AuthService: Update password
+        AuthService->>UserDB: Save new password
+        AuthService-->>App: Password updated
+        App-->>User: Reset successful
+    end
