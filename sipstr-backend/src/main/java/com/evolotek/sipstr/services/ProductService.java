@@ -2,8 +2,6 @@ package com.evolotek.sipstr.services;
 
 import com.evolotek.sipstr.dtos.ProductDTO;
 import com.evolotek.sipstr.dtos.ProductVariantDTO;
-import com.evolotek.sipstr.entities.Product;
-import com.evolotek.sipstr.entities.ProductVariant;
 import com.evolotek.sipstr.exceptions.ResourceNotFoundException;
 import com.evolotek.sipstr.repositories.ProductRepository;
 import com.evolotek.sipstr.repositories.ProductVariantRepository;

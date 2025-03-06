@@ -1,7 +1,5 @@
 package com.evolotek.sipstr.services;
 
-import com.evolotek.sipstr.entities.Order;
-import com.evolotek.sipstr.entities.Payment;
 import com.evolotek.sipstr.repositories.OrderRepository;
 import com.evolotek.sipstr.repositories.PaymentRepository;
 import lombok.RequiredArgsConstructor;

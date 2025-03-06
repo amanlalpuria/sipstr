@@ -1,10 +1,5 @@
 package com.evolotek.sipstr.services;
 
-import com.evolotek.sipstr.entities.Cart;
-import com.evolotek.sipstr.entities.CartItem;
-import com.evolotek.sipstr.entities.Store;
-import com.evolotek.sipstr.entities.StoreInventory;
-import com.evolotek.sipstr.entities.User;
 import com.evolotek.sipstr.exceptions.ResourceNotFoundException;
 import com.evolotek.sipstr.repositories.CartRepository;
 import com.evolotek.sipstr.repositories.CartItemRepository;

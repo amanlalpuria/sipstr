@@ -1,8 +1,5 @@
 package com.evolotek.sipstr.services;
 
-import com.evolotek.sipstr.dtos.RegisterUserDto;
-import com.evolotek.sipstr.entities.Role;
-import com.evolotek.sipstr.entities.User;
 import com.evolotek.sipstr.repositories.RoleRepository;
 import com.evolotek.sipstr.repositories.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -1,6 +1,5 @@
 package com.evolotek.sipstr.services;
 
-import com.evolotek.sipstr.entities.User;
 import com.evolotek.sipstr.security.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

@@ -1,7 +1,5 @@
 package com.evolotek.sipstr.services;
 
-import com.evolotek.sipstr.entities.Address;
-import com.evolotek.sipstr.entities.DeliveryZone;
 import com.evolotek.sipstr.exceptions.ResourceNotFoundException;
 import com.evolotek.sipstr.repositories.DeliveryZoneRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,5 @@
 package com.evolotek.sipstr.services;
 
-import com.evolotek.sipstr.entities.Address;
-import com.evolotek.sipstr.entities.User;
 import com.evolotek.sipstr.repositories.AddressRepository;
 import com.evolotek.sipstr.repositories.UserRepository;
 import org.springframework.stereotype.Service;

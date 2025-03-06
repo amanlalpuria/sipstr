@@ -1,7 +1,5 @@
 package com.evolotek.sipstr.services;
 
-import com.evolotek.sipstr.entities.DeliveryPartner;
-import com.evolotek.sipstr.entities.DeliveryPartnerDocument;
 import com.evolotek.sipstr.exceptions.ResourceNotFoundException;
 import com.evolotek.sipstr.repositories.DeliveryPartnerDocumentRepository;
 import com.evolotek.sipstr.repositories.DeliveryPartnerRepository;

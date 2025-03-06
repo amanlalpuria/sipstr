@@ -1,7 +1,5 @@
 package com.evolotek.sipstr.services;
 
-import com.evolotek.sipstr.entities.Store;
-import com.evolotek.sipstr.entities.StoreOperatingHours;
 import com.evolotek.sipstr.exceptions.ResourceNotFoundException;
 import com.evolotek.sipstr.repositories.StoreOperatingHoursRepository;
 import com.evolotek.sipstr.repositories.StoreRepository;

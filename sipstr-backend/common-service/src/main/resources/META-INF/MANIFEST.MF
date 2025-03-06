@@ -1,0 +1,47 @@
+Manifest-Version: 1.0
+Main-Class: com.sipstr.common_service.CommonServiceApplication
+Class-Path: spring-jcl-6.2.3.jar spring-boot-3.4.3.jar netty-transport-n
+ ative-unix-common-4.1.118.Final.jar jaxb-core-4.0.5.jar springdoc-opena
+ pi-starter-webmvc-api-2.8.4.jar spring-security-config-6.4.3.jar swagge
+ r-annotations-jakarta-2.2.28.jar netty-handler-4.1.118.Final.jar txw2-4
+ .0.5.jar log4j-to-slf4j-2.24.3.jar jaxb-runtime-4.0.5.jar netty-resolve
+ r-4.1.118.Final.jar spring-security-core-6.4.3.jar spring-boot-starter-
+ logging-3.4.3.jar jjwt-jackson-0.11.5.jar angus-activation-2.0.2.jar ka
+ fka-clients-3.8.1.jar spring-expression-6.2.3.jar spring-boot-starter-v
+ alidation-3.4.3.jar tomcat-embed-el-10.1.36.jar spring-data-jdbc-3.4.3.
+ jar netty-codec-4.1.118.Final.jar log4j-api-2.24.3.jar jakarta.xml.bind
+ -api-4.0.2.jar spring-boot-starter-data-jdbc-3.4.3.jar spring-core-6.2.
+ 3.jar swagger-ui-5.18.2.jar byte-buddy-1.15.11.jar istack-commons-runti
+ me-4.1.2.jar swagger-models-jakarta-2.2.28.jar micrometer-observation-1
+ .14.4.jar zstd-jni-1.5.6-4.jar jakarta.activation-api-2.1.3.jar spring-
+ tx-6.2.3.jar spring-data-keyvalue-3.4.3.jar netty-buffer-4.1.118.Final.
+ jar jul-to-slf4j-2.0.16.jar jakarta.inject-api-2.0.1.jar spring-securit
+ y-web-6.4.3.jar spring-boot-starter-data-jpa-3.4.3.jar spring-orm-6.2.3
+ .jar spring-boot-autoconfigure-3.4.3.jar hibernate-validator-8.0.2.Fina
+ l.jar logback-classic-1.5.16.jar jackson-dataformat-toml-2.18.2.jar net
+ ty-common-4.1.118.Final.jar flyway-core-10.20.1.jar spring-webmvc-6.2.3
+ .jar jakarta.annotation-api-2.1.1.jar snakeyaml-2.3.jar jakarta.transac
+ tion-api-2.0.1.jar spring-boot-starter-security-3.4.3.jar spring-boot-s
+ tarter-3.4.3.jar spring-boot-starter-jdbc-3.4.3.jar spring-data-redis-3
+ .4.3.jar jackson-dataformat-yaml-2.18.2.jar flyway-database-postgresql-
+ 10.20.1.jar spring-oxm-6.2.3.jar reactive-streams-1.0.4.jar reactor-cor
+ e-3.7.3.jar spring-messaging-6.2.3.jar jackson-annotations-2.18.2.jar j
+ jwt-impl-0.11.5.jar hibernate-commons-annotations-7.0.3.Final.jar sprin
+ g-context-support-6.2.3.jar spring-beans-6.2.3.jar spring-data-jpa-3.4.
+ 3.jar jakarta.validation-api-3.0.2.jar jackson-core-2.18.2.jar jakarta.
+ persistence-api-3.1.0.jar postgresql-42.7.5.jar swagger-core-jakarta-2.
+ 2.28.jar spring-data-commons-3.4.3.jar antlr4-runtime-4.13.0.jar spring
+ -boot-starter-data-redis-3.4.3.jar classmate-1.7.0.jar webjars-locator-
+ lite-1.0.1.jar spring-aop-6.2.3.jar spring-context-6.2.3.jar micrometer
+ -commons-1.14.4.jar commons-lang3-3.17.0.jar aspectjweaver-1.9.22.1.jar
+  lettuce-core-6.4.2.RELEASE.jar spring-data-relational-3.4.3.jar spring
+ -kafka-3.3.3.jar lz4-java-1.8.0.jar spring-retry-2.0.11.jar netty-trans
+ port-4.1.118.Final.jar spring-security-crypto-6.4.3.jar logback-core-1.
+ 5.16.jar checker-qual-3.48.3.jar jackson-databind-2.18.2.jar spring-boo
+ t-devtools-3.4.3.jar HikariCP-5.1.0.jar spring-web-6.2.3.jar jboss-logg
+ ing-3.6.1.Final.jar spring-aspects-6.2.3.jar springdoc-openapi-starter-
+ webmvc-ui-2.8.4.jar springdoc-openapi-starter-common-2.8.4.jar jackson-
+ datatype-jsr310-2.18.2.jar hibernate-core-6.6.8.Final.jar jandex-3.2.0.
+ jar jjwt-api-0.11.5.jar spring-jdbc-6.2.3.jar snappy-java-1.1.10.5.jar 
+ slf4j-api-2.0.16.jar jspecify-1.0.0.jar
+

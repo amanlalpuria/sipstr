@@ -1,6 +1,5 @@
 package com.evolotek.sipstr.services;
 
-import com.evolotek.sipstr.entities.StoreInventory;
 import com.evolotek.sipstr.repositories.StoreInventoryRepository;
 import org.springframework.stereotype.Service;
 

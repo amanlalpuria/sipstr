@@ -1,6 +1,5 @@
 package com.evolotek.sipstr.services;
 
-import com.evolotek.sipstr.entities.Coordinates;
 import com.evolotek.sipstr.repositories.CoordinatesRepository;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,5 @@
 package com.evolotek.sipstr.services;
 
-import com.evolotek.sipstr.configs.TaxRateConfig;
-import com.evolotek.sipstr.entities.StoreInventory;
 import com.evolotek.sipstr.repositories.AddressRepository;
 import com.evolotek.sipstr.repositories.StoreInventoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
