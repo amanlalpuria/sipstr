@@ -167,6 +167,7 @@ CREATE TABLE category (
     parent_category_id INTEGER,
     category_name VARCHAR(255) NOT NULL,
     description TEXT,
+    is_taxable BOOLEAN NOT NULL,
     image_url VARCHAR(255),
     is_active BOOLEAN DEFAULT true,
     display_order INTEGER,

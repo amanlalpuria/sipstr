@@ -1,3 +1,6 @@
+# docker-compose.yml - Updated version
+version: '3.8'
+
 services:
   postgres:
     image: postgres:latest
@@ -55,27 +58,239 @@ services:
     networks:
       - backend
 
-#  backend:
-#    build:
-#      context: ./sipstr-backend
-#      dockerfile: Dockerfile
-#    container_name: backend-service
-#    environment:
-#      DB_HOST: postgres
-#      DB_PORT: 5432
-#      DB_USER: sipstr_rw_user
-#      DB_PASSWORD: sipstr_rw_user
-#      DB_NAME: sipStr
-#      JWT_SECRET: 3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b
-#    depends_on:
-#      postgres:
-#        condition: service_healthy
-#      redis:
-#        condition: service_healthy
-#    ports:
-#      - "8080:8080"
-#    networks:
-#      - backend
+  service-registry:
+    build:
+      context: ./sipstr-backend
+      dockerfile: service-registry/Dockerfile
+    container_name: service-registry
+    ports:
+      - "8761:8761"
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8761/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  auth-service:
+    build:
+      context: ./sipstr-backend
+      dockerfile: auth-service/Dockerfile
+    container_name: auth-service
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/sipStr
+      - SPRING_DATASOURCE_USERNAME=sipstr_rw_user
+      - SPRING_DATASOURCE_PASSWORD=sipstr_rw_user
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
+      - SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka:9092
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - SERVER_PORT=8081
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      service-registry:
+        condition: service_healthy
+    networks:
+      - backend
+
+  user-service:
+    build:
+      context: ./sipstr-backend
+      dockerfile: user-service/Dockerfile
+    container_name: user-service
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/sipStr
+      - SPRING_DATASOURCE_USERNAME=sipstr_rw_user
+      - SPRING_DATASOURCE_PASSWORD=sipstr_rw_user
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
+      - SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka:9092
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - SERVER_PORT=8082
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      service-registry:
+        condition: service_healthy
+    networks:
+      - backend
+
+  payment-service:
+    build:
+      context: ./sipstr-backend
+      dockerfile: payment-service/Dockerfile
+    container_name: payment-service
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/sipStr
+      - SPRING_DATASOURCE_USERNAME=sipstr_rw_user
+      - SPRING_DATASOURCE_PASSWORD=sipstr_rw_user
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
+      - SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka:9092
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - SERVER_PORT=8083
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      service-registry:
+        condition: service_healthy
+    networks:
+      - backend
+
+  order-service:
+    build:
+      context: ./sipstr-backend
+      dockerfile: order-service/Dockerfile
+    container_name: order-service
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/sipStr
+      - SPRING_DATASOURCE_USERNAME=sipstr_rw_user
+      - SPRING_DATASOURCE_PASSWORD=sipstr_rw_user
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
+      - SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka:9092
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - SERVER_PORT=8084
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      service-registry:
+        condition: service_healthy
+    networks:
+      - backend
+
+  delivery-service:
+    build:
+      context: ./sipstr-backend
+      dockerfile: delivery-service/Dockerfile
+    container_name: delivery-service
+    ports:
+      - "8085:8085"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/sipStr
+      - SPRING_DATASOURCE_USERNAME=sipstr_rw_user
+      - SPRING_DATASOURCE_PASSWORD=sipstr_rw_user
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
+      - SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka:9092
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - SERVER_PORT=8085
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      service-registry:
+        condition: service_healthy
+    networks:
+      - backend
+
+  driver-location-service:
+    build:
+      context: ./sipstr-backend
+      dockerfile: driver-location-service/Dockerfile
+    container_name: driver-location-service
+    ports:
+      - "8086:8086"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/sipStr
+      - SPRING_DATASOURCE_USERNAME=sipstr_rw_user
+      - SPRING_DATASOURCE_PASSWORD=sipstr_rw_user
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
+      - SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka:9092
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - SERVER_PORT=8086
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      service-registry:
+        condition: service_healthy
+    networks:
+      - backend
+
+  notification-service:
+    build:
+      context: ./sipstr-backend
+      dockerfile: notification-service/Dockerfile
+    container_name: notification-service
+    ports:
+      - "8087:8087"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/sipStr
+      - SPRING_DATASOURCE_USERNAME=sipstr_rw_user
+      - SPRING_DATASOURCE_PASSWORD=sipstr_rw_user
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
+      - SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka:9092
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - SERVER_PORT=8087
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      service-registry:
+        condition: service_healthy
+    networks:
+      - backend
+
+  search-service:
+    build:
+      context: ./sipstr-backend
+      dockerfile: search-service/Dockerfile
+    container_name: search-service
+    ports:
+      - "8088:8088"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/sipStr
+      - SPRING_DATASOURCE_USERNAME=sipstr_rw_user
+      - SPRING_DATASOURCE_PASSWORD=sipstr_rw_user
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://service-registry:8761/eureka/
+      - SPRING_KAFKA_BOOTSTRAP-SERVERS=kafka:9092
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - SERVER_PORT=8088
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      service-registry:
+        condition: service_healthy
+    networks:
+      - backend
 
 volumes:
   postgres_data: {}
