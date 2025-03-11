@@ -4,9 +4,9 @@ import { colors } from "./colors";
 
 export const globalStyles = StyleSheet.create({
   button: {
-    backgroundColor: colors.black,
+    backgroundColor: colors.orange,
     borderWidth: 1,
-    borderColor: colors.black,
+    borderColor: "transparent",
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,
@@ -32,9 +32,62 @@ export const globalStyles = StyleSheet.create({
     width: "100%",
   },
   textView: {
-    fontFamily: "Poppins-SemiBold",
+    fontFamily: "Poppins-Regular",
     fontStyle: "normal",
-    fontSize: 12, // Change here to update everywhere
+    fontSize: 14, // Change here to update everywhere
     color: colors.black,
+  },
+  logo: {
+    width: 200,
+    height: 100,
+    resizeMode: "contain",
+    marginBottom: 30,
+  },
+});
+
+// Grouping all alert-related styles inside an object
+export const alertStyles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)", // Semi-transparent background
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  container: {
+    backgroundColor: colors.white,
+    padding: 20,
+    borderRadius: 10,
+    alignItems: "center",
+    width: "80%",
+  },
+  title: {
+    fontFamily: "Poppins-Bold",
+    fontSize: 22,
+    color: colors.black,
+    marginBottom: 10,
+  },
+  message: {
+    fontFamily: "Poppins-Regular",
+    fontSize: 16,
+    color: colors.text,
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  button: {
+    backgroundColor: colors.black,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 8,
+    marginHorizontal: 10,
+  },
+  buttonText: {
+    fontFamily: "Poppins-SemiBold",
+    fontSize: 16,
+    color: colors.white,
   },
 });

@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import CommonButton from '../components/CommonButton';
+import CommonButton from '../../components/CommonButton';
 
 export default function LoginScreen({
   onLoginPress = () => {},
