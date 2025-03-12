@@ -11,10 +11,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/catalog")
-@RequiredArgsConstructor
 public class CategoryController {
 
     private final CategoryService categoryService;
+
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
     @GetMapping("/categories")
     @PreAuthorize("hasAnyRole('SUPPLIER_ADMIN', 'SUPPLIER_MANAGER', 'SUPER_ADMIN')")

@@ -1,8 +1,11 @@
 package com.sipstr.product_service.controller;
 
+import com.sipstr.common_service.entities.Product;
 import com.sipstr.product_service.dtos.ProductDTO;
+import com.sipstr.product_service.service.CategoryService;
 import com.sipstr.product_service.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -12,16 +15,22 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/products")
-@RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
 
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
+
     @GetMapping
     @PreAuthorize("hasAnyRole('SUPPLIER_ADMIN', 'SUPPLIER_MANAGER', 'SUPER_ADMIN')")
-    public ResponseEntity<List<ProductDTO>> getAllProducts() {
-        return ResponseEntity.ok(productService.getAllProducts());
+    public ResponseEntity<Page<ProductDTO>> getAllProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(productService.getAllProducts(page, size));
     }
+
 
     @GetMapping("/{uuid}")
     @PreAuthorize("hasAnyRole('SUPPLIER_ADMIN', 'SUPPLIER_MANAGER', 'SUPER_ADMIN')")
@@ -29,11 +38,6 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductById(uuid));
     }
 
-    @PostMapping
-    @PreAuthorize("hasAnyRole('SUPPLIER_ADMIN', 'SUPPLIER_MANAGER')")
-    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO) {
-        return ResponseEntity.ok(productService.createProduct(productDTO));
-    }
 
     @PutMapping("/{uuid}")
     @PreAuthorize("hasAnyRole('SUPPLIER_ADMIN', 'SUPPLIER_MANAGER')")
