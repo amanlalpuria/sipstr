@@ -76,3 +76,202 @@
 - Enable **error tracking** via Sentry.
 
 ---
+# Sipstr App Microservices Architecture
+
+## Core Microservices
+
+### 1. User Management Service
+- Responsible for user registration, authentication, and profile management
+- Features:
+    - User registration
+    - Login/Logout
+    - Profile management
+    - Role-based access control
+    - Address management
+    - User preferences
+
+### 2. Authentication and Authorization Service
+- Centralized authentication and authorization
+- Features:
+    - JWT token generation
+    - OAuth2 support
+    - Single Sign-On (SSO)
+    - Role and permission management
+    - Multi-factor authentication
+
+### 3. Product Catalog Service
+- Manages product information and inventory
+- Features:
+    - Product CRUD operations
+    - Category management
+    - Price management
+    - Inventory tracking
+    - Product search and filtering
+    - Product recommendations
+
+### 4. Order Management Service
+- Handles order processing and management
+- Features:
+    - Order creation
+    - Order tracking
+    - Order history
+    - Cart management
+    - Order status updates
+    - Pricing calculations
+
+### 5. Payment Service
+- Manages payment processing and transactions
+- Features:
+    - Multiple payment method support
+    - Payment gateway integration
+    - Transaction logging
+    - Refund processing
+    - Payment status tracking
+    - Fraud detection
+
+### 6. Delivery Tracking Service
+- Manages delivery logistics and tracking
+- Features:
+    - Real-time delivery tracking
+    - Delivery route optimization
+    - Estimated delivery time
+    - Delivery status updates
+    - Delivery partner assignment
+
+### 7. Notification Service
+- Handles user communications
+- Features:
+    - Email notifications
+    - SMS notifications
+    - Push notifications
+    - In-app notifications
+    - Notification preferences
+
+### 8. Search and Recommendation Service
+- Provides advanced search and recommendation capabilities
+- Features:
+    - Product search
+    - Fuzzy search
+    - Personalized recommendations
+    - Search history
+    - Trending products
+
+### 9. Review and Rating Service
+- Manages product and delivery partner reviews
+- Features:
+    - Product reviews
+    - Delivery partner ratings
+    - Review moderation
+    - Review analytics
+
+### 10. Customer Support Service
+- Handles customer inquiries and support
+- Features:
+    - Ticket management
+    - Chat support
+    - Knowledge base
+    - FAQ management
+    - Support analytics
+
+## Supporting Services
+
+### 11. API Gateway
+- Single entry point for all client requests
+- Features:
+    - Request routing
+    - Authentication
+    - Rate limiting
+    - Load balancing
+    - SSL termination
+
+### 12. Config Server
+- Centralized configuration management
+- Features:
+    - External configuration
+    - Environment-specific configs
+    - Dynamic configuration updates
+
+### 13. Service Registry and Discovery
+- Service registration and discovery
+- Features:
+    - Service registration
+    - Service discovery
+    - Health checks
+    - Load balancing
+
+### 14. Monitoring and Observability Service
+- System health and performance monitoring
+- Features:
+    - Distributed tracing
+    - Metrics collection
+    - Log aggregation
+    - Performance dashboards
+    - Alerting
+
+## Communication Patterns
+
+### Inter-Service Communication
+- REST API
+- Message Queues (Kafka/RabbitMQ)
+- gRPC for performance-critical services
+
+### Event-Driven Architecture
+- Use Apache Kafka for:
+    - Order created
+    - Payment processed
+    - Delivery status updates
+    - User registration
+    - Notifications
+
+## Data Management
+
+### Database Strategy
+- User Service: PostgreSQL
+- Product Catalog: MongoDB
+- Order Service: PostgreSQL
+- Payment Service: PostgreSQL
+- Delivery Tracking: Cassandra
+- Search Service: Elasticsearch
+
+## Security Considerations
+- JWT-based authentication
+- Role-based access control
+- HTTPS everywhere
+- Input validation
+- Rate limiting
+- CORS configuration
+
+## Technology Stack
+- Java 17
+- Spring Boot
+- Spring Cloud
+- Apache Kafka
+- PostgreSQL
+- MongoDB
+- Redis
+- Elasticsearch
+- Docker
+- Kubernetes
+- Prometheus
+- Grafana
+
+## Deployment Strategy
+- Containerization with Docker
+- Orchestration with Kubernetes
+- Continuous Integration/Continuous Deployment (CI/CD)
+- Blue-Green Deployments
+- Canary Releases
+
+## Scalability Approaches
+- Horizontal scaling
+- Caching with Redis
+- Database sharding
+- Asynchronous processing
+- Message queue buffers
+
+## Potential Challenges
+- Data consistency
+- Service synchronization
+- Performance overhead
+- Distributed transaction management
+- Eventual consistency
