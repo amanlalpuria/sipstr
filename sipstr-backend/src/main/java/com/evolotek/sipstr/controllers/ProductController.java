@@ -1,6 +1,7 @@
 package com.evolotek.sipstr.controllers;
 
 import com.evolotek.sipstr.dtos.ProductDTO;
+import com.evolotek.sipstr.dtos.ProductVariantDTO;
 import com.evolotek.sipstr.entities.Product;
 import com.evolotek.sipstr.entities.ProductVariant;
 import com.evolotek.sipstr.services.ProductService;
@@ -53,8 +54,8 @@ public class ProductController {
     }
 
     @PutMapping("/variants/{variantId}")
-    public ResponseEntity<ProductVariant> updateProductVariant(@PathVariable Long variantId,
-                                                               @RequestBody ProductVariant variantDetails) {
+    public ResponseEntity<ProductVariantDTO> updateProductVariant(@PathVariable Long variantId,
+                                                               @RequestBody ProductVariantDTO variantDetails) {
         return ResponseEntity.ok(productService.updateProductVariant(variantId, variantDetails));
     }
 

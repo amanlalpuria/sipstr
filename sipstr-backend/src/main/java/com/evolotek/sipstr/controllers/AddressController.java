@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/addresses")
+@RequestMapping("/addresses")
 @Tag(name = "Address Controller", description = "APIs for managing user addresses")
 public class AddressController {
 

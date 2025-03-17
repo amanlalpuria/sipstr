@@ -167,7 +167,7 @@ CREATE TABLE category (
     parent_category_id INTEGER,
     category_name VARCHAR(255) NOT NULL,
     description TEXT,
-    image_url VARCHAR(255),
+    is_taxable BOOLEAN NOT NULL,
     is_active BOOLEAN DEFAULT true,
     display_order INTEGER,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -181,16 +181,24 @@ BEFORE UPDATE ON category
 FOR EACH ROW
 EXECUTE FUNCTION update_timestamp();
 
+CREATE TABLE brand (
+    brand_id SERIAL PRIMARY KEY,
+    brand_name VARCHAR(255) NOT NULL
+);
+
 -- Create product table with enhanced attributes
 CREATE TABLE product (
     product_id SERIAL PRIMARY KEY,
     uuid UUID DEFAULT uuid_generate_v4(),
     product_name VARCHAR(255) NOT NULL,
     description TEXT,
-    brand VARCHAR(255),
+    brand_id BIGINT NOT NULL,
     category_id INTEGER NOT NULL,
     tax_category VARCHAR(50),
     is_alcoholic BOOLEAN DEFAULT FALSE,
+    is_gluten_free BOOLEAN DEFAULT FALSE,
+    is_kosher BOOLEAN DEFAULT FALSE,
+    is_wine BOOLEAN DEFAULT FALSE,
     has_tobacco BOOLEAN DEFAULT FALSE,
     has_cannabis BOOLEAN DEFAULT FALSE,
     is_returnable BOOLEAN DEFAULT false,
@@ -200,7 +208,8 @@ CREATE TABLE product (
     is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    FOREIGN KEY (category_id) REFERENCES category(category_id)
+    FOREIGN KEY (category_id) REFERENCES category(category_id),
+    FOREIGN KEY (brand_id) REFERENCES brand(brand_id)
 );
 
 CREATE TRIGGER update_product_timestamp
@@ -208,24 +217,40 @@ BEFORE UPDATE ON product
 FOR EACH ROW
 EXECUTE FUNCTION update_timestamp();
 
+
+CREATE TABLE package (
+    package_id SERIAL PRIMARY KEY,
+    package_name VARCHAR(255) NOT NULL,
+    description TEXT
+);
+
 -- Create Product Variant Table
 CREATE TABLE product_variant (
     variant_id BIGSERIAL PRIMARY KEY,
     product_id BIGINT NOT NULL,
     abv_percentage DECIMAL(5,2),
-    image_url VARCHAR(255) NOT NULL,
-    unit VARCHAR(255) NOT NULL,  -- CAN BOTTLE
-    pack_of INT NOT NULL,   -- 1 2 3 4
-    volume_per_unit VARCHAR(255) NOT NULL,  --20oz 12oz
-    total_volume VARCHAR(255) NOT NULL, -- 1*20oz
+    thumbnail_image_url VARCHAR(255),
+    full_size_image_url VARCHAR(255),
+    brand_logo_image_url VARCHAR(255),
+    product_logo_image_url VARCHAR(255),
+    retail_upc VARCHAR(255) NOT NULL,
+    case_upc VARCHAR(255) NOT NULL,
+    package_id BIGINT NOT NULL,
     unit_price DECIMAL(10, 2) NOT NULL,  --5.59
     shelf_life_days INTEGER,
+    alcohol_by_volume DECIMAL(10,2),
     weight_grams DECIMAL(10,2),
+    calories DECIMAL(10,2),
+    carbs DECIMAL(10,2),
+    ibuValue DECIMAL(10,2),
+    sugars DECIMAL(10,2),
+    added_sugars DECIMAL(10,2),
     dimensions_cm JSONB,
     storage_instructions TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE
+    FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE,
+    FOREIGN KEY (package_id) REFERENCES package(package_id) ON DELETE CASCADE
 );
 
 -- Trigger to auto-update updated_at

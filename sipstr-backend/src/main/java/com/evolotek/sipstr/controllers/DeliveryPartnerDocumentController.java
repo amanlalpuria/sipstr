@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/delivery-partner-documents")
+@RequestMapping("/delivery-partner-documents")
 @RequiredArgsConstructor
 public class DeliveryPartnerDocumentController {
 

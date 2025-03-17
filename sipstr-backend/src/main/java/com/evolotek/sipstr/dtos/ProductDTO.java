@@ -1,5 +1,6 @@
 package com.evolotek.sipstr.dtos;
 
+import com.evolotek.sipstr.entities.ProductVariant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,5 +20,5 @@ public class ProductDTO {
     private String description;
     private String brand;
     private boolean isAlcoholic;
-    private List<ProductVariantDTO> variants;
+    private List<ProductVariant> variants;
 }

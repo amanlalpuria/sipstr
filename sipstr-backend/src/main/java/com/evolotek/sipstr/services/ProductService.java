@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -66,17 +67,17 @@ public class ProductService {
         return productVariantRepository.save(variant);
     }
 
-    public ProductVariant updateProductVariant(Long variantId, ProductVariant variantDetails) {
+    // ✅ Update product variant
+    @Transactional
+    public ProductVariantDTO updateProductVariant(Long variantId, ProductVariantDTO variantDTO) {
         ProductVariant variant = productVariantRepository.findById(variantId)
                 .orElseThrow(() -> new ResourceNotFoundException("Variant not found with ID: " + variantId));
 
-        variant.setUnit(variantDetails.getUnit());
-        variant.setPackOf(variantDetails.getPackOf());
-        variant.setVolumePerUnit(variantDetails.getVolumePerUnit());
-        variant.setTotalVolume(variantDetails.getTotalVolume());
-        variant.setUnitPrice(variantDetails.getUnitPrice());
+        variant.setUnitPrice(variantDTO.getUnitPrice());
+        variant.setRetailUpc(variantDTO.getRetailUpc());
+        variant.setCaseUpc(variantDTO.getCaseUpc());
 
-        return productVariantRepository.save(variant);
+        return mapVariantToDTO(productVariantRepository.save(variant));
     }
 
     public void deleteProductVariant(Long variantId) {
@@ -86,29 +87,28 @@ public class ProductService {
     }
 
     private ProductDTO mapToDTO(Product product) {
-        List<ProductVariantDTO> variantDTOs = product.getVariants().stream()
-                .map(this::mapVariantToDTO)
-                .collect(Collectors.toList());
+//        List<ProductVariant> variant = product.getVariants().stream()
+//                .map(this::mapProductVariant)
+//                .collect(Collectors.toList());
 
         return ProductDTO.builder()
                 .productId(product.getProductId())
                 .uuid(product.getUuid())
                 .productName(product.getProductName())
                 .description(product.getDescription())
-                .brand(product.getBrand())
+                .brand(product.getBrand().getName())
                 .isAlcoholic(product.isAlcoholic())
-                .variants(variantDTOs)
+                .variants(product.getVariants())
                 .build();
     }
 
+    // ✅ Convert ProductVariant -> DTO
     private ProductVariantDTO mapVariantToDTO(ProductVariant variant) {
         return ProductVariantDTO.builder()
                 .variantId(variant.getVariantId())
-                .unit(variant.getUnit())
-                .packOf(variant.getPackOf())
-                .volumePerUnit(variant.getVolumePerUnit())
-                .totalVolume(variant.getTotalVolume())
                 .unitPrice(variant.getUnitPrice())
+                .retailUpc(variant.getRetailUpc())
+                .caseUpc(variant.getCaseUpc())
                 .build();
     }
 }

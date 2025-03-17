@@ -13,9 +13,10 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class ProductVariantDTO {
     private Long variantId;
-    private String unit;
-    private int packOf;
-    private String volumePerUnit;
-    private String totalVolume;
+    private Long packageId;
     private BigDecimal unitPrice;
+    private String retailUpc;
+    private String caseUpc;
+    private String thumbnailImageUrl;
+    private String fullSizeImageUrl;
 }

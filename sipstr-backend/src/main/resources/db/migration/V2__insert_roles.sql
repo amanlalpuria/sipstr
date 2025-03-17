@@ -1,5 +1,5 @@
 INSERT INTO roles (name, description, permissions, is_active, updated_at, created_at) VALUES
-('USER', 'Regular user with basic access',
+('CUSTOMER', 'Customer with basic access',
  '{"view_own_data": true, "view_store_products": true, "place_order": true}',
  true, NOW(), NOW()),
 

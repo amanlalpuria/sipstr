@@ -1,31 +1,13 @@
 package com.evolotek.sipstr.entities;
 
 import com.evolotek.sipstr.configs.JsonbConverter;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.PreUpdate;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.Map;
 
 @Entity
 @Table(name = "roles")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class Role {
 
     @Id
@@ -49,6 +31,74 @@ public class Role {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    // Default Constructor
+    public Role() {}
+
+    // Getters
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Map<String, Object> getPermissions() {
+        return permissions;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    // Chained Setters
+    public Role setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public Role setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public Role setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public Role setPermissions(Map<String, Object> permissions) {
+        this.permissions = permissions;
+        return this;
+    }
+
+    public Role setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+        return this;
+    }
+
+    public Role setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+        return this;
+    }
+
+    public Role setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+        return this;
+    }
 
     @PreUpdate
     public void preUpdate() {
