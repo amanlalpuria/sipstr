@@ -25,35 +25,7 @@ const AddressesScreen = ({ navigation }) => {
       label: 'Home',
       address: '123, Main Street, Apt 4B New York, NY 10001',
       isPrimary: true,
-    },
-    {
-      id: '2',
-      type: 'work',
-      label: '43 Sturbridge Drive',
-      address: 'Piscataway, NJ 08854, USA',
-      isPrimary: false,
-    },
-    {
-      id: '3',
-      type: 'other',
-      label: '43 Sturbridge Drive',
-      address: 'Piscataway, NJ 08854, USA',
-      isPrimary: false,
-    },
-    {
-      id: '4',
-      type: 'other',
-      label: '43 Sturbridge Drive',
-      address: 'Piscataway, NJ 08854, USA',
-      isPrimary: false,
-    },
-    {
-      id: '5',
-      type: 'other',
-      label: '43 Sturbridge Drive',
-      address: 'Piscataway, NJ 08854, USA',
-      isPrimary: false,
-    },
+    }
   ];
 
   // Handle navigation back to the account screen
