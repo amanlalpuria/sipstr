@@ -1,8 +1,6 @@
 import React from "react";
-import { Modal, View } from "react-native";
-import CommonTextView from "./CommonTextView";
-import CommonButton from "./CommonButton";
-import { alertStyles } from "../styles";
+import { Modal, View, Text, TouchableOpacity } from "react-native";
+import { alertStyles } from "./styles";
 
 const CommonAlertBox = ({
   visible,
@@ -15,26 +13,28 @@ const CommonAlertBox = ({
 }) => {
   return (
     <Modal transparent={true} visible={visible} animationType="fade">
-      <View style={alertStyles.fullScreenOverlay}>
-        <View style={alertStyles.fullScreenContainer}>
+      <View style={alertStyles.overlay}>
+        <View style={alertStyles.container}>
           {/* Title */}
-          <CommonTextView style={alertStyles.title}>{title}</CommonTextView>
+          <Text style={alertStyles.title}>{title}</Text>
 
           {/* Message */}
-          <CommonTextView style={alertStyles.message}>{message}</CommonTextView>
+          <Text style={alertStyles.message}>{message}</Text>
 
           {/* Buttons */}
           <View style={alertStyles.buttonContainer}>
-            <CommonButton
-              title={confirmBtnText}
+            <TouchableOpacity
+              style={alertStyles.button}
               onPress={onConfirm}
+            >
+              <Text style={alertStyles.buttonText}>{confirmBtnText}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               style={alertStyles.button}
-            />
-            <CommonButton
-              title={cancelBtnText}
               onPress={onCancel}
-              style={alertStyles.button}
-            />
+            >
+              <Text style={alertStyles.buttonText}>{cancelBtnText}</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>

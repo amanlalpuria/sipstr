@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default function HomeScreen({ onProductDetailsPress = () => {} }) {
+export default function HomeScreen({ navigation }) {
   // Categories
   const [categories] = useState([
     { id: 'all', label: 'All' },
@@ -91,6 +91,9 @@ export default function HomeScreen({ onProductDetailsPress = () => {} }) {
       image: 'https://via.placeholder.com/70x130.png?text=Kingfisher',
     },
   ];
+
+  // Navigation functions
+  const goToAccount = () => navigation.navigate('Account');
 
   return (
     <View style={styles.container}>
@@ -177,7 +180,7 @@ export default function HomeScreen({ onProductDetailsPress = () => {} }) {
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.productCard}
-              onPress={onProductDetailsPress}
+              onPress={() => console.log('Product pressed:', item.id)}
             >
               <Image source={{ uri: item.image }} style={styles.productImage} />
               <Text style={styles.productName}>{item.name}</Text>
@@ -195,7 +198,7 @@ export default function HomeScreen({ onProductDetailsPress = () => {} }) {
             <TouchableOpacity
               key={item.id}
               style={styles.productCardGrid}
-              onPress={onProductDetailsPress}
+              onPress={() => console.log('Product pressed:', item.id)}
             >
               <Image source={{ uri: item.image }} style={styles.productImage} />
               <Text style={styles.productName}>{item.name}</Text>
@@ -217,7 +220,7 @@ export default function HomeScreen({ onProductDetailsPress = () => {} }) {
           <Ionicons name='receipt-outline' size={22} color='#333' />
           <Text style={styles.tabItemLabel}>My Orders</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem}>
+        <TouchableOpacity style={styles.tabItem} onPress={goToAccount}>
           <Ionicons name='person-outline' size={22} color='#333' />
           <Text style={styles.tabItemLabel}>Account</Text>
         </TouchableOpacity>
