@@ -87,9 +87,9 @@ public class ProductService {
     }
 
     private ProductDTO mapToDTO(Product product) {
-//        List<ProductVariant> variant = product.getVariants().stream()
-//                .map(this::mapProductVariant)
-//                .collect(Collectors.toList());
+        List<ProductVariantDTO> variant = product.getVariants().stream()
+                .map(this::mapVariantToDTO)
+                .collect(Collectors.toList());
 
         return ProductDTO.builder()
                 .productId(product.getProductId())
@@ -98,7 +98,7 @@ public class ProductService {
                 .description(product.getDescription())
                 .brand(product.getBrand().getName())
                 .isAlcoholic(product.isAlcoholic())
-                .variants(product.getVariants())
+                .variantsDTO(variant)
                 .build();
     }
 
@@ -106,9 +106,23 @@ public class ProductService {
     private ProductVariantDTO mapVariantToDTO(ProductVariant variant) {
         return ProductVariantDTO.builder()
                 .variantId(variant.getVariantId())
-                .unitPrice(variant.getUnitPrice())
+                .packageName(variant.getPackageEntity().getPackageName())
+                .abvPercentage(variant.getAbvPercentage())
+                .thumbnailImageUrl(variant.getThumbnailImageUrl())
+                .fullSizeImageUrl(variant.getFullSizeImageUrl())
                 .retailUpc(variant.getRetailUpc())
                 .caseUpc(variant.getCaseUpc())
+                .unitPrice(variant.getUnitPrice())
+                .shelfLifeDays(variant.getShelfLifeDays())
+                .alcoholByVolume(variant.getAlcoholByVolume())
+                .weightGrams(variant.getWeightGrams())
+                .calories(variant.getCalories())
+                .carbs(variant.getCarbs())
+                .ibuValue(variant.getIbuValue())
+                .sugars(variant.getSugars())
+                .addedSugars(variant.getAddedSugars())
+                .dimensionsCm(variant.getDimensionsCm())
+                .storageInstructions(variant.getStorageInstructions())
                 .build();
     }
 }

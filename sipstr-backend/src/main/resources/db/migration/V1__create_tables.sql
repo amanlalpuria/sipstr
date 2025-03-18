@@ -190,7 +190,7 @@ CREATE TABLE brand (
 CREATE TABLE product (
     product_id SERIAL PRIMARY KEY,
     uuid UUID DEFAULT uuid_generate_v4(),
-    product_name VARCHAR(255) NOT NULL,
+    product_name VARCHAR(255) NOT NULL UNIQUE,
     description TEXT,
     brand_id BIGINT NOT NULL,
     category_id INTEGER NOT NULL,
