@@ -1,10 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Image } from "react-native";
 import CommonTextView from "../../components/CommonTextView";
 import CommonButton from "../../components/CommonButton";
-
-import React, { useEffect, useState } from "react";
-import { View, Image } from "react-native";
 import { globalStyles } from "../../components/styles";
 
 const WelcomeScreen = ({ navigation }) => {
@@ -12,7 +9,7 @@ const WelcomeScreen = ({ navigation }) => {
     <View style={styles.container}>
       {/* Logo */}
       <Image
-        source={require("../assets/images/logo.png")}
+        source={require("../../assets/images/logo.png")}
         style={globalStyles.logo}
       />
 
@@ -26,7 +23,7 @@ const WelcomeScreen = ({ navigation }) => {
       <View style={styles.buttonRow}>
         <CommonButton
           title="YES"
-          onPress={() => navigation.navigate("HomeScreen")} // Navigate to Home
+          onPress={() => navigation.navigate("Home")} // Navigate to Home
           style={styles.buttonSpacing}
         />
         <CommonButton

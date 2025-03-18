@@ -1,6 +1,8 @@
-import React from "react";
-import { View, Platform, BackHandler, Alert, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, Platform, BackHandler, Alert, StyleSheet, Image } from "react-native";
 import { globalStyles } from "../../components/styles";
+import CommonTextView from "../../components/CommonTextView";
+import CommonButton from "../../components/CommonButton";
 
 const SorryScreen = () => {
   const [exitMessage, setExitMessage] = useState(false);
@@ -9,7 +11,12 @@ const SorryScreen = () => {
     if (Platform.OS === "android") {
       BackHandler.exitApp(); // Completely close the app on Android
     } else if (Platform.OS === "ios") {
-      RNExitApp.exitApp(); // Close the app on iOS (Optional)
+      // For iOS we would need a library like react-native-exit-app
+      // But since we don't have it imported, we'll just show an alert
+      Alert.alert(
+        "Access Denied",
+        "You must be 21 or older to access this app."
+      );
     } else {
       // Web: Show a message instead since we can't exit programmatically
       setExitMessage(true);
@@ -24,7 +31,7 @@ const SorryScreen = () => {
     <View style={styles.container}>
       {/* Logo */}
       <Image
-        source={require("../assets/images/logo.png")}
+        source={require("../../assets/images/logo.png")}
         style={globalStyles.logo}
       />
 

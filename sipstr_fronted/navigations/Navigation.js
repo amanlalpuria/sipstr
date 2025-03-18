@@ -5,7 +5,7 @@ import WelcomeScreen from "../screens/WelcomeScreen/WelcomeScreen";
 import LoginScreen from "../screens/Login/LoginScreen";
 import SignUpScreen from "../screens/Registration/SignUpScreen";
 import HomeScreen from "../screens/Home/HomeScreen";
-import SorryScreen from "../screens/AgeRestrictionPopUp/AgeLimitMsgScreen";
+import SorryScreen from "../screens/AgeRestrictionPopUp/SorryScreen";
 
 const Stack = createStackNavigator();
 

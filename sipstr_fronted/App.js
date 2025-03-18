@@ -1,5 +1,6 @@
 import React from "react";
 import { useFonts } from "expo-font";
+import AppNavigator from "./navigations/Navigation"; // Import from correct path
 
 export default function App() {
   // Load custom fonts
