@@ -165,7 +165,7 @@ CREATE TABLE coordinates (
 CREATE TABLE category (
     category_id SERIAL PRIMARY KEY,
     parent_category_id INTEGER,
-    category_name VARCHAR(255) NOT NULL,
+    category_name VARCHAR(255) NOT NULL UNIQUE,
     description TEXT,
     is_taxable BOOLEAN NOT NULL,
     is_active BOOLEAN DEFAULT true,
