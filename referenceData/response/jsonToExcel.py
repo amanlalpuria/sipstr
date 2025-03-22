@@ -2,9 +2,9 @@ import json
 import pandas as pd
 import os
 
-# ✅ Use raw strings (r"") or forward slashes ("/") to avoid escape sequence issues
-input_json_file = r"referenceData/response/in_detail_product_response.json"
-output_excel_file = r"referenceData/response/output.xlsx"
+# ✅ Use raw strings OR forward slashes to avoid escape issues
+input_json_file = r"D:\sipstr\referenceData\response\in_detail_product_response.json"
+output_excel_file = r"D:\sipstr\referenceData\response\output.xlsx"
 
 # ✅ Ensure the directory exists before writing the file
 os.makedirs(os.path.dirname(output_excel_file), exist_ok=True)
