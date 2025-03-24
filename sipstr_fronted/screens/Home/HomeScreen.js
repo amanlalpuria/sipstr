@@ -155,7 +155,7 @@ export default function HomeScreen({
             <TouchableOpacity
               key={item.id}
               style={styles.productCardGrid}
-              onPress={onProductDetailsPress}
+              onPress={() => console.log('Product pressed:', item.id)}
             >
               <Image source={{ uri: item.image }} style={styles.productImage} />
               <CommonTextView style={styles.productName}>
