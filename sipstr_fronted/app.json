@@ -12,12 +12,16 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "ios": {
+     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.sipstr"
+      "bundleIdentifier": "com.sipstr",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "We use your location to show local offers and deliver to your area."
+      }
     },
     "android": {
       "package": "com.sipstr",
+      "permissions": ["ACCESS_FINE_LOCATION"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"

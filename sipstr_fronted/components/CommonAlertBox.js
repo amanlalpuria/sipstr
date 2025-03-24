@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, View } from "react-native";
 import CommonTextView from "./CommonTextView";
 import CommonButton from "./CommonButton";
-import { alertStyles } from "../styles";
+import { alertStyles } from "./styles";
 
 const CommonAlertBox = ({
   visible,

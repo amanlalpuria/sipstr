@@ -1,6 +1,7 @@
 import React from "react";
 import { useFonts } from "expo-font";
 import AppNavigator from "./navigations/Navigation"; // Import from correct path
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function App() {
   // Load custom fonts
