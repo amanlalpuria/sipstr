@@ -22,7 +22,7 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "uuid", updatable = false, nullable = false)
+    @Column(name = "uuid", updatable = false, nullable = false, columnDefinition = "UUID DEFAULT uuid_generate_v4()")
     @UuidGenerator
     private UUID uuid;
 

@@ -24,15 +24,17 @@ public class OrderService {
 
     private final AddressRepository addressRepository;
     private final OrderRepository orderRepository;
+    private final OrderStoreRepository orderStoreRepository;
     private final OrderItemRepository orderItemRepository;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final DeliveryZoneService deliveryZoneService;
-    private final KafkaProducerService kafkaProducerService;
     private final TaxCalculationService taxCalculationService;
+    private final KafkaProducerService kafkaProducerService;
 
     @Transactional
     public Order createOrder(Long userId, Long addressId, Boolean isScheduled, LocalDateTime scheduledTime, BigDecimal tip) {
+        // Fetch Active Cart
         Cart cart = cartRepository.findByUser_IdAndStatus(userId, "ACTIVE")
                 .orElseThrow(() -> new ResourceNotFoundException("Active cart not found for user ID: " + userId));
 
@@ -45,22 +47,39 @@ public class OrderService {
                 .orElseThrow(() -> new ResourceNotFoundException("Address not found for ID: " + addressId));
 
         BigDecimal subtotal = BigDecimal.ZERO;
-        BigDecimal totalDeliveryFee = BigDecimal.ZERO;
         BigDecimal totalTax = BigDecimal.ZERO;
+        BigDecimal totalDiscount = BigDecimal.ZERO;
+        BigDecimal totalDeliveryFee = BigDecimal.ZERO;
 
         // Group Cart Items by Store
         Map<Store, List<CartItem>> storeCartItems = cartItems.stream()
                 .collect(Collectors.groupingBy(cartItem -> cartItem.getStoreInventory().getStore()));
 
-        List<OrderItem> orderItems = new ArrayList<>();
+        List<OrderStore> orderStores = new ArrayList<>();
+
+        Order order = Order.builder()
+                .user(cart.getUser())
+                .address(address)
+                .paymentStatus("PENDING")
+                .isScheduled(isScheduled)
+                .scheduledTime(isScheduled ? scheduledTime : null)
+                .createdAt(LocalDateTime.now())
+                .build();
+        Order savedOrder = orderRepository.save(order);
 
         for (Map.Entry<Store, List<CartItem>> entry : storeCartItems.entrySet()) {
             Store store = entry.getKey();
             List<CartItem> storeItems = entry.getValue();
 
+            // TODO need to tool from store
             BigDecimal storeSubtotal = BigDecimal.ZERO;
             BigDecimal storeTax = BigDecimal.ZERO;
+            BigDecimal storeDiscount = BigDecimal.ZERO;
             BigDecimal storeDeliveryFee = BigDecimal.ZERO;
+            BigDecimal storeBagFee = BigDecimal.ZERO;
+            BigDecimal storeCheckoutBagFee = BigDecimal.ZERO;
+
+            List<OrderItem> orderItems = new ArrayList<>();
 
             for (CartItem cartItem : storeItems) {
                 BigDecimal itemSubtotal = cartItem.getUnitPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity()));
@@ -70,24 +89,25 @@ public class OrderService {
                 storeTax = storeTax.add(itemTax);
 
                 OrderItem orderItem = OrderItem.builder()
-                        .order(null) // Set after order creation
+                        .orderStore(null) // Set later
                         .product(cartItem.getStoreInventory().getProduct())
                         .variant(cartItem.getStoreInventory().getVariant())
                         .quantity(cartItem.getQuantity())
                         .unitPrice(cartItem.getUnitPrice())
                         .subtotal(itemSubtotal)
                         .taxAmount(itemTax)
+                        .checkoutBagFee(storeCheckoutBagFee)
                         .finalPrice(itemSubtotal.add(itemTax))
                         .status("PENDING")
                         .specialInstructions(cartItem.getSpecialInstructions())
                         .build();
                 orderItems.add(orderItem);
+
+                storeBagFee = storeBagFee.add(storeCheckoutBagFee != null ? storeCheckoutBagFee : BigDecimal.ZERO);
             }
 
             // Fetch Store's Delivery Zone
             DeliveryZone deliveryZone = deliveryZoneService.getDeliveryZoneForStore(store.getStoreId(), address);
-
-            // Check if delivery fee applies
             if (storeSubtotal.add(storeTax).compareTo(deliveryZone.getMinOrderAmount()) < 0) {
                 storeDeliveryFee = deliveryZone.getBaseDeliveryFee();
             }
@@ -95,40 +115,45 @@ public class OrderService {
             totalDeliveryFee = totalDeliveryFee.add(storeDeliveryFee);
             subtotal = subtotal.add(storeSubtotal);
             totalTax = totalTax.add(storeTax);
+
+            OrderStore orderStore = OrderStore.builder()
+                    .order(savedOrder)
+                    .store(store)
+                    .storeStatus("PENDING")
+                    .storeSubtotal(storeSubtotal)
+                    .storeTax(storeTax)
+                    .storeDiscount(storeDiscount)
+                    .storeDeliveryFee(storeDeliveryFee)
+                    .checkoutBagFee(storeBagFee)
+                    .finalStoreTotal(storeSubtotal.add(storeTax).add(storeDeliveryFee).subtract(storeDiscount))
+                    .createdAt(LocalDateTime.now())
+                    .build();
+
+            OrderStore savedOrderStore = orderStoreRepository.save(orderStore);
+            orderStores.add(savedOrderStore);
+
+            for (OrderItem orderItem : orderItems) {
+                orderItem.setOrderStore(savedOrderStore);
+                orderItemRepository.save(orderItem);
+            }
         }
 
         BigDecimal serviceFee = new BigDecimal("2.00");
         BigDecimal total = subtotal.add(totalTax).add(totalDeliveryFee).add(serviceFee).add(tip != null ? tip : BigDecimal.ZERO);
 
-        Order order = Order.builder()
-                .user(cart.getUser())
-                .address(address)
-                .orderStatus("CREATED")
-                .paymentStatus("PENDING")
-                .subtotal(subtotal)
-                .tax(totalTax)
-                .deliveryFee(totalDeliveryFee)
-                .serviceFee(serviceFee)
-                .tip(tip)
-                .total(total)
-                .isScheduled(isScheduled)
-                .scheduledTime(isScheduled ? scheduledTime : null)
-                .createdAt(LocalDateTime.now())
-                .build();
-
-        Order savedOrder = orderRepository.save(order);
-
-        for (OrderItem orderItem : orderItems) {
-            orderItem.setOrder(savedOrder);
-            orderItemRepository.save(orderItem);
-        }
-
-        savedOrder.setOrderItems(orderItems);
+        savedOrder.setSubtotal(subtotal);
+        savedOrder.setTotalTax(totalTax);
+        savedOrder.setTotalDiscount(totalDiscount);
+        savedOrder.setTotalDeliveryFee(totalDeliveryFee);
+        savedOrder.setServiceFee(serviceFee);
+        savedOrder.setTip(tip);
+        savedOrder.setTotal(total);
+        orderRepository.save(savedOrder);
 
         cartItemRepository.deleteAll(cartItems);
         cartRepository.delete(cart);
 
-        kafkaProducerService.sendMessage("order-topic", "New order created: " + order);
+        kafkaProducerService.sendMessage("order-topic", "New order created: " + savedOrder);
 
         return savedOrder;
     }
@@ -137,12 +162,9 @@ public class OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
 
-        order.setOrderStatus(status);
         order.setUpdatedAt(LocalDateTime.now());
         orderRepository.save(order);
 
-        if ("ACCEPTED".equals(status)) {
-            kafkaProducerService.sendMessage("order-topic", "Order accepted: " + order);
-        }
+        kafkaProducerService.sendMessage("order-topic", "Order status updated: " + order);
     }
 }

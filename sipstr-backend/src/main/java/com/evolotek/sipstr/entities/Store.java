@@ -28,6 +28,15 @@ public class Store {
     @Column(name = "store_name", nullable = false)
     private String storeName;
 
+    @Column(name = "corporation_name", nullable = false)
+    private String corporationName;
+
+    @Column(name = "ein", nullable = false)
+    private Integer ein;
+
+    @Column(name = "license_number", nullable = false)
+    private Integer licenseNumber;
+
     @Column(name = "description")
     private String description;
 
@@ -43,9 +52,6 @@ public class Store {
     @Column(name = "contact_phone", nullable = false)
     private String contactPhone;
 
-    @Column(name = "operating_hours", columnDefinition = "JSONB")
-    private String operatingHours; // Store operating hours as JSON
-
     @Column(name = "delivery_radius_km", precision = 10, scale = 2)
     private BigDecimal deliveryRadiusKm;
 
@@ -56,7 +62,7 @@ public class Store {
     private Integer averagePreparationTime; // In minutes
 
     @Column(name = "is_currently_accepting_orders")
-    private Boolean isCurrentlyAcceptingOrders = true;
+    private Boolean isCurrentlyAcceptingOrders = true;           // we can mark isActive false if store pause order
 
     @Column(name = "rating", precision = 3, scale = 2)
     private BigDecimal rating;

@@ -11,6 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -34,5 +38,18 @@ public class TopPickController {
     @GetMapping
     public ResponseEntity<List<ProductDTO>> getTopPicks() {
         return ResponseEntity.ok(topPickService.getTopPicks());
+    }
+
+    @PostMapping("/{productId}")
+    public ResponseEntity<ProductDTO> addToTopPicks(
+            @PathVariable Long productId,
+            @RequestParam(required = false, defaultValue = "0") Float rankingScore) {
+        return ResponseEntity.ok(topPickService.addToTopPicks(productId, rankingScore));
+    }
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> removeFromTopPicks(@PathVariable Long productId) {
+        topPickService.removeFromTopPicks(productId);
+        return ResponseEntity.noContent().build();
     }
 }

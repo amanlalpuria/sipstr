@@ -29,7 +29,7 @@ public class StoreController {
             @ApiResponse(responseCode = "403", description = "Access denied (Only SUPPLIER users can create stores)")
     })
     @PostMapping
-    @PreAuthorize("hasRole('SUPPLIER')")
+    @PreAuthorize("hasRole('STORE_ADMIN')")
     public ResponseEntity<Store> createStore(@RequestBody Store store) {
         Store createdStore = storeService.createStore(store);
         return ResponseEntity.ok(createdStore);

@@ -7,68 +7,53 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "order_stores")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Order {
+public class OrderStore {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId;
-
-    @Column(nullable = false, unique = true, updatable = false)
-    private UUID uuid = UUID.randomUUID();
-
-    @ManyToOne(fetch = FetchType.LAZY) // Corrected annotation
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "address_id", nullable = false)
-    private Address address;
+    @JoinColumn(name = "order_id", nullable = false)
+    private Order order;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id", nullable = false)
+    private Store store;
+
+    private Long driverId;
 
     @Column(nullable = false)
-    private String paymentStatus; // Paid, Unpaid, Refunded, etc.
+    private String storeStatus; // Pending, On The Way, Delivered, Cancelled
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal subtotal;
+    private BigDecimal storeSubtotal;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalTax;
+    private BigDecimal storeTax;
 
     @Column(precision = 10, scale = 2)
-    private BigDecimal totalDiscount = BigDecimal.ZERO;
+    private BigDecimal storeDiscount = BigDecimal.ZERO;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalDeliveryFee;
-
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal serviceFee;
-
-    @Column(precision = 10, scale = 2)
-    private BigDecimal tip;
+    private BigDecimal storeDeliveryFee;
 
     @Column(precision = 10, scale = 2)
     private BigDecimal checkoutBagFee;
 
     @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal total;
+    private BigDecimal finalStoreTotal;
 
     private LocalDateTime estimatedDeliveryTime;
     private LocalDateTime actualDeliveryTime;
-
-    private Boolean isScheduled = false;
-    private LocalDateTime scheduledTime;
-
-    private String refundStatus;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -76,4 +61,3 @@ public class Order {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 }
-
