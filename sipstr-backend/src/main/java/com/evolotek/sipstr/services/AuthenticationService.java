@@ -1,6 +1,6 @@
 package com.evolotek.sipstr.services;
 
-import com.evolotek.sipstr.dtos.LoginUserDto;
+import com.evolotek.sipstr.dtos.LoginUserDTO;
 import com.evolotek.sipstr.dtos.RegisterUserDto;
 import com.evolotek.sipstr.entities.Role;
 import com.evolotek.sipstr.entities.User;
@@ -56,7 +56,7 @@ public class AuthenticationService {
         return userRepository.save(user);
     }
 
-    public User authenticate(LoginUserDto input) {
+    public User authenticate(LoginUserDTO input) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         input.getEmail(),

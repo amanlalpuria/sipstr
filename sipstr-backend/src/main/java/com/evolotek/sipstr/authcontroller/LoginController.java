@@ -1,6 +1,6 @@
 package com.evolotek.sipstr.authcontroller;
 
-import com.evolotek.sipstr.dtos.LoginUserDto;
+import com.evolotek.sipstr.dtos.LoginUserDTO;
 import com.evolotek.sipstr.dtos.RegisterUserDto;
 import com.evolotek.sipstr.entities.User;
 import com.evolotek.sipstr.responses.LoginResponse;
@@ -56,7 +56,7 @@ public class LoginController {
      */
     @Operation(summary = "User Login", description = "Authenticate user and return JWT token")
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
+    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDTO loginUserDto) {
         User authenticatedUser = authenticationService.authenticate(loginUserDto);
         // Convert User to CustomUserDetails
         UserDetails userDetails = new CustomUserDetails(authenticatedUser);

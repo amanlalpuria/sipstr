@@ -55,27 +55,33 @@ services:
     networks:
       - backend
 
-#  backend:
-#    build:
-#      context: ./sipstr-backend
-#      dockerfile: Dockerfile
-#    container_name: backend-service
-#    environment:
-#      DB_HOST: postgres
-#      DB_PORT: 5432
-#      DB_USER: sipstr_rw_user
-#      DB_PASSWORD: sipstr_rw_user
-#      DB_NAME: sipStr
-#      JWT_SECRET: 3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b
-#    depends_on:
-#      postgres:
-#        condition: service_healthy
-#      redis:
-#        condition: service_healthy
-#    ports:
-#      - "8080:8080"
-#    networks:
-#      - backend
+  backend:
+    build:
+      context: ./sipstr-backend
+      dockerfile: Dockerfile
+    container_name: backend-service
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: sipstr_rw_user
+      DB_PASSWORD: sipstr_rw_user
+      DB_NAME: sipStr
+      JWT_SECRET: 3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b
+      STRIPE_SECRET_KEY: sk_test_51Qt9ohKcFycn6VpnwBE6l5zZgxhJPhTnBlAdipiui1oWxnxx8jRnSjyidpkFd8PaXR58I67RG1TDYtaDDpITNDFW00w7YBn7AO
+      GOOGLE_CLIENT_ID: 423355590683-mtl4ceush1mt2keglsi292t49hd7ifmp.apps.googleusercontent.com
+      SUPER_ADMIN_FULLNAME: DevOps
+      SUPER_ADMIN_EMAIL: devops@evolotek.ai
+      SUPER_ADMIN_PASSWORD: devopsEvolotek
+      SUPER_ADMIN_MOBILE_NUMBER: 0000000009
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
 
 volumes:
   postgres_data: {}
