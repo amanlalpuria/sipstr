@@ -17,7 +17,7 @@ Follow these steps to set up and run the Sipstr backend:
 
 ### 1️⃣ Clone the Repository
 ```sh
-git clone [https://github.com/your-repo/sipstr-backend.git](https://github.com/amanlalpuria/sipstr.git)
+git clone https://github.com/amanlalpuria/sipstr.git
 cd sipstr
 ```
 
