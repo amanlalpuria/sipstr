@@ -3,6 +3,7 @@ import { View, TouchableOpacity, StyleSheet } from "react-native";
 import CommonTextView from "./CommonTextView";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import { colors } from "./colors";
+import { globalStyles } from "./styles";
 
 const TopBar = ({
   navigation,
@@ -11,36 +12,26 @@ const TopBar = ({
 }) => {
   return (
     <View style={styles.container}>
-      {/* Left: Logo & Location */}
-      <View style={styles.leftSection}>
+      {/* 1. Header Row */}
+      <View style={styles.topRow}>
         <CommonTextView style={styles.appName}>SipStr</CommonTextView>
-
-        {showLocation && (
-          <TouchableOpacity
-            style={styles.locationWrapper}
-            onPress={() => console.log("Location Change")}
-          >
-            <Ionicons name="location-sharp" size={16} color={colors.orange} />
-            <CommonTextView style={styles.locationText}>
-              {userCity}
-            </CommonTextView>
-            <Ionicons name="chevron-down" size={14} color={colors.orange} />
-          </TouchableOpacity>
-        )}
-      </View>
-
-      {/* Right: Heart & Cart Icons */}
-      <View style={styles.rightIcons}>
-        <TouchableOpacity onPress={() => console.log("Favorites Clicked")}>
-          <Feather name="heart" size={22} color={colors.black} />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => console.log("Cart Clicked")}
-          style={{ marginLeft: 18 }}
-        >
+        <TouchableOpacity onPress={() => console.log("Cart Clicked")}>
           <Feather name="shopping-cart" size={22} color={colors.black} />
         </TouchableOpacity>
       </View>
+      {showLocation && (
+        <View style={styles.deliveryBar}>
+          <View style={styles.deliveryLeft}>
+            <Ionicons name="location-sharp" size={16} color={colors.orange} />
+            <CommonTextView style={styles.deliveryText}>
+              Delivering to: {userCity}
+            </CommonTextView>
+          </View>
+          <TouchableOpacity onPress={() => console.log("Change pressed")}>
+            <CommonTextView style={styles.changeText}>Change</CommonTextView>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
@@ -61,15 +52,16 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "flex-start",
   },
-  appName: {
-    fontSize: 28,
-    fontFamily: "Poppins-Regula",
-    color: "#F65600",
+  appLogo: {
+    height: 20,
+    width: 20,
+    resizeMode: "contain",
   },
   locationWrapper: {
     flexDirection: "row",
     alignItems: "center",
     marginTop: 2,
+    backgroundColor: colors.lightOrange,
   },
   locationText: {
     fontSize: 16,

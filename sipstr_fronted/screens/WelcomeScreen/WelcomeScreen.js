@@ -3,64 +3,68 @@ import { View, StyleSheet, Image } from "react-native";
 import CommonTextView from "../../components/CommonTextView";
 import CommonButton from "../../components/CommonButton";
 import { globalStyles } from "../../components/styles";
+import { SafeAreaView } from "react-native-safe-area-context";
+import CommonAppNameLabel from "../../components/CommonAppNameLabel";
 
 const WelcomeScreen = ({ navigation }) => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {/* Logo */}
-      <Image
-        source={require("../../assets/images/logo.png")}
-        style={globalStyles.logo}
-      />
-
-      {/* Age Confirmation Text */}
-      <CommonTextView style={styles.ageTitle}>Are you over 21?</CommonTextView>
-      <CommonTextView style={styles.ageDesc}>
-        You must confirm that you are of legal drinking age to enter
-      </CommonTextView>
-
-      {/* Buttons Row */}
-      <View style={styles.buttonRow}>
-        <CommonButton
-          title="YES"
-          onPress={() => navigation.navigate("Home")} // Navigate to Home
-          style={styles.buttonSpacing}
-        />
-        <CommonButton
-          title="NO"
-          onPress={() => navigation.navigate("SorryScreen")} // Navigate to Sorry
-          style={styles.buttonSpacing}
-        />
+      <View style={styles.logoContainer}>
+        <CommonAppNameLabel fontSize={70} />
       </View>
-    </View>
+
+      {/* Bottom Content */}
+      <View style={styles.bottomSection}>
+        <CommonTextView style={{ fontSize: 27 }}>
+          Are you over 21?
+        </CommonTextView>
+        <CommonTextView style={{ fontSize: 18 }}>
+          You must confirm that you are of legal drinking age to enter
+        </CommonTextView>
+
+        {/* Buttons Row */}
+        <View style={styles.buttonRow}>
+          <CommonButton
+            title="YES"
+            onPress={() => navigation.navigate("Home")}
+            style={styles.button}
+          />
+          <CommonButton
+            title="NO"
+            onPress={() => navigation.navigate("SorryScreen")}
+            style={styles.button}
+          />
+        </View>
+      </View>
+    </SafeAreaView>
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    backgroundColor: "#FFF",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    paddingBottom: 30,
+  },
+  logoContainer: {
     alignItems: "center",
-    backgroundColor: "#FFFFFF",
+    marginTop: 100,
+  },
+  bottomSection: {
+    alignItems: "center",
   },
 
-  ageTitle: {
-    fontSize: 27,
-    marginBottom: 12,
-    textAlign: "center",
-  },
-  ageDesc: {
-    fontSize: 18,
-    textAlign: "center",
-    marginBottom: 30,
-  },
   buttonRow: {
     flexDirection: "row",
     justifyContent: "center",
+    gap: 20,
   },
-  buttonSpacing: {
-    marginHorizontal: 10, // Space between buttons
+  button: {
+    minWidth: 100,
   },
-};
+});
 
 export default WelcomeScreen;

@@ -9,6 +9,8 @@ export default function App() {
     "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
     "Poppins-SemiBold": require("./assets/fonts/Poppins-SemiBold.ttf"),
     "ReggaeOne-Regular": require("./assets/fonts/ReggaeOne-Regular.ttf"),
+    "ArefRuqaaInk-Bold": require("./assets/fonts/ArefRuqaaInk-Bold.ttf"),
+    "ArefRuqaaInk-Regular": require("./assets/fonts/ArefRuqaaInk-Regular.ttf"),
   });
   if (!fontsLoaded) return null;
   return <AppNavigator />;

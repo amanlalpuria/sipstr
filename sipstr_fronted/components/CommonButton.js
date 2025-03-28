@@ -6,19 +6,11 @@ import { colors } from "./colors";
 const CommonButton = ({ title, onPress, style, textStyle }) => {
   return (
     <TouchableOpacity
-      style={[
-        globalStyles.button,
-        { backgroundColor: colors.black, borderColor: colors.border },
-        style,
-      ]}
+      style={[globalStyles.button, style]}
       onPress={onPress}
       activeOpacity={0.8}
     >
-      <Text
-        style={[globalStyles.buttonText, { color: colors.white }, textStyle]}
-      >
-        {title}
-      </Text>
+      <Text style={[globalStyles.buttonText, textStyle]}>{title}</Text>
     </TouchableOpacity>
   );
 };

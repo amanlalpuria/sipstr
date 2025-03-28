@@ -5,19 +5,18 @@ import { colors } from "./colors";
 export const globalStyles = StyleSheet.create({
   button: {
     backgroundColor: colors.orange,
-    borderWidth: 1,
-    borderColor: "transparent",
+    borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 20,
-    borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
   },
   buttonText: {
     fontFamily: "Poppins-SemiBold",
     fontStyle: "normal",
-    fontSize: 18, // Change here to update everywhere
+    fontSize: 18,
     color: colors.white,
+    textAlign: "center",
   },
   input: {
     backgroundColor: "#FFFFFF",
@@ -33,6 +32,12 @@ export const globalStyles = StyleSheet.create({
   },
   textView: {
     fontFamily: "Poppins-Regular",
+    fontStyle: "normal",
+    fontSize: 14, // Change here to update everywhere
+    color: colors.black,
+  },
+  textViewSemiBold: {
+    fontFamily: "Poppins-SemiBold",
     fontStyle: "normal",
     fontSize: 14, // Change here to update everywhere
     color: colors.black,

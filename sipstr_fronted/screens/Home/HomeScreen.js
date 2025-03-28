@@ -16,6 +16,7 @@ import CommonAlertBox from "../../components/CommonAlertBox";
 import { categories, featuredData, topPicksData } from "../../Utils/StaticData";
 import { openSettings } from "expo-linking";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { colors } from "../../components/colors";
 
 export default function HomeScreen({
   navigation,
