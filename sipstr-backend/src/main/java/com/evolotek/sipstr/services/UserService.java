@@ -1,6 +1,6 @@
 package com.evolotek.sipstr.services;
 
-import com.evolotek.sipstr.dtos.RegisterUserDto;
+import com.evolotek.sipstr.dtos.RegisterUserDTO;
 import com.evolotek.sipstr.entities.Role;
 import com.evolotek.sipstr.entities.User;
 import com.evolotek.sipstr.repositories.RoleRepository;
@@ -56,7 +56,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User createAdministrator(RegisterUserDto input) {
+    public User createAdministrator(RegisterUserDTO input) {
         Optional<Role> optionalRole = roleRepository.findByName("ADMIN");
 
         if (optionalRole.isEmpty()) {

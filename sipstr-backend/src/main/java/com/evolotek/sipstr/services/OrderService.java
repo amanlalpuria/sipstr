@@ -3,8 +3,6 @@ package com.evolotek.sipstr.services;
 import com.evolotek.sipstr.entities.*;
 import com.evolotek.sipstr.exceptions.ResourceNotFoundException;
 import com.evolotek.sipstr.repositories.*;
-import com.evolotek.sipstr.services.TaxCalculationService;
-import com.evolotek.sipstr.services.kafka.KafkaProducerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,7 +28,6 @@ public class OrderService {
     private final CartItemRepository cartItemRepository;
     private final DeliveryZoneService deliveryZoneService;
     private final TaxCalculationService taxCalculationService;
-    private final KafkaProducerService kafkaProducerService;
 
     @Transactional
     public Order createOrder(Long userId, Long addressId, Boolean isScheduled, LocalDateTime scheduledTime, BigDecimal tip) {
@@ -153,7 +150,7 @@ public class OrderService {
         cartItemRepository.deleteAll(cartItems);
         cartRepository.delete(cart);
 
-        kafkaProducerService.sendMessage("order-topic", "New order created: " + savedOrder);
+//        kafkaProducerService.sendMessage("order-topic", "New order created: " + savedOrder);
 
         return savedOrder;
     }
@@ -165,6 +162,6 @@ public class OrderService {
         order.setUpdatedAt(LocalDateTime.now());
         orderRepository.save(order);
 
-        kafkaProducerService.sendMessage("order-topic", "Order status updated: " + order);
+//        kafkaProducerService.sendMessage("order-topic", "Order status updated: " + order);
     }
 }

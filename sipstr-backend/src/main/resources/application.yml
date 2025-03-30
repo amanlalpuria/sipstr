@@ -1,0 +1,83 @@
+spring:
+  application:
+    name: Sipstr
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    out-of-order: true
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/sipStr
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+    jpa:
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+      hibernate:
+        ddl-auto: update
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: order-processing
+      auto-offset-reset: earliest
+    producer:
+      retries: 3
+  doc:
+    api-docs:
+      enabled: true
+    swagger-ui:
+      enabled: true
+
+security:
+  jwt:
+    secret-key: ${JWT_SECRET}
+    expiration-time: 3600000  # 1 hour in milliseconds
+
+stripe:
+  api:
+    key: ${STRIPE_SECRET_KEY}
+
+frontend:
+  url: http://localhost:3000  # Adjust as per your React Native frontend
+
+google:
+  client:
+    secret-key: "need to change"
+
+super:
+  admin:
+    fullName: ${SUPER_ADMIN_FULLNAME}
+    email: ${SUPER_ADMIN_EMAIL}
+    password: ${SUPER_ADMIN_PASSWORD}
+    mobileNumber: ${SUPER_ADMIN_MOBILE_NUMBER}
+
+logging:
+  level:
+    org:
+      springframework:
+        web: DEBUG
+      springdoc: DEBUG
+      boot: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
+twilio:
+  account:
+    sid: ${TWILIO_ACCOUNT_SID}
+  auth:
+    token: ${TWILIO_AUTH_TOKEN}
+  phone:
+    number: ${TWILIO_PHONE_NUMBER}
+  message:
+    otpBody: ${TWILIO_MESSAGE_OTP_BODY}
+
+otp:
+  expiry:
+    minutes: ${TWILIO_OTP_EXPIRY_MINUTES}

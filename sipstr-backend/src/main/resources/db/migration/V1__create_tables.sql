@@ -44,24 +44,26 @@ EXECUTE FUNCTION update_timestamp();
 -- Create users table with enhanced security
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
-    uuid UUID DEFAULT uuid_generate_v4(),
+    uuid UUID DEFAULT uuid_generate_v4() NOT NULL UNIQUE,
     full_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     mobile_number VARCHAR(20) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     email_verified BOOLEAN DEFAULT false,
     mobile_verified BOOLEAN DEFAULT false,
-    two_factor_enabled BOOLEAN DEFAULT false,
+    two_factor_enabled BOOLEAN DEFAULT false NOT NULL,
     two_factor_secret VARCHAR(255),
+    account_status VARCHAR(50) DEFAULT 'PENDING' NOT NULL,
+    failed_login_attempts INTEGER DEFAULT 0 NOT NULL,
+    last_login_at TIMESTAMP NULL,
+    password_reset_token VARCHAR(255) NULL,
+    password_reset_expires TIMESTAMP NULL,
+    otp VARCHAR(10) NULL,
+    otp_expires_at TIMESTAMP NULL,
     role_id INTEGER NOT NULL,
-    account_status VARCHAR(50) DEFAULT 'PENDING',
-    failed_login_attempts INTEGER DEFAULT 0,
-    last_login_at TIMESTAMP,
-    password_reset_token VARCHAR(255),
-    password_reset_expires TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    FOREIGN KEY (role_id) REFERENCES roles(id)
+    CONSTRAINT fk_users_role FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
 );
 
 CREATE INDEX idx_users_email ON users(email);

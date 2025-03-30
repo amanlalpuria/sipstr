@@ -96,6 +96,13 @@
 			<version>20250107</version>
 		</dependency>
 
+		<!-- Twilio SDK for OTP -->
+		<dependency>
+			<groupId>com.twilio.sdk</groupId>
+			<artifactId>twilio</artifactId>
+			<version>8.31.1</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>com.stripe</groupId>

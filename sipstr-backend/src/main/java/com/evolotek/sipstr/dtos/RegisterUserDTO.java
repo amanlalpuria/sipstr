@@ -8,7 +8,7 @@ import lombok.*;
 
 @NoArgsConstructor
 @Data
-public class RegisterUserDto {
+public class RegisterUserDTO {
 
     @NotEmpty(message = "The email address is required.")
     @Email(message = "The email address is invalid.", flags = { Pattern.Flag.CASE_INSENSITIVE })
@@ -25,29 +25,35 @@ public class RegisterUserDto {
     private String mobileNumber;
 
     private String roleEnum;
+    private boolean isOtpSignup; // Indicates OTP-based signup
+
+    public RegisterUserDTO setOtpSignup(boolean otpSignup) {
+        this.isOtpSignup = otpSignup;
+        return this;
+    }
 
     // Ensure the setters return the object itself for chaining
-    public RegisterUserDto setFullName(String fullName) {
+    public RegisterUserDTO setFullName(String fullName) {
         this.fullName = fullName;
         return this;
     }
 
-    public RegisterUserDto setEmail(String email) {
+    public RegisterUserDTO setEmail(String email) {
         this.email = email;
         return this;
     }
 
-    public RegisterUserDto setPassword(String password) {
+    public RegisterUserDTO setPassword(String password) {
         this.password = password;
         return this;
     }
 
-    public RegisterUserDto setMobileNumber(String mobileNumber) {
+    public RegisterUserDTO setMobileNumber(String mobileNumber) {
         this.mobileNumber = mobileNumber;
         return this;
     }
 
-    public RegisterUserDto setRoleEnum(String roleEnum) {
+    public RegisterUserDTO setRoleEnum(String roleEnum) {
         this.roleEnum = roleEnum;
         return this;
     }

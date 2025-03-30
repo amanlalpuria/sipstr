@@ -1,6 +1,10 @@
 package com.evolotek.sipstr.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
@@ -9,6 +13,10 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "users")
 public class User {
 
@@ -68,85 +76,15 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "otp")
+    private String otp; // OTP Code
+
+    @Column(name = "otp_expires_at")
+    private LocalDateTime otpExpiresAt; // Expiration time for OTP
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
-
-    // Constructors
-    public User() {}
-
-    // Getters
-    public Long getId() {
-        return id;
-    }
-
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getMobileNumber() {
-        return mobileNumber;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public boolean isEmailVerified() {
-        return emailVerified;
-    }
-
-    public boolean isMobileVerified() {
-        return mobileVerified;
-    }
-
-    public boolean isTwoFactorEnabled() {
-        return twoFactorEnabled;
-    }
-
-    public String getTwoFactorSecret() {
-        return twoFactorSecret;
-    }
-
-    public String getAccountStatus() {
-        return accountStatus;
-    }
-
-    public int getFailedLoginAttempts() {
-        return failedLoginAttempts;
-    }
-
-    public LocalDateTime getLastLoginAt() {
-        return lastLoginAt;
-    }
-
-    public String getPasswordResetToken() {
-        return passwordResetToken;
-    }
-
-    public LocalDateTime getPasswordResetExpires() {
-        return passwordResetExpires;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public Role getRole() {
-        return role;
-    }
 
     // Chained Setters
     public User setId(Long id) {
@@ -231,6 +169,16 @@ public class User {
 
     public User setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+        return this;
+    }
+
+    public User setOtp(String otp) {
+        this.otp = otp;
+        return this;
+    }
+
+    public User setOtpExpiresAt(LocalDateTime otpExpiresAt) {
+        this.otpExpiresAt = otpExpiresAt;
         return this;
     }
 

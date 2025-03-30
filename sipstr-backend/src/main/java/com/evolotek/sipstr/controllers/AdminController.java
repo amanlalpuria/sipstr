@@ -1,6 +1,6 @@
 package com.evolotek.sipstr.controllers;
 
-import com.evolotek.sipstr.dtos.RegisterUserDto;
+import com.evolotek.sipstr.dtos.RegisterUserDTO;
 import com.evolotek.sipstr.entities.User;
 import com.evolotek.sipstr.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,7 +25,7 @@ public class AdminController {
     @Operation(summary = "Create a new administrator", description = "Allows a SUPER_ADMIN to create a new administrator account.")
     @PostMapping
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public ResponseEntity<User> createAdministrator(@RequestBody RegisterUserDto registerUserDto) {
+    public ResponseEntity<User> createAdministrator(@RequestBody RegisterUserDTO registerUserDto) {
         User createdAdmin = userService.createAdministrator(registerUserDto);
         return ResponseEntity.ok(createdAdmin);
     }

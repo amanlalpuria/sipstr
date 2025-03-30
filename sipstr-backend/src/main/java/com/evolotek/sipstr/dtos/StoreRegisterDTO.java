@@ -13,5 +13,4 @@ public class StoreRegisterDTO {
     private String corporationName;
     private Integer ein;
     private String licenseNumber;
-
 }

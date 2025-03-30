@@ -1,40 +1,27 @@
 package com.evolotek.sipstr.responses;
 
+import com.evolotek.sipstr.entities.Role;
+import com.evolotek.sipstr.entities.User;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+@NoArgsConstructor
+@Data
 public class UserDetailsResponse {
     private UUID uuid;
     private String username;
-    private List<String> roles;
+    private Role role;
 
-    public UserDetailsResponse(UUID uuid, String username, List<String> roles) {
-        this.uuid = uuid;
-        this.username = username;
-        this.roles = roles;
-    }
-
-    public UUID getUuid() {
-        return uuid;
-    }
-
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public List<String> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
+    // Static Mapper Method
+    public static UserDetailsResponse fromUser(User user) {
+        UserDetailsResponse response = new UserDetailsResponse();
+        response.setUuid(user.getUuid());
+        response.setUsername(user.getFullName());
+        response.setRole(user.getRole());
+        return response;
     }
 }

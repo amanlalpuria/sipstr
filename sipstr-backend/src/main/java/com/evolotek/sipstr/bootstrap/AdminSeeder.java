@@ -1,6 +1,6 @@
 package com.evolotek.sipstr.bootstrap;
 
-import com.evolotek.sipstr.dtos.RegisterUserDto;
+import com.evolotek.sipstr.dtos.RegisterUserDTO;
 import com.evolotek.sipstr.entities.Role;
 import com.evolotek.sipstr.entities.User;
 import com.evolotek.sipstr.repositories.RoleRepository;
@@ -45,7 +45,7 @@ public class AdminSeeder implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     private void createSuperAdministrator() {
-        RegisterUserDto userDto = new RegisterUserDto();
+        RegisterUserDTO userDto = new RegisterUserDTO();
         userDto.setFullName(fullName)
                 .setEmail(email)
                 .setPassword(password)
