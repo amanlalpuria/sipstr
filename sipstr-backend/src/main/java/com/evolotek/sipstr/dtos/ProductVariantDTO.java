@@ -13,9 +13,21 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class ProductVariantDTO {
     private Long variantId;
-    private String unit;
-    private int packOf;
-    private String volumePerUnit;
-    private String totalVolume;
+    private String packageName;
+    private BigDecimal abvPercentage;
+    private String thumbnailImageUrl;
+    private String fullSizeImageUrl;
+    private String retailUpc;
+    private String caseUpc;
     private BigDecimal unitPrice;
+    private Integer shelfLifeDays;
+    private BigDecimal alcoholByVolume;
+    private BigDecimal weightGrams;
+    private BigDecimal calories;
+    private BigDecimal carbs;
+    private BigDecimal ibuValue;
+    private BigDecimal sugars;
+    private BigDecimal addedSugars;
+    private String dimensionsCm;
+    private String storageInstructions;
 }

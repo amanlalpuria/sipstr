@@ -1,20 +1,10 @@
 package com.evolotek.sipstr.entities;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -34,76 +24,56 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long orderId;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, updatable = false)
     private UUID uuid = UUID.randomUUID();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY) // Corrected annotation
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
-    @ManyToOne
-    @JoinColumn(name = "driver_id")
-    private DeliveryPartner driver;
-
     @Column(nullable = false)
-    private String orderStatus;
+    private String paymentStatus; // Paid, Unpaid, Refunded, etc.
 
-    @Column(nullable = false)
-    private String paymentStatus;
-
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal subtotal;
 
-    @Column(nullable = false)
-    private BigDecimal deliveryFee;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal totalTax;
 
-    @Column(nullable = false)
+    @Column(precision = 10, scale = 2)
+    private BigDecimal totalDiscount = BigDecimal.ZERO;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal totalDeliveryFee;
+
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal serviceFee;
 
-    @Column(nullable = false)
-    private BigDecimal tax;
-
-    @Column
+    @Column(precision = 10, scale = 2)
     private BigDecimal tip;
 
-    @Column(nullable = false)
+    @Column(precision = 10, scale = 2)
+    private BigDecimal checkoutBagFee;
+
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal total;
 
-    @Column
     private LocalDateTime estimatedDeliveryTime;
-
-    @Column
     private LocalDateTime actualDeliveryTime;
 
-    @Column
-    private String specialInstructions;
-
-    @Column(nullable = false)
     private Boolean isScheduled = false;
-
-    @Column
     private LocalDateTime scheduledTime;
 
-    @Column
-    private String cancellationReason;
-
-    @Column
-    private LocalDateTime cancellationTime;
-
-    @Column
     private String refundStatus;
 
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
-    @Column
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> orderItems = new ArrayList<>();
 }
 

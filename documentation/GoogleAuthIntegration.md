@@ -105,9 +105,9 @@ public class GoogleAuthService {
 ```
 
 #### **3. Create Google Authentication Controller**
+
 ```java
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.evolotek.sipstr.entities.User;
 import com.evolotek.sipstr.repositories.UserRepository;
 import com.evolotek.sipstr.services.GoogleAuthService;
 import com.evolotek.sipstr.services.JwtService;

@@ -30,52 +30,38 @@ services:
       interval: 10s
       retries: 5
 
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    container_name: zookeeper
+  backend:
+    build:
+      context: ./sipstr-backend
+      dockerfile: Dockerfile
+    container_name: backend-service
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-    networks:
-      - backend
-
-  kafka:
-    image: confluentinc/cp-kafka:latest
-    container_name: kafka
-    ports:
-      - "9092:9092"
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: sipstr_rw_user
+      DB_PASSWORD: sipstr_rw_user
+      DB_NAME: sipStr
+      JWT_SECRET: 3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b
+      STRIPE_SECRET_KEY: sk_test_51Qt9ohKcFycn6VpnwBE6l5zZgxhJPhTnBlAdipiui1oWxnxx8jRnSjyidpkFd8PaXR58I67RG1TDYtaDDpITNDFW00w7YBn7AO
+      GOOGLE_CLIENT_ID: 423355590683-mtl4ceush1mt2keglsi292t49hd7ifmp.apps.googleusercontent.com
+      SUPER_ADMIN_FULLNAME: DevOps
+      SUPER_ADMIN_EMAIL: devops@evolotek.ai
+      SUPER_ADMIN_PASSWORD: devopsEvolotek
+      SUPER_ADMIN_MOBILE_NUMBER: 0000000009
+      TWILIO_ACCOUNT_SID: ACcf1356cbadf4b4da71f56e03142f17e7
+      TWILIO_AUTH_TOKEN: fd526d1a8eece61bf370d5352a470346
+      TWILIO_PHONE_NUMBER: +17577201712
+      TWILIO_OTP_EXPIRY_MINUTES: 5
+      TWILIO_MESSAGE_OTP_BODY: Your OTP is %s. This code is valid for the next 5 minutes. Do not disclose it to anyone.
     depends_on:
-      zookeeper:
-        condition: service_started
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
     networks:
       - backend
-
-#  backend:
-#    build:
-#      context: ./sipstr-backend
-#      dockerfile: Dockerfile
-#    container_name: backend-service
-#    environment:
-#      DB_HOST: postgres
-#      DB_PORT: 5432
-#      DB_USER: sipstr_rw_user
-#      DB_PASSWORD: sipstr_rw_user
-#      DB_NAME: sipStr
-#      JWT_SECRET: 3cfa76ef14937c1c0ea519f8fc057a80fcd04a7420f8e8bcd0a7567c272e007b
-#    depends_on:
-#      postgres:
-#        condition: service_healthy
-#      redis:
-#        condition: service_healthy
-#    ports:
-#      - "8080:8080"
-#    networks:
-#      - backend
 
 volumes:
   postgres_data: {}

@@ -1,19 +1,10 @@
 package com.evolotek.sipstr.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
@@ -22,12 +13,11 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(name = "users")
 public class User {
 
     @Id
@@ -86,7 +76,114 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "otp")
+    private String otp; // OTP Code
+
+    @Column(name = "otp_expires_at")
+    private LocalDateTime otpExpiresAt; // Expiration time for OTP
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
+
+    // Chained Setters
+    public User setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public User setUuid(UUID uuid) {
+        this.uuid = uuid;
+        return this;
+    }
+
+    public User setFullName(String fullName) {
+        this.fullName = fullName;
+        return this;
+    }
+
+    public User setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public User setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
+        return this;
+    }
+
+    public User setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+        return this;
+    }
+
+    public User setEmailVerified(boolean emailVerified) {
+        this.emailVerified = emailVerified;
+        return this;
+    }
+
+    public User setMobileVerified(boolean mobileVerified) {
+        this.mobileVerified = mobileVerified;
+        return this;
+    }
+
+    public User setTwoFactorEnabled(boolean twoFactorEnabled) {
+        this.twoFactorEnabled = twoFactorEnabled;
+        return this;
+    }
+
+    public User setTwoFactorSecret(String twoFactorSecret) {
+        this.twoFactorSecret = twoFactorSecret;
+        return this;
+    }
+
+    public User setAccountStatus(String accountStatus) {
+        this.accountStatus = accountStatus;
+        return this;
+    }
+
+    public User setFailedLoginAttempts(int failedLoginAttempts) {
+        this.failedLoginAttempts = failedLoginAttempts;
+        return this;
+    }
+
+    public User setLastLoginAt(LocalDateTime lastLoginAt) {
+        this.lastLoginAt = lastLoginAt;
+        return this;
+    }
+
+    public User setPasswordResetToken(String passwordResetToken) {
+        this.passwordResetToken = passwordResetToken;
+        return this;
+    }
+
+    public User setPasswordResetExpires(LocalDateTime passwordResetExpires) {
+        this.passwordResetExpires = passwordResetExpires;
+        return this;
+    }
+
+    public User setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+        return this;
+    }
+
+    public User setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+        return this;
+    }
+
+    public User setOtp(String otp) {
+        this.otp = otp;
+        return this;
+    }
+
+    public User setOtpExpiresAt(LocalDateTime otpExpiresAt) {
+        this.otpExpiresAt = otpExpiresAt;
+        return this;
+    }
+
+    public User setRole(Role role) {
+        this.role = role;
+        return this;
+    }
 }

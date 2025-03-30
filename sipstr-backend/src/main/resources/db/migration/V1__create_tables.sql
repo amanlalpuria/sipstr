@@ -44,24 +44,26 @@ EXECUTE FUNCTION update_timestamp();
 -- Create users table with enhanced security
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
-    uuid UUID DEFAULT uuid_generate_v4(),
+    uuid UUID DEFAULT uuid_generate_v4() NOT NULL UNIQUE,
     full_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     mobile_number VARCHAR(20) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     email_verified BOOLEAN DEFAULT false,
     mobile_verified BOOLEAN DEFAULT false,
-    two_factor_enabled BOOLEAN DEFAULT false,
+    two_factor_enabled BOOLEAN DEFAULT false NOT NULL,
     two_factor_secret VARCHAR(255),
+    account_status VARCHAR(50) DEFAULT 'PENDING' NOT NULL,
+    failed_login_attempts INTEGER DEFAULT 0 NOT NULL,
+    last_login_at TIMESTAMP NULL,
+    password_reset_token VARCHAR(255) NULL,
+    password_reset_expires TIMESTAMP NULL,
+    otp VARCHAR(10) NULL,
+    otp_expires_at TIMESTAMP NULL,
     role_id INTEGER NOT NULL,
-    account_status VARCHAR(50) DEFAULT 'PENDING',
-    failed_login_attempts INTEGER DEFAULT 0,
-    last_login_at TIMESTAMP,
-    password_reset_token VARCHAR(255),
-    password_reset_expires TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    FOREIGN KEY (role_id) REFERENCES roles(id)
+    CONSTRAINT fk_users_role FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
 );
 
 CREATE INDEX idx_users_email ON users(email);
@@ -165,9 +167,9 @@ CREATE TABLE coordinates (
 CREATE TABLE category (
     category_id SERIAL PRIMARY KEY,
     parent_category_id INTEGER,
-    category_name VARCHAR(255) NOT NULL,
+    category_name VARCHAR(255) NOT NULL UNIQUE,
     description TEXT,
-    image_url VARCHAR(255),
+    is_taxable BOOLEAN NOT NULL,
     is_active BOOLEAN DEFAULT true,
     display_order INTEGER,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -181,16 +183,24 @@ BEFORE UPDATE ON category
 FOR EACH ROW
 EXECUTE FUNCTION update_timestamp();
 
+CREATE TABLE brand (
+    brand_id SERIAL PRIMARY KEY,
+    brand_name VARCHAR(255) NOT NULL
+);
+
 -- Create product table with enhanced attributes
 CREATE TABLE product (
     product_id SERIAL PRIMARY KEY,
     uuid UUID DEFAULT uuid_generate_v4(),
-    product_name VARCHAR(255) NOT NULL,
+    product_name VARCHAR(255) NOT NULL UNIQUE,
     description TEXT,
-    brand VARCHAR(255),
+    brand_id BIGINT NOT NULL,
     category_id INTEGER NOT NULL,
     tax_category VARCHAR(50),
     is_alcoholic BOOLEAN DEFAULT FALSE,
+    is_gluten_free BOOLEAN DEFAULT FALSE,
+    is_kosher BOOLEAN DEFAULT FALSE,
+    is_wine BOOLEAN DEFAULT FALSE,
     has_tobacco BOOLEAN DEFAULT FALSE,
     has_cannabis BOOLEAN DEFAULT FALSE,
     is_returnable BOOLEAN DEFAULT false,
@@ -200,7 +210,8 @@ CREATE TABLE product (
     is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    FOREIGN KEY (category_id) REFERENCES category(category_id)
+    FOREIGN KEY (category_id) REFERENCES category(category_id),
+    FOREIGN KEY (brand_id) REFERENCES brand(brand_id)
 );
 
 CREATE TRIGGER update_product_timestamp
@@ -208,24 +219,40 @@ BEFORE UPDATE ON product
 FOR EACH ROW
 EXECUTE FUNCTION update_timestamp();
 
+
+CREATE TABLE package (
+    package_id SERIAL PRIMARY KEY,
+    package_name VARCHAR(255) NOT NULL,
+    description TEXT
+);
+
 -- Create Product Variant Table
 CREATE TABLE product_variant (
     variant_id BIGSERIAL PRIMARY KEY,
     product_id BIGINT NOT NULL,
     abv_percentage DECIMAL(5,2),
-    image_url VARCHAR(255) NOT NULL,
-    unit VARCHAR(255) NOT NULL,  -- CAN BOTTLE
-    pack_of INT NOT NULL,   -- 1 2 3 4
-    volume_per_unit VARCHAR(255) NOT NULL,  --20oz 12oz
-    total_volume VARCHAR(255) NOT NULL, -- 1*20oz
+    thumbnail_image_url VARCHAR(255),
+    full_size_image_url VARCHAR(255),
+    brand_logo_image_url VARCHAR(255),
+    product_logo_image_url VARCHAR(255),
+    retail_upc VARCHAR(255) NOT NULL,
+    case_upc VARCHAR(255) NOT NULL,
+    package_id BIGINT NOT NULL,
     unit_price DECIMAL(10, 2) NOT NULL,  --5.59
     shelf_life_days INTEGER,
+    alcohol_by_volume DECIMAL(10,2),
     weight_grams DECIMAL(10,2),
+    calories DECIMAL(10,2),
+    carbs DECIMAL(10,2),
+    ibuValue DECIMAL(10,2),
+    sugars DECIMAL(10,2),
+    added_sugars DECIMAL(10,2),
     dimensions_cm JSONB,
     storage_instructions TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE
+    FOREIGN KEY (product_id) REFERENCES product(product_id) ON DELETE CASCADE,
+    FOREIGN KEY (package_id) REFERENCES package(package_id) ON DELETE CASCADE
 );
 
 -- Trigger to auto-update updated_at
@@ -239,12 +266,14 @@ CREATE TABLE store (
     store_id SERIAL PRIMARY KEY,
     uuid UUID DEFAULT uuid_generate_v4(),
     store_name VARCHAR(255) NOT NULL,
+    corporation_name VARCHAR(255) NOT NULL,
+    ein INTEGER NOT NULL,
+    license_number INTEGER NOT NULL,
     description TEXT,
     address_id INTEGER NOT NULL,
     owner_id INTEGER NOT NULL,
     contact_email VARCHAR(255) NOT NULL,
     contact_phone VARCHAR(20) NOT NULL,
-    operating_hours JSONB NOT NULL,
     delivery_radius_km DECIMAL(10,2),
     minimum_order_amount DECIMAL(10,2),
     average_preparation_time INTEGER, -- in minutes
@@ -435,30 +464,45 @@ CREATE TABLE orders (
     order_id SERIAL PRIMARY KEY,
     uuid UUID DEFAULT uuid_generate_v4(),
     user_id INTEGER NOT NULL,
-    store_id INTEGER NOT NULL,
     address_id INTEGER NOT NULL,
-    driver_id INTEGER,
-    order_status VARCHAR(50) NOT NULL,
-    payment_status VARCHAR(50) NOT NULL,
+    payment_status VARCHAR(50) NOT NULL, -- Paid, Unpaid, Refunded, etc.
     subtotal DECIMAL(10,2) NOT NULL,
-    delivery_fee DECIMAL(10,2) NOT NULL,
+    total_tax DECIMAL(10,2) NOT NULL,
+    total_discount DECIMAL(10,2) DEFAULT 0,
+    total_delivery_fee DECIMAL(10,2) NOT NULL,
     service_fee DECIMAL(10,2) NOT NULL,
-    tax DECIMAL(10,2) NOT NULL,
     tip DECIMAL(10,2),
+    checkout_bag_fee DECIMAL(10,2),
     total DECIMAL(10,2) NOT NULL,
     estimated_delivery_time TIMESTAMP,
     actual_delivery_time TIMESTAMP,
-    special_instructions TEXT,
     is_scheduled BOOLEAN DEFAULT false,
     scheduled_time TIMESTAMP,
-    cancellation_reason TEXT,
-    cancellation_time TIMESTAMP,
     refund_status VARCHAR(50),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (address_id) REFERENCES address(id)
+);
+
+CREATE TABLE order_stores (
+    id SERIAL PRIMARY KEY,
+    order_id INTEGER NOT NULL,  -- Links to orders table
+    store_id INTEGER NOT NULL,  -- Store fulfilling this part of the order
+    driver_id INTEGER,  -- Delivery partner assigned for this store's order
+    store_status VARCHAR(50) NOT NULL,  -- Pending, On The Way, Delivered, Cancelled
+    store_subtotal DECIMAL(10,2) NOT NULL,  -- Total price for this store's items
+    store_tax DECIMAL(10,2) NOT NULL,
+    store_discount DECIMAL(10,2) DEFAULT 0,
+    store_delivery_fee DECIMAL(10,2) NOT NULL,
+    checkout_bag_fee DECIMAL(10,2),
+    final_store_total DECIMAL(10,2) NOT NULL,
+    estimated_delivery_time TIMESTAMP,
+    actual_delivery_time TIMESTAMP,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id) ON DELETE CASCADE,
     FOREIGN KEY (store_id) REFERENCES store(store_id) ON DELETE CASCADE,
-    FOREIGN KEY (address_id) REFERENCES address(id),
     FOREIGN KEY (driver_id) REFERENCES delivery_partner(partner_id)
 );
 
@@ -470,20 +514,21 @@ EXECUTE FUNCTION update_timestamp();
 -- Create order_items table with detailed tracking
 CREATE TABLE order_items (
     id SERIAL PRIMARY KEY,
-    order_id INTEGER NOT NULL,
+    order_store_id INTEGER NOT NULL,  -- Links to order_stores
     product_id INTEGER NOT NULL,
     variant_id INTEGER NOT NULL,
     quantity INTEGER NOT NULL,
     unit_price DECIMAL(10,2) NOT NULL,
     subtotal DECIMAL(10,2) NOT NULL,
-    discount_amount DECIMAL(10,2) DEFAULT 0,
+    store_discount DECIMAL(10,2) DEFAULT 0,
     tax_amount DECIMAL(10,2) NOT NULL,
+    checkout_bag_fee DECIMAL(10,2),
     final_price DECIMAL(10,2) NOT NULL,
     special_instructions TEXT,
-    status VARCHAR(50) NOT NULL,
+    status VARCHAR(50) NOT NULL,  -- Pending, Packed, Out for Delivery, Delivered
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP,
-    FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    FOREIGN KEY (order_store_id) REFERENCES order_stores(id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES product(product_id),
     FOREIGN KEY (variant_id) REFERENCES product_variant(variant_id)
 );
@@ -581,7 +626,7 @@ CREATE TABLE top_picks (
  CREATE INDEX idx_user_mobile ON users(mobile_number);
  CREATE INDEX idx_store_seller ON store(owner_id);
  CREATE INDEX idx_order_user ON orders(user_id);
- CREATE INDEX idx_order_status ON orders(order_status);
- CREATE INDEX idx_order_driver ON orders(driver_id);
+-- CREATE INDEX idx_order_status ON orders(order_status);
+-- CREATE INDEX idx_order_driver ON orders(driver_id);
  CREATE INDEX idx_payment_order ON payment(order_id);
  CREATE INDEX idx_product_category ON product(category_id);

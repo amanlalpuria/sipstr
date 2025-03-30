@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/delivery-partners")
+@RequestMapping("/delivery-partners")
 @RequiredArgsConstructor
 public class DeliveryPartnerController {
 

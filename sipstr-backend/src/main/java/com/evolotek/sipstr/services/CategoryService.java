@@ -1,13 +1,16 @@
 package com.evolotek.sipstr.services;
 
+import com.evolotek.sipstr.dtos.CategoryDTO;
 import com.evolotek.sipstr.entities.Category;
 import com.evolotek.sipstr.exceptions.CategoryNotFoundException;
 import com.evolotek.sipstr.repositories.CategoryRepository;
+import com.evolotek.sipstr.utils.CategoryMapperUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -15,8 +18,14 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    /**
+     * ✅ Fetch all categories and map to DTOs.
+     */
+    public List<CategoryDTO> getAllCategories() {
+        return categoryRepository.findAll()
+                .stream()
+                .map(CategoryMapperUtil::mapToDTO)
+                .collect(Collectors.toList());
     }
 
     public Category getCategoryById(Long id) {
