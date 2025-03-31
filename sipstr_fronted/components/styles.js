@@ -5,16 +5,18 @@ import { colors } from "./colors";
 export const globalStyles = StyleSheet.create({
   button: {
     backgroundColor: colors.orange,
-    borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
+    borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
+    minWidth: 200,
+    minHeight: 50,
+    paddingVertical: 5,
+    paddingHorizontal: 20,
+    width: "50%",
   },
   buttonText: {
     fontFamily: "Poppins-SemiBold",
-    fontStyle: "normal",
-    fontSize: 18,
+    fontSize: 20,
     color: colors.white,
     textAlign: "center",
   },

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import CommonButton from "../../components/CommonButton";
 import CommonTextView from "../../components/CommonTextView";
 import CommonTextField from "../../components/CommonTextField";
@@ -8,73 +8,96 @@ import { globalStyles } from "../../components/styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CommonAppNameLabel from "../../components/CommonAppNameLabel";
 
-const LoginScreen = ({ navigation, route }) => {
+const LoginScreen = ({ navigation }) => {
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      {/* App Logo / Title */}
-      <CommonAppNameLabel fontSize={62}/>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.inner}>
+        {/* Logo */}
+        <CommonAppNameLabel fontSize={62} />
 
-      {/* Heading */}
-      <CommonTextView style={styles.welcomeText}>Welcome</CommonTextView>
+        {/* Heading */}
+        <View style={{ marginTop: 30 }}>
+          <CommonTextView style={styles.welcomeText}>Welcome</CommonTextView>
+        </View>
 
-      {/* Email / Phone Input */}
-      <CommonTextField placeholder="Enter Mobile Number/Email" />
+        {/* Input Fields */}
+        <CommonTextField placeholder="Enter Mobile Number/Email" />
+        <CommonTextField
+          placeholder="Enter Password"
+          secureTextEntry
+          style={styles.inputSpacing}
+        />
 
-      {/* Password Input */}
-      <CommonTextField placeholder="Enter Password" secureTextEntry />
-
-      {/* Forgot Password */}
-      <TouchableOpacity style={styles.forgotPasswordContainer}>
-        <CommonTextView style={styles.forgotText}>
-          Forgot Password
-        </CommonTextView>
-      </TouchableOpacity>
-
-      {/* Login Button */}
-      <CommonButton
-        title="Login"
-        onPress={() => navigation.navigate("Login")}
-      />
-
-      {/* Signup Link */}
-      <TouchableOpacity>
-        <CommonTextView style={styles.signupText}>
-          Don’t have an account?{" "}
-          <CommonTextView
-            onPress={() => navigation.navigate("SignUp")}
-            style={styles.signupLink}
-          >
-            Signup
+        {/* Forgot Password */}
+        <TouchableOpacity style={styles.forgotPasswordContainer}>
+          <CommonTextView style={styles.forgotText}>
+            Forgot Password
           </CommonTextView>
-        </CommonTextView>
-      </TouchableOpacity>
+        </TouchableOpacity>
+
+        {/* Login Button */}
+        <CommonButton
+          title="Login"
+          onPress={() => navigation.navigate("Home")}
+        />
+
+        {/* Signup */}
+        <TouchableOpacity style={styles.signupWrapper}>
+          <CommonTextView style={styles.signupText}>
+            Don’t have an account?{" "}
+            <CommonTextView
+              onPress={() => navigation.navigate("SignUp")}
+              style={styles.signupLink}
+            >
+              Signup
+            </CommonTextView>
+          </CommonTextView>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  welcomeText: {
-    fontSize: 28,
-    marginBottom: 25,
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+    justifyContent: "center", // Vertically center all
   },
-
+  inner: {
+    paddingHorizontal: 30,
+    alignItems: "center",
+  },
+  welcomeText: {
+    fontSize: 24,
+    fontFamily: "Poppins-SemiBold",
+    marginBottom: 30,
+  },
+  inputSpacing: {
+    marginTop: 15,
+  },
   forgotPasswordContainer: {
-    alignSelf: "flex-end",
+    width: "100%",
+    alignItems: "flex-end",
+    marginBottom: 20,
+    marginTop: 8,
   },
   forgotText: {
-    fontSize: 12,
+    fontSize: 13,
     fontFamily: "Poppins-SemiBold",
-    color: colors.orange, // or your brand color
-    marginTop: 4,
+    color: colors.orange,
+  },
+  signupWrapper: {
+    marginTop: 16,
   },
   signupText: {
     fontSize: 14,
     fontFamily: "Poppins-Regular",
-    marginTop: 10,
   },
   signupLink: {
-    fontWeight: "bold",
+    fontFamily: "Poppins-SemiBold",
     color: colors.orange,
   },
 });
+
 export default LoginScreen;

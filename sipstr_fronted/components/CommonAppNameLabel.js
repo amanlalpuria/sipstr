@@ -4,7 +4,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { colors } from "./colors";
 
-// Props: size can be passed dynamically
 const CommonAppNameLabel = ({ fontSize = 32 }) => {
   return (
     <MaskedView
@@ -12,9 +11,10 @@ const CommonAppNameLabel = ({ fontSize = 32 }) => {
         <Text
           style={{
             fontSize,
-            fontFamily: "ArefRuqaaInk-Bold", // Load this in your App.js
+            fontFamily: "ArefRuqaaInk-Bold",
             fontWeight: "700",
-            color: "black", // Required for masking
+            color: "black", // Required to define mask shape
+            textAlign: "center",
           }}
         >
           SipStr
@@ -25,13 +25,17 @@ const CommonAppNameLabel = ({ fontSize = 32 }) => {
         colors={[colors.orange, colors.lightOrange]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
+        style={{
+          height: fontSize + 10, // height of gradient = text height
+        }}
       >
         <Text
           style={{
             fontSize,
             fontFamily: "ArefRuqaaInk-Bold",
             fontWeight: "700",
-            opacity: 0, // To keep height
+            opacity: 0, // make it invisible, used only for size
+            textAlign: "center",
           }}
         >
           SipStr

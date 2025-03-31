@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, Text } from "react-native";
 import CommonTextView from "../../components/CommonTextView";
 import CommonButton from "../../components/CommonButton";
 import { globalStyles } from "../../components/styles";
@@ -13,7 +13,6 @@ const WelcomeScreen = ({ navigation }) => {
       <View style={styles.logoContainer}>
         <CommonAppNameLabel fontSize={70} />
       </View>
-
       {/* Bottom Content */}
       <View style={styles.bottomSection}>
         <CommonTextView style={{ fontSize: 27 }}>
@@ -35,6 +34,18 @@ const WelcomeScreen = ({ navigation }) => {
             onPress={() => navigation.navigate("SorryScreen")}
             style={styles.button}
           />
+
+          <CommonButton
+            title="Login"
+            onPress={() => navigation.navigate("Login")}
+            style={styles.button}
+          />
+
+          <CommonButton
+            title="SignUp"
+            onPress={() => navigation.navigate("SignUp")}
+            style={styles.button}
+          />
         </View>
       </View>
     </SafeAreaView>
@@ -50,8 +61,9 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
   logoContainer: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
-    marginTop: 100,
   },
   bottomSection: {
     alignItems: "center",
@@ -60,10 +72,11 @@ const styles = StyleSheet.create({
   buttonRow: {
     flexDirection: "row",
     justifyContent: "center",
-    gap: 20,
+    margin: 20,
   },
   button: {
     minWidth: 100,
+    marginRight: 20,
   },
 });
 
