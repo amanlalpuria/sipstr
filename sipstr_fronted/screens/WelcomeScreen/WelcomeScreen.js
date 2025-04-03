@@ -15,7 +15,7 @@ const WelcomeScreen = ({ navigation }) => {
       </View>
       {/* Bottom Content */}
       <View style={styles.bottomSection}>
-        <CommonTextView style={{ fontSize: 27 }}>
+        <CommonTextView style={{ fontSize: 27, margin: 20 }}>
           Are you over 21?
         </CommonTextView>
         <CommonTextView style={{ fontSize: 18 }}>

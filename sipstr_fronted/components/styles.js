@@ -1,5 +1,5 @@
 // styles.js
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import { colors } from "./colors";
 
 export const globalStyles = StyleSheet.create({
@@ -8,41 +8,56 @@ export const globalStyles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
     justifyContent: "center",
-    minWidth: 200,
     minHeight: 50,
-    paddingVertical: 5,
-    paddingHorizontal: 20,
-    width: "50%",
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    minWidth: 200,
+    maxWidth: 320, // Good desktop width
+    width: Platform.OS === "web" ? "80%" : "100%",
+    ...(Platform.OS === "web" && {
+      cursor: "pointer",
+    }),
   },
   buttonText: {
     fontFamily: "Poppins-SemiBold",
-    fontSize: 20,
+    fontSize: 18,
     color: colors.white,
     textAlign: "center",
   },
   input: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.white,
     borderWidth: 1,
     borderColor: colors.black,
     borderRadius: 15,
     fontFamily: "Poppins-Regular",
-    fontSize: 15, // Change here to update everywhere
-    paddingVertical: 10,
+    fontSize: 15,
+    paddingVertical: Platform.OS === "web" ? 14 : 10,
     paddingHorizontal: 15,
     color: colors.black,
-    width: "100%",
+    marginVertical: 6,
+    width: Platform.OS === "web" ? "80%" : "100%",
+    maxWidth: 320,
+    ...(Platform.OS === "web" && {
+      outlineStyle: "none",
+      appearance: "none",
+      boxShadow: "none",
+    }),
   },
   textView: {
     fontFamily: "Poppins-Regular",
-    fontStyle: "normal",
-    fontSize: 14, // Change here to update everywhere
+    fontSize: 14,
     color: colors.black,
+    ...(Platform.OS === "web" && {
+      lineHeight: 20,
+    }),
   },
   textViewSemiBold: {
     fontFamily: "Poppins-SemiBold",
-    fontStyle: "normal",
-    fontSize: 14, // Change here to update everywhere
+    fontSize: 14,
     color: colors.black,
+    ...(Platform.OS === "web" && {
+      lineHeight: 20,
+    }),
   },
   logo: {
     width: 200,
@@ -98,3 +113,33 @@ export const alertStyles = StyleSheet.create({
     color: colors.white,
   },
 });
+
+export const injectSweetAlertStyles = () => {
+  if (typeof window !== "undefined") {
+    const style = document.createElement("style");
+    style.innerHTML = `
+      .swal-title {
+        font-family: 'Poppins-SemiBold';
+        font-size: 24px;
+        color: #111827;
+      }
+
+      .swal-message {
+        font-family: 'Poppins-Regular';
+        font-size: 16px;
+        color: #6B7280;
+      }
+
+      .swal-button {
+        font-family: 'Poppins-SemiBold';
+        font-size: 16px;
+      }
+
+      .swal-popup {
+        border-radius: 12px;
+        padding: 20px;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+};

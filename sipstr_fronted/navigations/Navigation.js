@@ -8,6 +8,7 @@ import HomeScreen from "../screens/Home/HomeScreen";
 import SorryScreen from "../screens/AgeRestrictionPopUp/SorryScreen";
 import AccountSettings from "../screens/AccountSettings/AccountSettings";
 import AddressesScreen from "../screens/AccountSettings/AddressesScreen";
+import ForgotPasswordScreen from "../screens/ForgotPassword/ForgotPassword";
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,7 @@ const AppNavigator = () => {
         <Stack.Screen name="SorryScreen" component={SorryScreen} />
         <Stack.Screen name="Account" component={AccountSettings} />
         <Stack.Screen name="Addresses" component={AddressesScreen} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -10,18 +10,22 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "~4.0.1",
+    "@react-native-async-storage/async-storage": "^2.1.2",
+    "@react-native-community/netinfo": "^11.4.1",
     "@react-native-masked-view/masked-view": "^0.3.2",
+    "@react-navigation/bottom-tabs": "^7.3.5",
     "@react-navigation/native": "^7.0.15",
     "@react-navigation/stack": "^7.1.2",
+    "axios": "^1.8.4",
     "expo": "~52.0.31",
     "expo-font": "~13.0.3",
     "expo-linear-gradient": "^14.0.2",
     "expo-linking": "^7.0.5",
     "expo-location": "^18.0.8",
     "expo-status-bar": "~2.0.1",
-    "react": "18.3.1",
+    "react": "^18.3.1",
     "react-dom": "18.3.1",
-    "react-native": "0.76.7",
+    "react-native": "^0.76.7",
     "react-native-exit-app": "^2.0.0",
     "react-native-gesture-handler": "^2.24.0",
     "react-native-root-toast": "^4.0.1",
@@ -29,7 +33,8 @@
     "react-native-screens": "^4.9.2",
     "react-native-svg": "^15.11.2",
     "react-native-vector-icons": "^10.2.0",
-    "react-native-web": "~0.19.13"
+    "react-native-web": "~0.19.13",
+    "sweetalert2": "^11.17.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useFonts } from "expo-font";
-import AppNavigator from "./navigations/Navigation"; // Import from correct path
+import AppNavigator from "./navigations/Navigation";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { injectSweetAlertStyles } from "./components/styles";
 
 export default function App() {
-  // Load custom fonts
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
     "Poppins-SemiBold": require("./assets/fonts/Poppins-SemiBold.ttf"),
@@ -12,6 +12,16 @@ export default function App() {
     "ArefRuqaaInk-Bold": require("./assets/fonts/ArefRuqaaInk-Bold.ttf"),
     "ArefRuqaaInk-Regular": require("./assets/fonts/ArefRuqaaInk-Regular.ttf"),
   });
+
+  useEffect(() => {
+    injectSweetAlertStyles(); // only for web
+  }, []);
+
   if (!fontsLoaded) return null;
-  return <AppNavigator />;
+
+  return (
+    <SafeAreaProvider>
+      <AppNavigator />
+    </SafeAreaProvider>
+  );
 }
