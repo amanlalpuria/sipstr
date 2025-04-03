@@ -5,8 +5,15 @@ import CommonButton from "../../components/CommonButton";
 import { globalStyles } from "../../components/styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CommonAppNameLabel from "../../components/CommonAppNameLabel";
+import { colors } from "../../components/colors";
 
 const WelcomeScreen = ({ navigation }) => {
+  const navigateToHome = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "MainTabs" }],
+    });
+  };
   return (
     <SafeAreaView style={styles.container}>
       {/* Logo */}
@@ -26,24 +33,12 @@ const WelcomeScreen = ({ navigation }) => {
         <View style={styles.buttonRow}>
           <CommonButton
             title="YES"
-            onPress={() => navigation.navigate("Home")}
+            onPress={navigateToHome}
             style={styles.button}
           />
           <CommonButton
             title="NO"
             onPress={() => navigation.navigate("SorryScreen")}
-            style={styles.button}
-          />
-
-          <CommonButton
-            title="Login"
-            onPress={() => navigation.navigate("Login")}
-            style={styles.button}
-          />
-
-          <CommonButton
-            title="SignUp"
-            onPress={() => navigation.navigate("SignUp")}
             style={styles.button}
           />
         </View>
@@ -55,7 +50,7 @@ const WelcomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFF",
+    backgroundColor: colors.white,
     justifyContent: "space-between",
     paddingHorizontal: 20,
     paddingBottom: 30,
@@ -75,7 +70,7 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   button: {
-    minWidth: 100,
+    //minWidth: 100,
     marginRight: 20,
   },
 });

@@ -11,8 +11,8 @@ export const globalStyles = StyleSheet.create({
     minHeight: 50,
     paddingVertical: 12,
     paddingHorizontal: 25,
-    minWidth: 200,
-    maxWidth: 320, // Good desktop width
+    minWidth: Platform.OS === "web" ? 200 : 80,
+    maxWidth: Platform.OS === "web" ? 320 : 100, // Good desktop width
     width: Platform.OS === "web" ? "80%" : "100%",
     ...(Platform.OS === "web" && {
       cursor: "pointer",

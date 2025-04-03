@@ -36,6 +36,7 @@ const Utils = {
 
   isAndroid: Platform.OS === "android",
   isIOS: Platform.OS === "ios",
+  isWeb: Platform.OS === "web",
 
   showToast: (msg) => {
     if (Platform.OS === "web") {

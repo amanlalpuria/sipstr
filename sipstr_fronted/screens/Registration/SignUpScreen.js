@@ -16,10 +16,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Utils from "../../Utils/Utils";
 
 const SignUpScreen = ({ navigation }) => {
-  const [emailPhoneInput, SetEmailPhoneInput] = useState("");
-  const [nameInput, SetNameInput] = useState("");
-  const [passwordInput, SetPasswordInput] = useState("");
-  const [confirmPwdInput, SetConfirmPwdInput] = useState("");
+  const [nameInput, setNameInput] = useState("");
+  const [emailPhoneInput, setEmailPhoneInput] = useState("");
+  const [passwordInput, setPasswordInput] = useState("");
+  const [confirmPwdInput, setConfirmPwdInput] = useState("");
 
   const validateAndSignUp = () => {
     const name = nameInput.trim();
@@ -29,7 +29,6 @@ const SignUpScreen = ({ navigation }) => {
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/;
 
-    // Validation logic
     if (!name || !emailOrPhone || !password || !confirmPwd) {
       Utils.showToast("All fields are required.");
       return;
@@ -45,7 +44,7 @@ const SignUpScreen = ({ navigation }) => {
 
     if (!passwordRegex.test(password)) {
       Utils.showToast(
-        "Password must be 8+ characters with uppercase, lowercase, digit & special char."
+        "Password must include uppercase, lowercase, digit & special char."
       );
       return;
     }
@@ -55,9 +54,8 @@ const SignUpScreen = ({ navigation }) => {
       return;
     }
 
-    // All validations passed
-    Utils.showToast("SignUp Success! 🎉");
-    navigation.navigate("Home"); // or your next screen
+    Utils.showToast("Signup Success 🎉");
+    navigation.navigate("Home");
   };
 
   return (
@@ -66,69 +64,57 @@ const SignUpScreen = ({ navigation }) => {
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled"
       >
-        {/* App Logo / Title */}
-        <CommonAppNameLabel fontSize={62} />
+        <CommonAppNameLabel fontSize={60} />
+        <CommonTextView style={styles.title}>Create Account</CommonTextView>
 
-        {/* Heading */}
-        <CommonTextView style={styles.createAccountText}>
-          Create Account
-        </CommonTextView>
-        {/* Input Fields */}
         <CommonTextField
           placeholder="Enter Name"
-          style={styles.input}
           value={nameInput}
-          onChangeText={SetNameInput}
+          onChangeText={setNameInput}
+          style={styles.input}
         />
         <CommonTextField
           placeholder="Enter Mobile Number/Email"
           value={emailPhoneInput}
-          onChangeText={SetEmailPhoneInput}
+          onChangeText={setEmailPhoneInput}
           style={styles.input}
         />
         <CommonTextField
           placeholder="Enter Password"
           secureTextEntry
           value={passwordInput}
-          onChangeText={SetPasswordInput}
+          onChangeText={setPasswordInput}
           style={styles.input}
         />
         <CommonTextField
           placeholder="Confirm Password"
           secureTextEntry
           value={confirmPwdInput}
-          onChangeText={SetConfirmPwdInput}
+          onChangeText={setConfirmPwdInput}
           style={styles.input}
         />
 
-        {/* Signup Button */}
         <CommonButton
           title="Signup"
           onPress={validateAndSignUp}
-          style={styles.signUpButton}
+          style={styles.button}
         />
 
-        {/* Already have an account? Login */}
-
         <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-          <CommonTextView style={globalStyles.textViewSemiBold}>
+          <CommonTextView style={styles.loginText}>
             Already have an account?{" "}
-            <CommonTextView style={styles.orangeText}>Login</CommonTextView>
+            <CommonTextView style={styles.loginLink}>Login</CommonTextView>
           </CommonTextView>
         </TouchableOpacity>
 
-        {/* Divider */}
-        <View style={styles.dividerContainer}>
+        <View style={styles.dividerRow}>
           <View style={styles.divider} />
-          <CommonTextView
-            style={[globalStyles.textViewSemiBold, styles.dividerText]}
-          >
+          <CommonTextView style={styles.dividerText}>
             Or Register with
           </CommonTextView>
           <View style={styles.divider} />
         </View>
 
-        {/* Social Signup */}
         <View style={styles.socialRow}>
           <TouchableOpacity>
             <Image
@@ -151,39 +137,38 @@ const SignUpScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#FFF",
+    backgroundColor: "#fff",
   },
   container: {
+    padding: 24,
     alignItems: "center",
-    padding: 20,
-    paddingBottom: 40,
+    gap: 16,
   },
-  createAccountText: {
-    fontSize: 28,
-    marginBottom: 20,
-    marginTop: 20,
+  title: {
+    fontSize: 26,
+    fontFamily: "Poppins-SemiBold",
+    marginBottom: 8,
   },
   input: {
-    marginBottom: 15,
-    marginTop: 10,
     width: "100%",
   },
-  grayText: {
-    color: colors.grayText,
+  button: {
+    width: "100%",
+  },
+  loginText: {
     fontSize: 14,
+    fontFamily: "Poppins-Regular",
     marginTop: 12,
   },
-  orangeText: {
-    color: colors.orange,
+  loginLink: {
     fontFamily: "Poppins-SemiBold",
-    fontStyle: "normal",
-    fontSize: 14,
+    color: colors.orange,
   },
-  dividerContainer: {
+  dividerRow: {
     flexDirection: "row",
     alignItems: "center",
     marginVertical: 18,
-    width: "30%",
+    width: "100%",
   },
   divider: {
     flex: 1,
@@ -193,20 +178,18 @@ const styles = StyleSheet.create({
   dividerText: {
     marginHorizontal: 10,
     fontSize: 14,
+    fontFamily: "Poppins-SemiBold",
   },
   socialRow: {
     flexDirection: "row",
     justifyContent: "center",
-    gap: 20, // Optional: Or use marginHorizontal in icons
+    gap: 20,
   },
   socialIcon: {
     height: 40,
     width: 40,
     borderRadius: 8,
     resizeMode: "contain",
-  },
-  signUpButton: {
-    margin: 30,
   },
 });
 

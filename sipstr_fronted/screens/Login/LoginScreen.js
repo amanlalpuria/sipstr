@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
-import CommonButton from "../../components/CommonButton";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import CommonTextView from "../../components/CommonTextView";
 import CommonTextField from "../../components/CommonTextField";
-import { colors } from "../../components/colors";
-import { globalStyles } from "../../components/styles";
-import { SafeAreaView } from "react-native-safe-area-context";
+import CommonButton from "../../components/CommonButton";
 import CommonAppNameLabel from "../../components/CommonAppNameLabel";
+import { colors } from "../../components/colors";
 import Utils from "../../Utils/Utils";
 
 const LoginScreen = ({ navigation }) => {
@@ -15,11 +14,8 @@ const LoginScreen = ({ navigation }) => {
 
   const validateAndLogin = () => {
     const emailOrPhone = emailPhoneInput.trim();
-    const password = passwordInput.trim();
+    const password = passwordInput;
 
-    console.log("Hello world");
-
-    // Validation logic
     if (!emailOrPhone || !password) {
       Utils.showToast("All fields are required.");
       return;
@@ -32,51 +28,44 @@ const LoginScreen = ({ navigation }) => {
       Utils.showToast("Enter a valid email or 10-digit phone number.");
       return;
     }
-    // All validations passed
+
     Utils.showToast("Login Success! 🎉");
-    navigation.navigate("Home"); // or your next screen
+    navigation.navigate("BottomTabs");
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.inner}>
-        {/* Logo */}
-        <CommonAppNameLabel fontSize={62} />
-        {/* Heading */}
-        <View style={{ marginTop: 30 }}>
-          <CommonTextView style={styles.welcomeText}>Welcome</CommonTextView>
-        </View>
-        {/* Input Fields */}
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <CommonAppNameLabel fontSize={60} />
+        <CommonTextView style={styles.title}>Welcome</CommonTextView>
+
         <CommonTextField
           placeholder="Enter Mobile Number/Email"
           value={emailPhoneInput}
           onChangeText={SetEmailPhoneInput}
+          style={styles.input}
         />
         <CommonTextField
           placeholder="Enter Password"
           secureTextEntry
           value={passwordInput}
           onChangeText={SetPasswordInput}
-          style={styles.inputSpacing}
+          style={styles.input}
         />
-        {/* Forgot Password */}
-        <TouchableOpacity
-          style={styles.forgotPasswordContainer}
-          onPress={() => navigation.navigate("ForgotPassword")}
-        >
+
+        <TouchableOpacity style={styles.forgotPasswordContainer}>
           <CommonTextView style={styles.forgotText}>
             Forgot Password
           </CommonTextView>
         </TouchableOpacity>
 
-        {/* Login Button */}
-        <CommonButton title="Login" onPress={validateAndLogin} />
+        <CommonButton
+          title="Login"
+          onPress={validateAndLogin}
+          style={styles.button}
+        />
 
-        {/* Signup */}
-        <TouchableOpacity
-          style={styles.signupWrapper}
-          onPress={() => navigation.navigate("SignUp")}
-        >
+        <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
           <CommonTextView style={styles.signupText}>
             Don’t have an account?{" "}
             <CommonTextView style={styles.signupLink}>Signup</CommonTextView>
@@ -88,43 +77,44 @@ const LoginScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
   container: {
     flex: 1,
-    backgroundColor: colors.white,
-    justifyContent: "center", // Vertically center all
-  },
-  inner: {
-    paddingHorizontal: 30,
+    paddingHorizontal: 24,
+    justifyContent: "center",
     alignItems: "center",
+    gap: 16,
   },
-  welcomeText: {
-    fontSize: 24,
+  title: {
+    fontSize: 26,
     fontFamily: "Poppins-SemiBold",
-    marginBottom: 30,
+    marginTop: 10,
   },
-  inputSpacing: {
-    marginTop: 15,
+  input: {
+    width: "100%",
   },
   forgotPasswordContainer: {
-    //width: "100%",
-    alignItems: "flex-end",
-    marginBottom: 20,
-    marginTop: 8,
+    alignSelf: "flex-end",
+    marginRight: 8,
   },
   forgotText: {
-    fontSize: 13,
-    fontFamily: "Poppins-SemiBold",
     color: colors.orange,
-  },
-  signupWrapper: {
-    marginTop: 16,
+    fontSize: 12,
+    fontFamily: "Poppins-SemiBold",
   },
   signupText: {
     fontSize: 14,
+    fontFamily: "Poppins-Regular",
   },
   signupLink: {
-    fontFamily: "Poppins-SemiBold",
     color: colors.orange,
+    fontFamily: "Poppins-SemiBold",
+  },
+  button: {
+    width: "100%",
   },
 });
 

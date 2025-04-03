@@ -69,20 +69,6 @@ export default function HomeScreen({
           showLocation={showLocation}
           userCity={city}
         />
-
-        {/* Search Bar */}
-        <View style={styles.searchBar}>
-          <Ionicons name="search" size={18} color="#999" />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search"
-            placeholderTextColor="#999"
-          />
-          <TouchableOpacity>
-            <Ionicons name="camera-outline" size={20} color="#999" />
-          </TouchableOpacity>
-        </View>
-
         {/* Categories */}
         <CommonTextView style={styles.sectionHeading}>
           Categories
@@ -156,7 +142,7 @@ export default function HomeScreen({
             <TouchableOpacity
               key={item.id}
               style={styles.productCardGrid}
-              onPress={() => console.log('Product pressed:', item.id)}
+              onPress={() => console.log("Product pressed:", item.id)}
             >
               <Image source={{ uri: item.image }} style={styles.productImage} />
               <CommonTextView style={styles.productName}>

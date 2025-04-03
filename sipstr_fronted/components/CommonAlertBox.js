@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, View } from "react-native";
+import { Modal, View, TouchableOpacity } from "react-native";
 import CommonTextView from "./CommonTextView";
 import CommonButton from "./CommonButton";
 import { alertStyles } from "./styles";
@@ -25,16 +25,10 @@ const CommonAlertBox = ({
 
           {/* Buttons */}
           <View style={alertStyles.buttonContainer}>
-            <TouchableOpacity
-              style={alertStyles.button}
-              onPress={onConfirm}
-            >
+            <TouchableOpacity style={alertStyles.button} onPress={onConfirm}>
               <Text style={alertStyles.buttonText}>{confirmBtnText}</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={alertStyles.button}
-              onPress={onCancel}
-            >
+            <TouchableOpacity style={alertStyles.button} onPress={onCancel}>
               <Text style={alertStyles.buttonText}>{cancelBtnText}</Text>
             </TouchableOpacity>
           </View>

@@ -3,6 +3,7 @@ import { useFonts } from "expo-font";
 import AppNavigator from "./navigations/Navigation";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { injectSweetAlertStyles } from "./components/styles";
+import Utils from "./Utils/Utils";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -13,9 +14,11 @@ export default function App() {
     "ArefRuqaaInk-Regular": require("./assets/fonts/ArefRuqaaInk-Regular.ttf"),
   });
 
-  useEffect(() => {
-    injectSweetAlertStyles(); // only for web
-  }, []);
+  if (Utils.isWeb) {
+    useEffect(() => {
+      injectSweetAlertStyles(); // only for web
+    }, []);
+  }
 
   if (!fontsLoaded) return null;
 
