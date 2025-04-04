@@ -70,7 +70,11 @@ public class LoginController {
 
         return ResponseEntity.ok(new LoginResponse()
                 .setToken(jwtToken)
-                .setExpiresIn(jwtService.getExpirationTime()));
+                .setExpiresIn(jwtService.getExpirationTime())
+                .setUserId(authenticatedUser.getId())
+                .setEmail(authenticatedUser.getEmail())
+                .setMobileNumber(authenticatedUser.getMobileNumber())
+                .setIsActive("ACTIVE".equals(authenticatedUser.getAccountStatus())));
     }
 
     @PostMapping("/otp/send")

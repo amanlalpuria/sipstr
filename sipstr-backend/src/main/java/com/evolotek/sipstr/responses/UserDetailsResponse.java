@@ -5,13 +5,20 @@ import com.evolotek.sipstr.entities.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Collections;
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @NoArgsConstructor
 @Data
 public class UserDetailsResponse {
+
+    private  Long userId;
+    private  String name;
+    private  String mobileNumber;
+    private  String email;
+    private  Boolean isActive;
+    private LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
     private UUID uuid;
     private String username;
     private Role role;
@@ -22,6 +29,13 @@ public class UserDetailsResponse {
         response.setUuid(user.getUuid());
         response.setUsername(user.getFullName());
         response.setRole(user.getRole());
+        response.setUserId(user.getId());
+        response.setName(user.getFullName());
+        response.setMobileNumber(user.getMobileNumber());
+        response.setEmail(user.getEmail());
+        response.setIsActive("ACTIVE".equals(user.getAccountStatus()));
+        response.setCreatedAt(user.getCreatedAt());
+        response.setUpdatedAt(user.getUpdatedAt());
         return response;
     }
 }

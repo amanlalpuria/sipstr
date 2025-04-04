@@ -86,6 +86,81 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
+
+
+    // Getters
+    public Long getId() {
+        return id;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public boolean isEmailVerified() {
+        return emailVerified;
+    }
+
+    public boolean isMobileVerified() {
+        return mobileVerified;
+    }
+
+    public boolean isTwoFactorEnabled() {
+        return twoFactorEnabled;
+    }
+
+    public String getTwoFactorSecret() {
+        return twoFactorSecret;
+    }
+
+    public String getAccountStatus() {
+        return accountStatus;
+    }
+
+    public int getFailedLoginAttempts() {
+        return failedLoginAttempts;
+    }
+
+    public LocalDateTime getLastLoginAt() {
+        return lastLoginAt;
+    }
+
+    public String getPasswordResetToken() {
+        return passwordResetToken;
+    }
+
+    public LocalDateTime getPasswordResetExpires() {
+        return passwordResetExpires;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
     // Chained Setters
     public User setId(Long id) {
         this.id = id;
