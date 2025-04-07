@@ -18,18 +18,18 @@ const CommonAlertBox = ({
       <View style={alertStyles.overlay}>
         <View style={alertStyles.container}>
           {/* Title */}
-          <Text style={alertStyles.title}>{title}</Text>
+          <CommonTextView style={alertStyles.title}>{title}</CommonTextView>
 
           {/* Message */}
-          <Text style={alertStyles.message}>{message}</Text>
+          <CommonTextView style={alertStyles.message}>{message}</CommonTextView>
 
           {/* Buttons */}
           <View style={alertStyles.buttonContainer}>
             <TouchableOpacity style={alertStyles.button} onPress={onConfirm}>
-              <Text style={alertStyles.buttonText}>{confirmBtnText}</Text>
+              <CommonTextView style={alertStyles.buttonText}>{confirmBtnText}</CommonTextView>
             </TouchableOpacity>
             <TouchableOpacity style={alertStyles.button} onPress={onCancel}>
-              <Text style={alertStyles.buttonText}>{cancelBtnText}</Text>
+              <CommonTextView style={alertStyles.buttonText}>{cancelBtnText}</CommonTextView>
             </TouchableOpacity>
           </View>
         </View>
