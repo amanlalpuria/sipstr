@@ -78,33 +78,33 @@ const AccountSettings = ({ navigation }) => {
         <Ionicons name={icon} size={22} color="#333" style={styles.menuIcon} />
         <Text style={styles.menuText}>{title}</Text>
       </View>
-      {hasEditButton ? (
+      {hasEditButton && (
         <Text style={styles.editButton}>Edit</Text>
-      ) : (
-        <Ionicons name="chevron-forward" size={20} color="#CCCCCC" />
       )}
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="#FFE4D6" barStyle="dark-content" />
+      <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Text style={styles.header}>My Account</Text>
+        <Text style={styles.header}>My Profile</Text>
 
         {/* User Info Section */}
         <View style={styles.userInfoContainer}>
           <View style={styles.userInfoRow}>
             <View style={styles.iconContainer}>
-              <Ionicons name="person" size={28} color="#333" />
+              <Ionicons name="person-outline" size={28} color="#333" />
             </View>
             <View style={styles.userTextContainer}>
-              <Text style={styles.userName}>{userData.name}</Text>
+              <Text style={styles.userName}>Name</Text>
               <Text style={styles.userPhone}>{userData.phone}</Text>
             </View>
           </View>
-          <Text style={styles.editButton}>Edit</Text>
+          <TouchableOpacity>
+            <Ionicons name="pencil" size={20} color="#F86E1E" />
+          </TouchableOpacity>
         </View>
 
         {/* Menu Items */}
@@ -119,17 +119,9 @@ const AccountSettings = ({ navigation }) => {
         )}
 
         {/* Referral Code Section */}
-        <View style={styles.referralContainer}>
-          <View style={styles.menuItemLeft}>
-            <Ionicons
-              name="gift-outline"
-              size={22}
-              color="#333"
-              style={styles.menuIcon}
-            />
-            <Text style={styles.menuText}>Referral code</Text>
-          </View>
-        </View>
+        {renderMenuItem("gift-outline", "Referral code", () =>
+          handleOptionPress("referral")
+        )}
 
         {renderMenuItem("help-circle-outline", "FAQ", () =>
           handleOptionPress("faq")
@@ -138,19 +130,16 @@ const AccountSettings = ({ navigation }) => {
           handleOptionPress("rate")
         )}
 
-        {/* Sign Out Button */}
+        {/* Log Out Button */}
         <TouchableOpacity
-          style={styles.signOutButton}
+          style={styles.logOutButton}
           activeOpacity={0.7}
           onPress={() => handleOptionPress("signout")}
         >
-          <Ionicons
-            name="log-out-outline"
-            size={22}
-            color="#333"
-            style={styles.menuIcon}
-          />
-          <Text style={styles.menuText}>Sign out</Text>
+          <View style={styles.logOutContent}>
+            <Ionicons name="log-out-outline" size={22} color="#FFFFFF" />
+            <Text style={styles.logOutText}>Log out</Text>
+          </View>
         </TouchableOpacity>
       </ScrollView>
 
@@ -171,7 +160,7 @@ const AccountSettings = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFE4D6",
+    backgroundColor: "#FFFFFF",
   },
   header: {
     fontSize: 24,
@@ -179,6 +168,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 50,
     marginBottom: 20,
+    color: "#000000",
   },
   userInfoContainer: {
     backgroundColor: "#FFFFFF",
@@ -189,6 +179,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   userInfoRow: {
     flexDirection: "row",
@@ -229,9 +227,8 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
     marginHorizontal: 20,
-    marginBottom: 1,
     borderBottomWidth: 1,
-    borderBottomColor: "#F0F0F0",
+    borderBottomColor: "#F5F5F5",
   },
   menuItemLeft: {
     flexDirection: "row",
@@ -239,33 +236,31 @@ const styles = StyleSheet.create({
   },
   menuIcon: {
     marginRight: 12,
+    width: 24,
   },
   menuText: {
     fontSize: 15,
     fontFamily: "Poppins-Regular",
     color: "#333333",
   },
-  referralContainer: {
-    backgroundColor: "#FFFFFF",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
+  logOutButton: {
+    backgroundColor: "#F86E1E",
     marginHorizontal: 20,
-    marginBottom: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#F0F0F0",
-  },
-  signOutButton: {
-    backgroundColor: "#FFFFFF",
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    marginHorizontal: 20,
+    marginTop: 20,
     marginBottom: 20,
     borderRadius: 8,
+    padding: 15,
+  },
+  logOutContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  logOutText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontFamily: "Poppins-Regular",
+    marginLeft: 8,
   },
   bottomTabBar: {
     flexDirection: "row",

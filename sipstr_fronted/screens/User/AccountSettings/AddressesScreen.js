@@ -1,12 +1,16 @@
+<<<<<<< HEAD:sipstr_fronted/screens/User/AccountSettings/AddressesScreen.js
 import React, { useState } from "react";
+=======
+import React from 'react';
+>>>>>>> 5c3808088d4cd079e88a5c4faee0d846b20c58ea:sipstr_fronted/screens/AccountSettings/AddressesScreen.js
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  StatusBar,
   TextInput,
   ScrollView,
+<<<<<<< HEAD:sipstr_fronted/screens/User/AccountSettings/AddressesScreen.js
   Image,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
@@ -51,19 +55,26 @@ const AddressesScreen = ({ navigation }) => {
     // Implementation for editing an address would go here
   };
 
+=======
+  StatusBar,
+} from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
+const AddressesScreen = ({ navigation }) => {
+>>>>>>> 5c3808088d4cd079e88a5c4faee0d846b20c58ea:sipstr_fronted/screens/AccountSettings/AddressesScreen.js
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor="#F8F8F8" barStyle="dark-content" />
-
+      <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
+      
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleBack} style={styles.backButton}>
-          <Ionicons name="close" size={24} color="#333" />
-        </TouchableOpacity>
         <Text style={styles.headerTitle}>Addresses</Text>
-        <View style={{ width: 24 }} />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Ionicons name="close" size={24} color="#000" />
+        </TouchableOpacity>
       </View>
 
+<<<<<<< HEAD:sipstr_fronted/screens/User/AccountSettings/AddressesScreen.js
       {/* Search Bar */}
       <View style={styles.searchContainer}>
         <Ionicons
@@ -80,13 +91,37 @@ const AddressesScreen = ({ navigation }) => {
         />
         <Ionicons name="location" size={18} color="#888" />
       </View>
+=======
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Search Bar */}
+        <View style={styles.searchContainer}>
+          <Ionicons name="search-outline" size={20} color="#666" />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search for an address"
+            placeholderTextColor="#666"
+          />
+        </View>
+>>>>>>> 5c3808088d4cd079e88a5c4faee0d846b20c58ea:sipstr_fronted/screens/AccountSettings/AddressesScreen.js
 
-      {/* Address Types */}
-      <View style={styles.addressTypesContainer}>
-        <TouchableOpacity style={styles.addressTypeItem}>
-          <View style={styles.addressTypeIconHome}>
-            <Ionicons name="home-outline" size={18} color="#FFF" />
+        {/* Quick Labels */}
+        <View style={styles.labelsContainer}>
+          <View style={styles.labelRow}>
+            <TouchableOpacity style={styles.labelButton}>
+              <Ionicons name="home-outline" size={20} color="#000" />
+              <Text style={styles.labelText}>Home</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity style={styles.labelButton}>
+              <Ionicons name="business-outline" size={20} color="#000" />
+              <Text style={styles.labelText}>Work</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.addLabelButton}>
+              <Text style={styles.addLabelText}>+ Add Label</Text>
+            </TouchableOpacity>
           </View>
+<<<<<<< HEAD:sipstr_fronted/screens/User/AccountSettings/AddressesScreen.js
           <Text style={styles.addressTypeText}>Home</Text>
         </TouchableOpacity>
 
@@ -104,10 +139,23 @@ const AddressesScreen = ({ navigation }) => {
           <Text style={styles.addLabelText}>+ Add Label</Text>
         </TouchableOpacity>
       </View>
+=======
+        </View>
+>>>>>>> 5c3808088d4cd079e88a5c4faee0d846b20c58ea:sipstr_fronted/screens/AccountSettings/AddressesScreen.js
 
-      {/* Divider */}
-      <View style={styles.divider} />
+        {/* Explore Nearby */}
+        <View style={styles.sectionContainer}>
+          <Text style={styles.sectionTitle}>Explore Nearby</Text>
+          <TouchableOpacity style={styles.currentLocationButton}>
+            <Ionicons name="locate-outline" size={22} color="#000" />
+            <View>
+              <Text style={styles.currentLocationText}>Use current location</Text>
+              <Text style={styles.locationSubtext}>Auto fill your address here</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
 
+<<<<<<< HEAD:sipstr_fronted/screens/User/AccountSettings/AddressesScreen.js
       {/* Explore Nearby */}
       <View style={styles.sectionContainer}>
         <Text style={styles.sectionTitle}>Explore Nearby</Text>
@@ -163,10 +211,30 @@ const AddressesScreen = ({ navigation }) => {
               onPress={() => handleEditAddress(address.id)}
             >
               <Ionicons name="create-outline" size={18} color="#333" />
+=======
+        {/* Saved Addresses */}
+        <View style={styles.sectionContainer}>
+          <Text style={styles.sectionTitle}>Saved Address</Text>
+          
+          {/* Home Address */}
+          <TouchableOpacity style={[styles.addressItem, styles.selectedAddress]}>
+            <View style={styles.addressLeft}>
+              <View style={styles.addressIconContainer}>
+                <Ionicons name="home" size={20} color="#F86E1E" />
+              </View>
+              <View style={styles.addressDetails}>
+                <Text style={styles.addressLabel}>Home</Text>
+                <Text style={styles.addressText}>123, Main Street, Apt 4B New York, NY 10001</Text>
+              </View>
+            </View>
+            <TouchableOpacity>
+              <Ionicons name="pencil" size={20} color="#F86E1E" />
+>>>>>>> 5c3808088d4cd079e88a5c4faee0d846b20c58ea:sipstr_fronted/screens/AccountSettings/AddressesScreen.js
             </TouchableOpacity>
           </TouchableOpacity>
-        ))}
+        </View>
       </ScrollView>
+<<<<<<< HEAD:sipstr_fronted/screens/User/AccountSettings/AddressesScreen.js
 
       {/* Bottom Tab Bar - Keeping the same navigation bar as in the main app */}
       <View style={styles.bottomTabBar}>
@@ -192,6 +260,8 @@ const AddressesScreen = ({ navigation }) => {
           <Text style={styles.tabItemLabel}>Account</Text>
         </TouchableOpacity>
       </View>
+=======
+>>>>>>> 5c3808088d4cd079e88a5c4faee0d846b20c58ea:sipstr_fronted/screens/AccountSettings/AddressesScreen.js
     </View>
   );
 };
@@ -199,6 +269,7 @@ const AddressesScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+<<<<<<< HEAD:sipstr_fronted/screens/User/AccountSettings/AddressesScreen.js
     backgroundColor: "#F8F8F8",
   },
   header: {
@@ -316,11 +387,71 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Regular",
     fontSize: 12,
     color: "#888",
+=======
+    backgroundColor: '#FFFFFF',
   },
-  savedAddressesContainer: {
-    flex: 1,
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 50,
+    paddingBottom: 20,
+    backgroundColor: '#FFFFFF',
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontFamily: 'Poppins-SemiBold',
+    color: '#000000',
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F5F5F5',
+    marginHorizontal: 20,
+    marginBottom: 20,
     paddingHorizontal: 15,
+    paddingVertical: 12,
+    borderRadius: 8,
   },
+  searchInput: {
+    flex: 1,
+    marginLeft: 10,
+    fontSize: 15,
+    fontFamily: 'Poppins-Regular',
+    color: '#000',
+  },
+  labelsContainer: {
+    paddingHorizontal: 20,
+    marginBottom: 20,
+  },
+  labelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  labelButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F5F5F5',
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  labelText: {
+    marginLeft: 5,
+    fontSize: 14,
+    fontFamily: 'Poppins-Regular',
+    color: '#000',
+>>>>>>> 5c3808088d4cd079e88a5c4faee0d846b20c58ea:sipstr_fronted/screens/AccountSettings/AddressesScreen.js
+  },
+  addLabelButton: {
+    backgroundColor: '#F5F5F5',
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 20,
+  },
+<<<<<<< HEAD:sipstr_fronted/screens/User/AccountSettings/AddressesScreen.js
   savedAddressItem: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -402,6 +533,77 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Regular",
     color: "#333",
     marginTop: 2,
+=======
+  addLabelText: {
+    fontSize: 14,
+    fontFamily: 'Poppins-Regular',
+    color: '#000',
+  },
+  sectionContainer: {
+    paddingHorizontal: 20,
+    marginBottom: 20,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontFamily: 'Poppins-SemiBold',
+    color: '#000',
+    marginBottom: 10,
+  },
+  currentLocationButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+  },
+  currentLocationText: {
+    fontSize: 15,
+    fontFamily: 'Poppins-Regular',
+    color: '#000',
+    marginLeft: 12,
+  },
+  locationSubtext: {
+    fontSize: 13,
+    fontFamily: 'Poppins-Regular',
+    color: '#666',
+    marginLeft: 12,
+  },
+  addressItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 15,
+    borderRadius: 8,
+    marginBottom: 10,
+  },
+  selectedAddress: {
+    backgroundColor: '#FFF5F0',
+  },
+  addressLeft: {
+    flexDirection: 'row',
+    flex: 1,
+  },
+  addressIconContainer: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  addressDetails: {
+    flex: 1,
+  },
+  addressLabel: {
+    fontSize: 15,
+    fontFamily: 'Poppins-SemiBold',
+    color: '#000',
+    marginBottom: 2,
+  },
+  addressText: {
+    fontSize: 13,
+    fontFamily: 'Poppins-Regular',
+    color: '#666',
+>>>>>>> 5c3808088d4cd079e88a5c4faee0d846b20c58ea:sipstr_fronted/screens/AccountSettings/AddressesScreen.js
   },
 });
 
