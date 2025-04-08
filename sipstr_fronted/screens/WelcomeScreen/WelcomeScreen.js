@@ -6,12 +6,15 @@ import { globalStyles } from "../../components/styles";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CommonAppNameLabel from "../../components/CommonAppNameLabel";
 import { colors } from "../../components/colors";
+import { getUserData } from "../../Utils/StorageHelper";
 
 const WelcomeScreen = ({ navigation }) => {
-  const navigateToHome = () => {
+  const navigateToHome = async () => {
+    var user = await getUserData();
+    var screenName = user ? "MainTabs" : "Login";
     navigation.reset({
       index: 0,
-      routes: [{ name: "MainTabs" }],
+      routes: [{ name: screenName }],
     });
   };
   return (

@@ -2,7 +2,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/Home/HomeScreen";
 import SearchScreen from "../screens/Search/SearchScreen";
-import AccountSettings from "../screens/AccountSettings/AccountSettings";
+import AccountSettings from "../screens/User/AccountSettings/AccountSettings";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import { colors } from "../components/colors";
 import CategoriesScreen from "../screens/Products/CategoriesScreen";

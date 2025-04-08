@@ -9,9 +9,9 @@ import {
   ScrollView,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { colors } from "../../components/colors";
-import { globalStyles } from "../../components/styles";
-import CommonAlertBox from "../../components/CommonAlertBox";
+import { colors } from "../../../components/colors";
+import { globalStyles } from "../../../components/styles";
+import CommonTwoButtonAlertBox from "../../../components/CommonTwoButtonAlertBox";
 
 const AccountSettings = ({ navigation }) => {
   // States
@@ -155,7 +155,7 @@ const AccountSettings = ({ navigation }) => {
       </ScrollView>
 
       {/* Sign Out Confirmation Alert */}
-      <CommonAlertBox
+      <CommonTwoButtonAlertBox
         visible={showSignOutAlert}
         title="Sign Out"
         message="Are you sure you want to sign out?"

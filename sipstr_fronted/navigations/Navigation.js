@@ -2,15 +2,16 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import WelcomeScreen from "../screens/WelcomeScreen/WelcomeScreen";
-import LoginScreen from "../screens/Login/LoginScreen";
-import SignUpScreen from "../screens/Registration/SignUpScreen";
+import LoginScreen from "../screens/User/Login/LoginScreen";
+import SignUpScreen from "../screens/User/Registration/SignUpScreen";
 import HomeScreen from "../screens/Home/HomeScreen";
-import SorryScreen from "../screens/AgeRestrictionPopUp/SorryScreen";
-import AddressesScreen from "../screens/AccountSettings/AddressesScreen";
-import ForgotPasswordScreen from "../screens/ForgotPassword/ForgotPassword";
+import SorryScreen from "../screens/WelcomeScreen/SorryScreen";
+import AddressesScreen from "../screens/User/AccountSettings/AddressesScreen";
+import ForgotPasswordScreen from "../screens/User/ForgotPassword/ForgotPassword";
 import BottomTabs from "../components/BottomTabs";
-import AccountSettings from "../screens/AccountSettings/AccountSettings";
+import AccountSettings from "../screens/User/AccountSettings/AccountSettings";
 import CategoriesScreen from "../screens/Products/CategoriesScreen";
+import VerifyOTPScreen from "../screens/User/OTP/VerifyOTP";
 
 const Stack = createStackNavigator();
 
@@ -27,6 +28,7 @@ const AppNavigator = () => {
         <Stack.Screen name="Addresses" component={AddressesScreen} />
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name="Categories" component={CategoriesScreen} />
+        <Stack.Screen name="VerifyOTP" component={VerifyOTPScreen} />
 
         {/* Bottom Tab Container */}
         <Stack.Screen name="MainTabs" component={BottomTabs} />

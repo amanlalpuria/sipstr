@@ -3,8 +3,9 @@ import { Modal, View, TouchableOpacity } from "react-native";
 import CommonTextView from "./CommonTextView";
 import CommonButton from "./CommonButton";
 import { alertStyles } from "./styles";
+import { colors } from "./colors";
 
-const CommonAlertBox = ({
+const CommonTwoButtonAlertBox = ({
   visible,
   title,
   message,
@@ -18,19 +19,24 @@ const CommonAlertBox = ({
       <View style={alertStyles.overlay}>
         <View style={alertStyles.container}>
           {/* Title */}
-          <Text style={alertStyles.title}>{title}</Text>
+          <CommonTextView style={alertStyles.title}>{title}</CommonTextView>
 
           {/* Message */}
-          <Text style={alertStyles.message}>{message}</Text>
+          <CommonTextView style={alertStyles.message}>{message}</CommonTextView>
 
           {/* Buttons */}
           <View style={alertStyles.buttonContainer}>
-            <TouchableOpacity style={alertStyles.button} onPress={onConfirm}>
-              <Text style={alertStyles.buttonText}>{confirmBtnText}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={alertStyles.button} onPress={onCancel}>
-              <Text style={alertStyles.buttonText}>{cancelBtnText}</Text>
-            </TouchableOpacity>
+            <CommonButton
+              title={confirmBtnText}
+              onPress={onConfirm}
+              style={{ flex: 1, marginRight: 10 }}
+            />
+            <CommonButton
+              title={cancelBtnText}
+              onPress={onCancel}
+              style={{ flex: 1, marginLeft: 10, backgroundColor: "#E5E7EB" }} // light grey for cancel
+              textStyle={{ color: colors.black }}
+            />
           </View>
         </View>
       </View>
@@ -38,4 +44,4 @@ const CommonAlertBox = ({
   );
 };
 
-export default CommonAlertBox;
+export default CommonTwoButtonAlertBox;

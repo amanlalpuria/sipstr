@@ -6,14 +6,17 @@ import {
   Image,
   ScrollView,
 } from "react-native";
-import CommonButton from "../../components/CommonButton";
-import CommonTextView from "../../components/CommonTextView";
-import CommonTextField from "../../components/CommonTextField";
-import CommonAppNameLabel from "../../components/CommonAppNameLabel";
-import { globalStyles } from "../../components/styles";
-import { colors } from "../../components/colors";
+import CommonButton from "../../../components/CommonButton";
+import CommonTextView from "../../../components/CommonTextView";
+import CommonTextField from "../../../components/CommonTextField";
+import CommonAppNameLabel from "../../../components/CommonAppNameLabel";
+import { globalStyles } from "../../../components/styles";
+import { colors } from "../../../components/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Utils from "../../Utils/Utils";
+import Utils from "../../../Utils/Utils";
+import { apiClient, handleApiResponse } from "../../../api/ApiHelper";
+import { API_ENDPOINTS } from "../../../api/ApiConstant";
+import { UserModel } from "../../../data/models/UserModel";
 
 const SignUpScreen = ({ navigation }) => {
   const [nameInput, setNameInput] = useState("");
@@ -53,9 +56,28 @@ const SignUpScreen = ({ navigation }) => {
       Utils.showToast("Passwords do not match.");
       return;
     }
+  };
 
-    Utils.showToast("Signup Success 🎉");
-    navigation.navigate("Home");
+  const signUp = async (payload) => {
+    const result = await handleApiResponse(() =>
+      apiClient.post(API_ENDPOINTS.REGISTER, payload)
+    );
+
+    if (result.success) {
+      const user = UserModel.fromLoginResponse(result.data);
+      await saveUserData(user); // Save in AsyncStorage
+    }
+
+    if (result.success) {
+      const token = result.data.token || result.data.data?.token;
+      if (token) {
+        await saveToken(token); // store for later use
+      }
+      Utils.showToast("Signup Success 🎉");
+      navigation.navigate("VerifyOTP");
+    } else {
+      Utils.showToast(result.message || "Login failed");
+    }
   };
 
   return (
@@ -118,13 +140,13 @@ const SignUpScreen = ({ navigation }) => {
         <View style={styles.socialRow}>
           <TouchableOpacity>
             <Image
-              source={require("../../assets/images/google.png")}
+              source={require("../../../assets/images/google.png")}
               style={styles.socialIcon}
             />
           </TouchableOpacity>
           <TouchableOpacity>
             <Image
-              source={require("../../assets/images/apple.png")}
+              source={require("../../../assets/images/apple.png")}
               style={styles.socialIcon}
             />
           </TouchableOpacity>

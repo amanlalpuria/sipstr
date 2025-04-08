@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
-import Utils from "../../Utils/Utils";
-import CommonButton from "../../components/CommonButton";
-import CommonTextField from "../../components/CommonTextField";
-import CommonAppNameLabel from "../../components/CommonAppNameLabel";
+import Utils from "../../../Utils/Utils";
+import CommonButton from "../../../components/CommonButton";
+import CommonTextField from "../../../components/CommonTextField";
+import CommonAppNameLabel from "../../../components/CommonAppNameLabel";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { colors } from "../../components/colors";
+import { colors } from "../../../components/colors";
 
 const ForgotPasswordScreen = () => {
   const [emailOrPhone, setEmailOrPhone] = useState("");

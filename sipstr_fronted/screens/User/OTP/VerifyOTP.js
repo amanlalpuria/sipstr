@@ -1,0 +1,127 @@
+import React, { useRef, useState } from "react";
+import {
+  View,
+  StyleSheet,
+  TextInput,
+  Keyboard,
+  TouchableOpacity,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import CommonTextView from "../../../components/CommonTextView";
+import CommonButton from "../../../components/CommonButton";
+import CommonAppNameLabel from "../../../components/CommonAppNameLabel";
+import Utils from "../../../Utils/Utils";
+import { colors } from "../../../components/colors";
+
+const VerifyOTPScreen = ({ navigation }) => {
+  const [otp, setOtp] = useState(["", "", "", ""]);
+
+  const refs = [useRef(), useRef(), useRef(), useRef()];
+
+  const handleChange = (index, value) => {
+    if (!/^\d?$/.test(value)) return; // Only allow single digit
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    if (value && index < 3) {
+      refs[index + 1].current.focus();
+    }
+  };
+
+  const handleBackspace = (index, value) => {
+    if (value === "" && index > 0) {
+      refs[index - 1].current.focus();
+    }
+  };
+
+  const validateAndSubmit = () => {
+    const joinedOTP = otp.join("");
+    if (joinedOTP.length < 4) {
+      Utils.showToast("Please enter the full 4-digit OTP");
+      return;
+    }
+
+    Utils.showToast(`OTP Entered: ${joinedOTP}`);
+    // TODO: Call your verify API here
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <CommonAppNameLabel fontSize={60} />
+      <CommonTextView style={styles.heading}>Verify OTP</CommonTextView>
+      <CommonTextView style={styles.instruction}>
+        Please enter the 4-digit code sent to your phone/email.
+      </CommonTextView>
+
+      <View style={styles.otpRow}>
+        {otp.map((digit, index) => (
+          <TextInput
+            key={index}
+            ref={refs[index]}
+            value={digit}
+            onChangeText={(value) => handleChange(index, value)}
+            onKeyPress={({ nativeEvent }) =>
+              nativeEvent.key === "Backspace" && handleBackspace(index, digit)
+            }
+            style={styles.otpInput}
+            keyboardType="number-pad"
+            maxLength={1}
+            returnKeyType="done"
+          />
+        ))}
+      </View>
+
+      <CommonButton title="Submit" onPress={validateAndSubmit} />
+      <TouchableOpacity onPress={() => Keyboard.dismiss()}>
+        <CommonTextView style={styles.resendLink}>Resend OTP</CommonTextView>
+      </TouchableOpacity>
+    </SafeAreaView>
+  );
+};
+
+export default VerifyOTPScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#FFF",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 24,
+  },
+  heading: {
+    fontSize: 24,
+    fontFamily: "Poppins-SemiBold",
+    marginTop: 16,
+  },
+  instruction: {
+    fontSize: 14,
+    fontFamily: "Poppins-Regular",
+    textAlign: "center",
+    marginVertical: 16,
+    color: colors.grayText,
+  },
+  otpRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "80%",
+    marginBottom: 30,
+  },
+  otpInput: {
+    width: 50,
+    height: 55,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.orange,
+    fontSize: 24,
+    textAlign: "center",
+    fontFamily: "Poppins-SemiBold",
+  },
+  resendLink: {
+    marginTop: 20,
+    color: colors.orange,
+    fontFamily: "Poppins-SemiBold",
+    fontSize: 14,
+  },
+});

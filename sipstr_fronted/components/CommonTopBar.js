@@ -15,8 +15,11 @@ const TopBar = ({
     <View style={styles.container}>
       {/* 1. Header Row */}
       <View style={styles.topRow}>
-        <CommonAppNameLabel fontSize={30} />
-        <TouchableOpacity onPress={() => console.log("Cart Clicked")}>
+        <CommonAppNameLabel fontSize={30} style={styles.appNameLabel} />
+        <TouchableOpacity
+          onPress={() => console.log("Cart Clicked")}
+          style={styles.cartIcon}
+        >
           <Feather name="shopping-cart" size={24} color={colors.black} />
         </TouchableOpacity>
       </View>
@@ -49,8 +52,13 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.white,
     paddingTop: 12,
-    paddingHorizontal: 16,
     paddingBottom: 8,
+  },
+  appNameLabel: {
+    marginLeft: 100,
+  },
+  cartIcon: {
+    marginRight: 10,
   },
   topRow: {
     flexDirection: "row",

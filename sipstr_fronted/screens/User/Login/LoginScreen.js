@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import CommonTextView from "../../components/CommonTextView";
-import CommonTextField from "../../components/CommonTextField";
-import CommonButton from "../../components/CommonButton";
-import CommonAppNameLabel from "../../components/CommonAppNameLabel";
-import { colors } from "../../components/colors";
-import Utils from "../../Utils/Utils";
+import CommonTextView from "../../../components/CommonTextView";
+import CommonTextField from "../../../components/CommonTextField";
+import CommonButton from "../../../components/CommonButton";
+import CommonAppNameLabel from "../../../components/CommonAppNameLabel";
+import { colors } from "../../../components/colors";
+import Utils from "../../../Utils/Utils";
+import { apiClient, handleApiResponse } from "../../../api/ApiHelper";
+import { API_ENDPOINTS } from "../../../api/ApiConstant";
+import { UserModel } from "../../../data/models/UserModel";
 
 const LoginScreen = ({ navigation }) => {
   const [emailPhoneInput, SetEmailPhoneInput] = useState("");
@@ -14,7 +17,7 @@ const LoginScreen = ({ navigation }) => {
 
   const validateAndLogin = () => {
     const emailOrPhone = emailPhoneInput.trim();
-    const password = passwordInput;
+    const password = passwordInput.trim();
 
     if (!emailOrPhone || !password) {
       Utils.showToast("All fields are required.");
@@ -29,8 +32,34 @@ const LoginScreen = ({ navigation }) => {
       return;
     }
 
-    Utils.showToast("Login Success! 🎉");
-    navigation.navigate("BottomTabs");
+    const loginRequest = {
+      email: emailOrPhone,
+      password: password,
+    };
+
+    loginUser(loginRequest);
+  };
+
+  const loginUser = async (payload) => {
+    const result = await handleApiResponse(() =>
+      apiClient.post(API_ENDPOINTS.LOGIN, payload)
+    );
+
+    if (result.success) {
+      const user = UserModel.fromLoginResponse(result.data);
+      await saveUserData(user); // Save in AsyncStorage
+    }
+
+    if (result.success) {
+      const token = result.data.token || result.data.data?.token;
+      if (token) {
+        await saveToken(token); // store for later use
+      }
+      Utils.showToast("Login Success!");
+      navigation.navigate("BottomTabs"); // navigate after login
+    } else {
+      Utils.showToast(result.message || "Login failed");
+    }
   };
 
   return (
