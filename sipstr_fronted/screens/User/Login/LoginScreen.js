@@ -10,12 +10,14 @@ import Utils from "../../../Utils/Utils";
 import { apiClient, handleApiResponse } from "../../../api/ApiHelper";
 import { API_ENDPOINTS } from "../../../api/ApiConstant";
 import { UserModel } from "../../../data/models/UserModel";
+import { saveToken, saveUserData } from "../../../Utils/StorageHelper";
 
 const LoginScreen = ({ navigation }) => {
   const [emailPhoneInput, SetEmailPhoneInput] = useState("");
   const [passwordInput, SetPasswordInput] = useState("");
 
   const validateAndLogin = () => {
+    console.log("Login Btn Pressed");
     const emailOrPhone = emailPhoneInput.trim();
     const password = passwordInput.trim();
 
@@ -37,6 +39,10 @@ const LoginScreen = ({ navigation }) => {
       password: password,
     };
 
+    if (!Utils.isInternetConnected) {
+      Utils.showToast("Please connect to Internet!");
+      return;
+    }
     loginUser(loginRequest);
   };
 
@@ -46,17 +52,18 @@ const LoginScreen = ({ navigation }) => {
     );
 
     if (result.success) {
+      console.log("success");
       const user = UserModel.fromLoginResponse(result.data);
+      console.log(user.email);
       await saveUserData(user); // Save in AsyncStorage
-    }
 
-    if (result.success) {
       const token = result.data.token || result.data.data?.token;
+      console.log(token);
       if (token) {
         await saveToken(token); // store for later use
       }
       Utils.showToast("Login Success!");
-      navigation.navigate("BottomTabs"); // navigate after login
+      navigation.navigate("MainTabs"); // navigate after login
     } else {
       Utils.showToast(result.message || "Login failed");
     }

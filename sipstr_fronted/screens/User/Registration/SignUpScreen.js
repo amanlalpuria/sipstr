@@ -17,6 +17,7 @@ import Utils from "../../../Utils/Utils";
 import { apiClient, handleApiResponse } from "../../../api/ApiHelper";
 import { API_ENDPOINTS } from "../../../api/ApiConstant";
 import { UserModel } from "../../../data/models/UserModel";
+import { saveUserData } from "../../../Utils/StorageHelper";
 
 const SignUpScreen = ({ navigation }) => {
   const [nameInput, setNameInput] = useState("");
@@ -27,8 +28,11 @@ const SignUpScreen = ({ navigation }) => {
   const validateAndSignUp = () => {
     const name = nameInput.trim();
     const emailOrPhone = emailPhoneInput.trim();
-    const password = passwordInput;
-    const confirmPwd = confirmPwdInput;
+    const password = passwordInput.trim();
+    const confirmPwd = confirmPwdInput.trim();
+    const otpSignup = false;
+    var email = "";
+    var mobileNumber = "";
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/;
 
@@ -37,10 +41,12 @@ const SignUpScreen = ({ navigation }) => {
       return;
     }
 
-    if (
-      !Utils.isEmailValid(emailOrPhone) &&
-      !Utils.isPhoneValid(emailOrPhone)
-    ) {
+    if (Utils.isEmailValid(emailOrPhone)) {
+      email = emailOrPhone;
+    } else if (Utils.isPhoneValid(emailOrPhone)) {
+      mobileNumber = emailOrPhone;
+      otpSignup = true;
+    } else {
       Utils.showToast("Enter a valid email or 10-digit phone number.");
       return;
     }
@@ -56,28 +62,46 @@ const SignUpScreen = ({ navigation }) => {
       Utils.showToast("Passwords do not match.");
       return;
     }
+    const request = {
+      email: email,
+      password: password,
+      fullName: name,
+      mobileNumber: mobileNumber,
+      roleEnum: "CUSTOMER",
+      otpSignup: otpSignup,
+    };
+    signUp(request, otpSignup);
   };
 
-  const signUp = async (payload) => {
+  const signUp = async (payload, otpSignup) => {
     const result = await handleApiResponse(() =>
       apiClient.post(API_ENDPOINTS.REGISTER, payload)
     );
 
     if (result.success) {
-      const user = UserModel.fromLoginResponse(result.data);
+      const user = UserModel.fromSignUpResponse(result.data);
       await saveUserData(user); // Save in AsyncStorage
+      if (otpSignup) {
+        navigation.navigate("VerifyOTP");
+      } else {
+        navigation.navigate("MainTabs");
+      }
     }
 
-    if (result.success) {
-      const token = result.data.token || result.data.data?.token;
-      if (token) {
-        await saveToken(token); // store for later use
-      }
-      Utils.showToast("Signup Success 🎉");
-      navigation.navigate("VerifyOTP");
-    } else {
-      Utils.showToast(result.message || "Login failed");
-    }
+    // if (result.success) {
+    //   const token = result.data.token || result.data.data?.token;
+    //   if (token) {
+    //     await saveToken(token); // store for later use
+    //   }
+    //   Utils.showToast("Signup Success 🎉");
+    //   if (otpSignup) {
+    //     navigation.navigate("VerifyOTP");
+    //   } else {
+    //     navigation.navigate("Home");
+    //   }
+    // } else {
+    //   Utils.showToast(result.message || "SignUp failed");
+    // }
   };
 
   return (

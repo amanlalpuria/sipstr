@@ -12,7 +12,7 @@ import * as Location from "expo-location";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import TopBar from "../../components/CommonTopBar";
 import CommonTextView from "../../components/CommonTextView";
-import CommonAlertBox from "../../components/CommonAlertBox";
+import CommonTwoButtonAlertBox from "../../components/CommonTwoButtonAlertBox";
 import { categories, featuredData, topPicksData } from "../../Utils/StaticData";
 import { openSettings } from "expo-linking";
 import { SafeAreaView } from "react-native-safe-area-context";

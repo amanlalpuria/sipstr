@@ -28,8 +28,6 @@ export class UserModel {
   // Static method to create model from Login response
   static fromLoginResponse(data) {
     return new UserModel({
-      token: data.token,
-      expiresIn: data.expiresIn,
       userId: data.userId,
       email: data.email,
       mobileNumber: data.mobileNumber,

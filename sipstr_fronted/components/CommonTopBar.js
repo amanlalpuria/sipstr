@@ -20,7 +20,10 @@ const TopBar = ({
           onPress={() => console.log("Cart Clicked")}
           style={styles.cartIcon}
         >
-          <Feather name="shopping-cart" size={24} color={colors.black} />
+          <Image
+            source={require("../assets/images/cart.png")}
+            style={{ width: 20, height: 20 }}
+          />
         </TouchableOpacity>
       </View>
 
@@ -64,11 +67,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginLeft: 15,
   },
   deliveryBar: {
     marginTop: 10,
     backgroundColor: colors.lightOrange,
-    height: 35,
+    height: 40,
     padding: 8,
     flexDirection: "row",
     justifyContent: "space-between",

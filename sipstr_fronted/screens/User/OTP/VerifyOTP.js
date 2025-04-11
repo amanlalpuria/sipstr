@@ -10,8 +10,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import CommonTextView from "../../../components/CommonTextView";
 import CommonButton from "../../../components/CommonButton";
 import CommonAppNameLabel from "../../../components/CommonAppNameLabel";
+import CommonTextField from "../../../components/CommonTextField";
 import Utils from "../../../Utils/Utils";
 import { colors } from "../../../components/colors";
+import { apiClient, handleApiResponse } from "../../../api/ApiHelper";
+import { API_ENDPOINTS } from "../../../api/ApiConstant";
 
 const VerifyOTPScreen = ({ navigation }) => {
   const [otp, setOtp] = useState(["", "", "", ""]);
@@ -44,6 +47,10 @@ const VerifyOTPScreen = ({ navigation }) => {
 
     Utils.showToast(`OTP Entered: ${joinedOTP}`);
     // TODO: Call your verify API here
+    const request = {
+      
+    }
+
   };
 
   return (
@@ -56,7 +63,7 @@ const VerifyOTPScreen = ({ navigation }) => {
 
       <View style={styles.otpRow}>
         {otp.map((digit, index) => (
-          <TextInput
+          <CommonTextField
             key={index}
             ref={refs[index]}
             value={digit}

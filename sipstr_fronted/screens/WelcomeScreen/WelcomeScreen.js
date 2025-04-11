@@ -12,6 +12,7 @@ const WelcomeScreen = ({ navigation }) => {
   const navigateToHome = async () => {
     var user = await getUserData();
     var screenName = user ? "MainTabs" : "Login";
+    console.log(screenName);
     navigation.reset({
       index: 0,
       routes: [{ name: screenName }],

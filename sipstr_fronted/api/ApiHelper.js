@@ -21,6 +21,8 @@ apiClient.interceptors.request.use(async (config) => {
 
 // Global response handler
 export const handleApiResponse = async (apiCall) => {
+  console.log("Inside handleApiResponse " + apiCall);
+  console.log("URL = " + BASE_URL);
   try {
     const response = await apiCall();
     if (response?.data?.success || response?.status === 200) {

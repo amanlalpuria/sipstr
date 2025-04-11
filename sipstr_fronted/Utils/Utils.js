@@ -1,4 +1,4 @@
-import { Alert, Keyboard, Platform } from "react-native";
+import { Alert, Keyboard, Platform, ToastAndroid } from "react-native";
 import NetInfo from "@react-native-community/netinfo";
 import Toast from "react-native-root-toast";
 import Swal from "sweetalert2";
@@ -41,6 +41,8 @@ const Utils = {
   showToast: (msg) => {
     if (Platform.OS === "web") {
       Utils.showAlert(msg);
+    } else if (Platform.OS === "android") {
+      ToastAndroid.show(msg, ToastAndroid.SHORT); // Native fallback
     } else {
       Toast.show(msg, {
         duration: Toast.durations.SHORT,

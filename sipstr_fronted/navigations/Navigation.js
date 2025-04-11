@@ -12,6 +12,7 @@ import BottomTabs from "../components/BottomTabs";
 import AccountSettings from "../screens/User/AccountSettings/AccountSettings";
 import CategoriesScreen from "../screens/Products/CategoriesScreen";
 import VerifyOTPScreen from "../screens/User/OTP/VerifyOTP";
+import CartScreen from "../screens/Cart/CartScreen";
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,7 @@ const AppNavigator = () => {
         <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
         <Stack.Screen name="Categories" component={CategoriesScreen} />
         <Stack.Screen name="VerifyOTP" component={VerifyOTPScreen} />
+        <Stack.Screen name="Cart" component={CartScreen} />
 
         {/* Bottom Tab Container */}
         <Stack.Screen name="MainTabs" component={BottomTabs} />
