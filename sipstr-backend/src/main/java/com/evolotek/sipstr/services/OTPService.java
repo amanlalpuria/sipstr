@@ -34,7 +34,6 @@ public class OTPService {
                     newUser.setAccountStatus("PENDING");
                     return userRepository.save(newUser);
                 });
-
         String otp = String.valueOf(new Random().nextInt(900000) + 100000); // Generate 6-digit OTP
         user.setOtp(otp);
         user.setOtpExpiresAt(LocalDateTime.now().plusMinutes(otpExpTime)); // Valid for configured minutes

@@ -82,6 +82,9 @@ public class Store {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "fcm_token", unique = true)
+    private String fcmToken;
+
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StoreOperatingHours> operatingHoursList;
 

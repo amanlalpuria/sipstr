@@ -9,7 +9,7 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class NotificationRequest {
+public class NotificationRequestDTO {
 
     private String token;
     private String title;

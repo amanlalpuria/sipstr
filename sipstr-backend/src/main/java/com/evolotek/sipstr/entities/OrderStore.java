@@ -1,5 +1,6 @@
 package com.evolotek.sipstr.entities;
 
+import com.evolotek.sipstr.utils.OrderNotificationStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -7,6 +8,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "order_stores")
@@ -55,9 +58,15 @@ public class OrderStore {
     private LocalDateTime estimatedDeliveryTime;
     private LocalDateTime actualDeliveryTime;
 
+    @Enumerated(EnumType.STRING)
+    private OrderNotificationStatus notificationStatus;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "orderStore", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems = new ArrayList<>();
 }

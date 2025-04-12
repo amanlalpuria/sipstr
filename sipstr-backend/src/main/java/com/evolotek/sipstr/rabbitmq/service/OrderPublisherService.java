@@ -1,9 +1,9 @@
 package com.evolotek.sipstr.rabbitmq.service;
 
-import com.evolotek.sipstr.rabbitmq.dto.OrderNotifyResponseDTO;
+import com.evolotek.sipstr.rabbitmq.dto.StatusResponseDTO;
 
 public interface OrderPublisherService {
 
-     OrderNotifyResponseDTO notifyStoresForOrder(Long orderId);
+     StatusResponseDTO notifyStoresForOrder(Long orderId);
 
 }

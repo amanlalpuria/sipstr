@@ -1,31 +1,45 @@
 package com.evolotek.sipstr.rabbitmq.dto;
 
+import lombok.Data;
+
 import java.util.List;
 
-public class OrderDTO {
-    private String orderId;
-    private List<ItemDTO> items;
+@Data
+public class OrderItemNotifyDTO {
+    private Long orderId;
+    private Long storeId;
+    private List<OrderItemDTO> items;
 
-    public OrderDTO() {}
+    public OrderItemNotifyDTO() {}
 
-    public OrderDTO(String orderId, List<ItemDTO> items) {
+    public OrderItemNotifyDTO(Long orderId, Long storeId, List<OrderItemDTO> items) {
         this.orderId = orderId;
+        this.storeId = storeId;
         this.items = items;
+
     }
 
-    public String getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
 
-    public List<ItemDTO> getItems() {
+    public Long getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(Long storeId) {
+        this.storeId = storeId;
+    }
+
+    public List<OrderItemDTO> getItems() {
         return items;
     }
 
-    public void setItems(List<ItemDTO> items) {
+    public void setItems(List<OrderItemDTO> items) {
         this.items = items;
     }
 

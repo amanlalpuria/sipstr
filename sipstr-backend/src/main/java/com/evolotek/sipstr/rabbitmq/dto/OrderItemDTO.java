@@ -3,14 +3,14 @@ package com.evolotek.sipstr.rabbitmq.dto;
 import lombok.Data;
 
 @Data
-public class ItemDTO {
+public class OrderItemDTO {
 
         private Long productId;
         private String productName;
 
-        public ItemDTO() {}
+        public OrderItemDTO() {}
 
-        public ItemDTO(String productName, Long productId) {
+        public OrderItemDTO(String productName, Long productId) {
             this.productName = productName;
             this.productId = productId;
         }

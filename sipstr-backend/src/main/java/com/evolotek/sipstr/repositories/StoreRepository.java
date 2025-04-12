@@ -18,4 +18,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
                                  @Param("radius") Double radius);
 
     Optional<Store> findByUuid(UUID uuid);
+    Store findByOwnerId(Long ownerId);
+    Store findByStoreId(Long storeId);
 }

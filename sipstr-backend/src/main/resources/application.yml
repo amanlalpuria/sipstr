@@ -1,3 +1,5 @@
+server:
+  port : 8082
 spring:
   application:
     name: Sipstr
@@ -80,4 +82,13 @@ twilio:
 
 otp:
   expiry:
-    minutes: ${TWILIO_OTP_EXPIRY_MINUTES}
+    minutes: 5
+
+app:
+  firebase-configuration-file: ${FIREBASE_CREDENTIAL}
+
+
+rabbitmq:
+    exchange:
+          name: ${RABBITMQ_EXCHANGE_NAME}
+

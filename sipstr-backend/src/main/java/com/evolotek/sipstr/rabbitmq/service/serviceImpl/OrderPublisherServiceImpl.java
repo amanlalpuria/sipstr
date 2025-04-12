@@ -2,9 +2,10 @@ package com.evolotek.sipstr.rabbitmq.service.serviceImpl;
 
 import com.evolotek.sipstr.entities.Order;
 import com.evolotek.sipstr.entities.OrderItem;
-import com.evolotek.sipstr.rabbitmq.dto.OrderNotifyResponseDTO;
-import com.evolotek.sipstr.rabbitmq.entity.StoreOrderNotification;
-import com.evolotek.sipstr.rabbitmq.repository.StoreOrderNotificationRepository;
+import com.evolotek.sipstr.entities.OrderStore;
+import com.evolotek.sipstr.rabbitmq.dto.OrderItemDTO;
+import com.evolotek.sipstr.rabbitmq.dto.OrderItemNotifyDTO;
+import com.evolotek.sipstr.rabbitmq.dto.StatusResponseDTO;
 import com.evolotek.sipstr.rabbitmq.service.OrderPublisherService;
 import com.evolotek.sipstr.repositories.OrderItemRepository;
 import com.evolotek.sipstr.repositories.OrderRepository;
@@ -12,13 +13,11 @@ import com.evolotek.sipstr.repositories.OrderStoreRepository;
 import com.evolotek.sipstr.utils.OrderNotificationStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.transaction.Transactional;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -29,7 +28,6 @@ public class OrderPublisherServiceImpl implements OrderPublisherService  {
     private final RabbitTemplate rabbitTemplate;
     private final OrderRepository orderRepository;
     private final OrderStoreRepository orderStoreRepository;
-    private final StoreOrderNotificationRepository storeOrderNotificationRepository;
 
     private final OrderItemRepository orderItemRepository;
 
@@ -40,25 +38,25 @@ public class OrderPublisherServiceImpl implements OrderPublisherService  {
     public OrderPublisherServiceImpl(RabbitTemplate rabbitTemplate,
                                      OrderRepository orderRepository,
                                      OrderStoreRepository orderStoreRepository,
-                                     StoreOrderNotificationRepository storeOrderNotificationRepository, OrderItemRepository orderItemRepository) {
+                                     OrderItemRepository orderItemRepository) {
         this.rabbitTemplate = rabbitTemplate;
         this.orderRepository = orderRepository;
         this.orderStoreRepository = orderStoreRepository;
-        this.storeOrderNotificationRepository = storeOrderNotificationRepository;
         this.orderItemRepository = orderItemRepository;
     }
 
 
     @Override
-    public OrderNotifyResponseDTO notifyStoresForOrder(Long orderId) {
+    public StatusResponseDTO notifyStoresForOrder(Long orderId) {
 
         Order order = this.orderRepository.getReferenceById(orderId);
         Map<Long, List<OrderItem>> itemsByStore = order.getOrderStores().stream()
-                .flatMap(orderStore -> orderStore.getOrderItems().stream())
-                .collect(Collectors.groupingBy(OrderItem::getOrderStoreId));
-
-        List<StoreOrderNotification> notifications = new ArrayList<>();
+                .collect(Collectors.toMap(
+                        store -> store.getStore().getStoreId(),
+                        OrderStore::getOrderItems
+                ));
         itemsByStore.forEach((storeId, items) -> {
+            OrderItemNotifyDTO orderItemNotifyDTO = convertToOrderItem(orderId, storeId, items);
             String jsonPayload = null;
             try {
                 jsonPayload = new ObjectMapper().writeValueAsString(items);
@@ -66,19 +64,25 @@ public class OrderPublisherServiceImpl implements OrderPublisherService  {
                 throw new RuntimeException(e);
             }
             System.out.println(jsonPayload);
-            rabbitTemplate.convertAndSend(exchange, "store." + storeId, items);
+            rabbitTemplate.convertAndSend(exchange, "store." + storeId, orderItemNotifyDTO);
 
-            notifications.add(updateOrderStatus(orderId, storeId));
         });
-        storeOrderNotificationRepository.saveAll(notifications);
-        return new OrderNotifyResponseDTO(1, "Stores notify successfully");
+        order.getOrderStores().stream().forEach(it -> it.setNotificationStatus(OrderNotificationStatus.SENT));
+       orderRepository.save(order);
+        return new StatusResponseDTO(1, "Stores notify successfully");
     }
 
-    @Transactional
-    public StoreOrderNotification updateOrderStatus(Long orderId, Long storeId) {
-        StoreOrderNotification notification = new StoreOrderNotification(orderId, storeId);
-        notification.setNotificationStatus(OrderNotificationStatus.SENT);
-        return notification;
+    public OrderItemNotifyDTO convertToOrderItem(Long orderId, Long storeId, List<OrderItem> orderItems) {
+        List<OrderItemDTO> orderItemDTOS = orderItems.stream()
+                .map(entry -> {
+                    OrderItemDTO dto = new OrderItemDTO();
+                    dto.setProductId(entry.getProductId());
+                    dto.setProductName(entry.getProduct().getProductName());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        return new OrderItemNotifyDTO(orderId, storeId, orderItemDTOS);
     }
 
 
