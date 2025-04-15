@@ -87,7 +87,7 @@ public class User {
     private Role role;
 
     // Chained Setters
-    public User setId(Long id) {
+   /* public User setId(Long id) {
         this.id = id;
         return this;
     }
@@ -185,5 +185,5 @@ public class User {
     public User setRole(Role role) {
         this.role = role;
         return this;
-    }
+    }*/
 }

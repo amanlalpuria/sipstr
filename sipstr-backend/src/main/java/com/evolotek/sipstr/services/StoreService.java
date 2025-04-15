@@ -1,37 +1,93 @@
 package com.evolotek.sipstr.services;
 
-import com.evolotek.sipstr.entities.Store;
+import com.evolotek.sipstr.dtos.StoreRegisterDTO;
+import com.evolotek.sipstr.entities.*;
 import com.evolotek.sipstr.exceptions.ResourceNotFoundException;
+import com.evolotek.sipstr.repositories.AddressRepository;
 import com.evolotek.sipstr.repositories.StoreInventoryRepository;
 import com.evolotek.sipstr.repositories.StoreRepository;
+import com.evolotek.sipstr.repositories.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class StoreService {
 
     private final StoreInventoryRepository storeInventoryRepository;
     private final StoreRepository storeRepository;
+    private final AddressRepository addressRepository;
+    private final UserRepository userRepository;
     private final GeocodingService geocodingService;
 
-    public StoreService(StoreInventoryRepository storeInventoryRepository, StoreRepository storeRepository, GeocodingService geocodingService) {
+    public StoreService(StoreInventoryRepository storeInventoryRepository, StoreRepository storeRepository, GeocodingService geocodingService, AddressRepository addressRepository, UserRepository userRepository) {
         this.storeInventoryRepository = storeInventoryRepository;
         this.storeRepository = storeRepository;
         this.geocodingService = geocodingService;
+        this.addressRepository = addressRepository;
+        this.userRepository = userRepository;
     }
-
 
     public void deleteStore(Long storeId) {
         storeInventoryRepository.deleteAllByStoreId(storeId); // Delete associated records
         storeRepository.deleteById(storeId);
     }
 
-    public Store createStore(Store store) {
+    @Transactional
+    public Store registerStore(StoreRegisterDTO dto, UUID ownerId) {
+        User owner = userRepository.findByUuid(ownerId)
+                .orElseThrow(() -> new RuntimeException("Owner not found"));
+
+        // Create Address Entity
+        Address address = Address.builder()
+                .address1(dto.getAddress1())
+                .address2(dto.getAddress2())
+                .city(dto.getCity())
+                .state(dto.getState())
+                .zipcode(dto.getZipcode())
+                .country(dto.getCountry())
+                .user(owner)
+                .build();
+
+        address = addressRepository.save(address);
+
+        // Create Store Entity
+        Store store = Store.builder()
+                .uuid(UUID.randomUUID())
+                .storeName(dto.getStoreName())
+                .corporationName(dto.getCorporationName())
+                .ein(dto.getEin())
+                .licenseNumber(dto.getLicenseNumber())
+                .description(dto.getDescription())
+                .contactEmail(dto.getStoreEmail())
+                .contactPhone(dto.getStoreContactNumber())
+                .liquorLicenseUrl(dto.getLiquorLicenseUrl())
+                .address(address)
+                .owner(owner)
+                .isCurrentlyAcceptingOrders(true)
+                .isActive(true)
+                .build();
+
+        // Map Operating Hours
+        List<StoreOperatingHours> operatingHours = List.of(
+                new StoreOperatingHours(store, 0, dto.getWeekendStartTime(), dto.getWeekendCloseTime(), false),
+                new StoreOperatingHours(store, 1, dto.getWeekDaysStartTime(), dto.getWeekDaysCloseTime(), false)
+        );
+
+        store.setOperatingHoursList(operatingHours);
+
+        // Map Holiday Hours
+        List<StoreHolidayHours> holidayHours = dto.getHolidayDates().stream()
+                .map(date -> new StoreHolidayHours(store, date))
+                .collect(Collectors.toList());
+
+        store.setHolidayHoursList(holidayHours);
+
         return storeRepository.save(store);
     }
-
     public Store addStore(Store store) {
         return storeRepository.save(store);
     }

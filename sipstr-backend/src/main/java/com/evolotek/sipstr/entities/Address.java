@@ -48,6 +48,9 @@ public class Address {
     @Column(name = "zipcode", nullable = false)
     private String zipcode;
 
+    @Column(name = "country", nullable = false)
+    private String country;
+
     @Column(name = "borough")
     private String borough;
 

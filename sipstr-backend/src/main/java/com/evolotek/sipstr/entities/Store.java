@@ -32,19 +32,22 @@ public class Store {
     private String corporationName;
 
     @Column(name = "ein", nullable = false)
-    private Integer ein;
+    private Long ein;
 
     @Column(name = "license_number", nullable = false)
-    private Integer licenseNumber;
+    private String licenseNumber;
+
+    @Column(name = "liquor_license_url", nullable = false)
+    private String liquorLicenseUrl;
 
     @Column(name = "description")
     private String description;
 
     @Column(name = "address_id", nullable = false)
-    private Long addressId;
+    private Address address;
 
     @Column(name = "owner_id", nullable = false)
-    private Long ownerId;
+    private User owner;
 
     @Column(name = "contact_email", nullable = false)
     private String contactEmail;

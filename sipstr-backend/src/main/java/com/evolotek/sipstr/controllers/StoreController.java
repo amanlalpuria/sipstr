@@ -1,7 +1,9 @@
 package com.evolotek.sipstr.controllers;
 
+import com.evolotek.sipstr.dtos.StoreRegisterDTO;
 import com.evolotek.sipstr.entities.Store;
 import com.evolotek.sipstr.services.StoreService;
+import com.evolotek.sipstr.utils.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,11 +20,12 @@ import java.util.UUID;
 @RequestMapping("/stores")
 public class StoreController {
     private final StoreService storeService;
+    private final JwtUtil jwtUtil;
 
-    public StoreController(StoreService storeService) {
+    public StoreController(StoreService storeService, JwtUtil jwtUtil) {
         this.storeService = storeService;
+        this.jwtUtil = jwtUtil;
     }
-
     @Operation(summary = "Create a New Store", description = "Allows a SUPPLIER user to register a store.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Store created successfully"),
@@ -30,8 +33,15 @@ public class StoreController {
     })
     @PostMapping
     @PreAuthorize("hasRole('STORE_ADMIN')")
-    public ResponseEntity<Store> createStore(@RequestBody Store store) {
-        Store createdStore = storeService.createStore(store);
+    public ResponseEntity<Store> registerStore(@RequestHeader("Authorization") String token, @RequestBody StoreRegisterDTO store) {
+
+        String userId = jwtUtil.extractUserId(token);
+
+        if (userId == null) {
+            return ResponseEntity.status(403).build(); // Forbidden if user_id is not present
+        }
+
+        Store createdStore = storeService.registerStore(store, UUID.fromString(userId));
         return ResponseEntity.ok(createdStore);
     }
 

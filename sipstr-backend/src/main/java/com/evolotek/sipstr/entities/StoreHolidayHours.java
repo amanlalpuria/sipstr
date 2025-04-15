@@ -3,6 +3,7 @@ package com.evolotek.sipstr.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,7 +24,7 @@ public class StoreHolidayHours {
     private Store store;
 
     @Column(name = "holiday_date", nullable = false)
-    private String holidayDate;
+    private LocalDate holidayDate;
 
     @Column(name = "opening_time")
     private String openingTime;
@@ -36,4 +37,12 @@ public class StoreHolidayHours {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    public StoreHolidayHours(Store store, LocalDate holidayDate) {
+        this.store = store;
+        this.holidayDate = holidayDate;
+        this.openingTime = "00:00:00"; // 24 hours open
+        this.closingTime = "23:59:59"; // 24 hours close
+        this.isClosed = true;
+    }
 }
