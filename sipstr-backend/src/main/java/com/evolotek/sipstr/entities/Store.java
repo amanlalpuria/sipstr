@@ -43,10 +43,12 @@ public class Store {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "address_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "address_id", nullable = false)
     private Address address;
 
-    @Column(name = "owner_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
     @Column(name = "contact_email", nullable = false)
