@@ -10,7 +10,6 @@ import lombok.*;
 @Data
 public class RegisterUserDTO {
 
-    @NotEmpty(message = "The email address is required.")
     @Email(message = "The email address is invalid.", flags = { Pattern.Flag.CASE_INSENSITIVE })
     private String email;
 
@@ -20,17 +19,15 @@ public class RegisterUserDTO {
     @Size(min = 2, max = 100, message = "The length of full name must be between 2 and 100 characters.")
     private String fullName;
 
-    /*TODO : Mobile Numbe limit according to US standards need to be done*/
-    @NotEmpty(message = "The mobile number is required.")
+    /*TODO : Mobile Number limit according to US standards need to be done*/
     private String mobileNumber;
 
     private String roleEnum;
-    private boolean isOtpSignup; // Indicates OTP-based signup
 
-    public RegisterUserDTO setOtpSignup(boolean otpSignup) {
-        this.isOtpSignup = otpSignup;
-        return this;
+    public boolean isValid() {
+        return (email != null && !email.isEmpty()) || (mobileNumber != null && !mobileNumber.isEmpty());
     }
+
 
     // Ensure the setters return the object itself for chaining
     public RegisterUserDTO setFullName(String fullName) {

@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -44,36 +45,43 @@ public class AuthenticationService {
     }
 
     public UserDetailsResponse signup(RegisterUserDTO input) {
+        if ((input.getEmail() == null || input.getEmail().isEmpty()) &&
+                (input.getMobileNumber() == null || input.getMobileNumber().isEmpty())) {
+            throw new RuntimeException("Either email or mobile number must be provided.");
+        }
+
         Optional<Role> optionalRole = roleRepository.findByName(input.getRoleEnum());
         if (optionalRole.isEmpty()) {
             throw new IllegalArgumentException("Invalid role: " + input.getRoleEnum());
         }
 
-        Optional<User> existingUser = userRepository.findByMobileNumber(input.getMobileNumber());
+        Optional<User> existingUser = input.getEmail() != null
+                ? userRepository.findByEmail(input.getEmail())
+                : userRepository.findByMobileNumber(input.getMobileNumber());
 
-        if (existingUser.isPresent() && existingUser.get().isMobileVerified()) {
-            throw new RuntimeException("User with this mobile number is already registered.");
+        if (existingUser.isPresent() &&
+                ((input.getMobileNumber() != null && existingUser.get().isMobileVerified()) ||
+                        (input.getEmail() != null && existingUser.get().isEmailVerified()))) {
+            throw new RuntimeException("User already registered with this email/mobile.");
         }
 
         User user = existingUser.orElseGet(() -> {
             User newUser = new User()
                     .setFullName(input.getFullName())
-                    .setEmail(input.getEmail())
-                    .setMobileNumber(input.getMobileNumber())
                     .setRole(optionalRole.get())
-                    .setPasswordHash(passwordEncoder.encode(input.getPassword()))
-                    .setAccountStatus("PENDING");  // Mark as pending until OTP verification
+                    .setAccountStatus("PENDING")
+                    .setPasswordHash(passwordEncoder.encode(input.getPassword()));
+
+            if (input.getEmail() != null) newUser.setEmail(input.getEmail());
+            if (input.getMobileNumber() != null) newUser.setMobileNumber(input.getMobileNumber());
+
             return userRepository.save(newUser);
         });
 
-        if (input.isOtpSignup()) {
-            otpService.generateAndSendOtp(user.getMobileNumber());
-        } else {
-            user.setAccountStatus("ACTIVE");
-            userRepository.save(user);
-        }
+        logger.debug("Signup request received. Sending OTP...");
+        String identifier = input.getEmail() != null ? input.getEmail() : input.getMobileNumber();
+        otpService.generateAndSendOtp(identifier);
 
-        // ✅ Convert User to UserDetailsResponse before returning
         return UserDetailsResponse.fromUser(user);
     }
 
@@ -89,12 +97,27 @@ public class AuthenticationService {
                 .orElseThrow();
     }
 
-    public User authenticateByOtp(String mobileNumber, String otp) {
-        if (!otpService.verifyOtp(mobileNumber, otp)) {
-            throw new RuntimeException("Invalid OTP or expired");
+    public User authenticateByOtp(String identifier, String otp) {
+        Optional<User> optionalUser = identifier.contains("@")
+                ? userRepository.findByEmail(identifier)
+                : userRepository.findByMobileNumber(identifier);
+
+        User user = optionalUser.orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (user.getOtp() != null &&
+                user.getOtp().equals(otp) &&
+                user.getOtpExpiresAt().isAfter(LocalDateTime.now())) {
+
+            if (identifier.contains("@")) user.setEmailVerified(true);
+            else user.setMobileVerified(true);
+
+            user.setAccountStatus("ACTIVE");
+            user.setOtp(null);
+            user.setOtpExpiresAt(null);
+            return userRepository.save(user);
         }
 
-        return userRepository.findByMobileNumber(mobileNumber)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        throw new RuntimeException("Invalid or expired OTP");
     }
+
 }

@@ -53,11 +53,15 @@ super:
 
 logging:
   level:
+    root: INFO
+    com.evolotek.sipstr: DEBUG # Fine-grained logs for your package
     org:
       springframework:
         web: DEBUG
       springdoc: DEBUG
       boot: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %logger{36} - %msg%n"
 
 management:
   endpoints:

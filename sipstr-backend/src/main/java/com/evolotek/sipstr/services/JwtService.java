@@ -46,8 +46,15 @@ public class JwtService {
         if (!(userDetails instanceof CustomUserDetails)) {
             throw new IllegalArgumentException("UserDetails must be an instance of CustomUserDetails");
         }
+
         User user = ((CustomUserDetails) userDetails).getUser();
+
         extraClaims.put("role", user.getRole().getName().toString());
+        extraClaims.put("uuid", user.getUuid().toString());
+        extraClaims.put("email", user.getEmail());
+        extraClaims.put("mobileNumber", user.getMobileNumber());
+        extraClaims.put("accountStatus", user.getAccountStatus());
+
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 

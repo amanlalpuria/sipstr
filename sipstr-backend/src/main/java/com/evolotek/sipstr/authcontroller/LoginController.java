@@ -39,15 +39,10 @@ public class LoginController {
     /**
      * Signup for CUSTOMER, DELIVERY_PERSON, STORE_ADMIN, STORE_MANAGER
      */
-    @Operation(summary = "User Signup", description = "Register a new user with a specific role - USER, DELIVERY_PERSON, SUPPLIER")
+    @Operation(summary = "User Signup", description = "Register a new user with a specific role - USER, STORE_MANAGER, STORE_ADMIN, DELIVERY_PERSON")
     @PostMapping("/signup")
     public ResponseEntity<UserDetailsResponse> register(@RequestBody RegisterUserDTO registerUserDto) {
         UserDetailsResponse registeredUser = authenticationService.signup(registerUserDto);
-        LoginUserDTO loginUserDTO = new LoginUserDTO();
-        loginUserDTO.setEmail(registerUserDto.getEmail());
-        loginUserDTO.setPassword(registerUserDto.getPassword());
-        LoginResponse loginResponse = authenticate(loginUserDTO).getBody();
-        registeredUser.setToken(loginResponse.getToken());
         return ResponseEntity.ok(registeredUser);
     }
 
@@ -75,26 +70,21 @@ public class LoginController {
 
         return ResponseEntity.ok(new LoginResponse()
                 .setToken(jwtToken)
-                .setExpiresIn(jwtService.getExpirationTime())
-                .setUserId(authenticatedUser.getId())
-                .setEmail(authenticatedUser.getEmail())
-                .setMobileNumber(authenticatedUser.getMobileNumber())
-                .setIsActive("ACTIVE".equals(authenticatedUser.getAccountStatus())));
+                .setExpiresIn(jwtService.getExpirationTime()));
     }
 
     @PostMapping("/otp/send")
-    public ResponseEntity<String> sendOtp(@RequestParam String mobileNumber) {
-        otpService.generateAndSendOtp(mobileNumber);
-        return ResponseEntity.ok("OTP sent to " + mobileNumber);
+    public ResponseEntity<String> sendOtp(@RequestParam String identifier) {
+        otpService.generateAndSendOtp(identifier);
+        return ResponseEntity.ok("OTP sent to " + identifier);
     }
 
     @PostMapping("/otp/verify")
-    public ResponseEntity<LoginResponse> verifyOtp(@RequestParam String mobileNumber, @RequestParam String otp) {
-        User authenticatedUser = authenticationService.authenticateByOtp(mobileNumber, otp);
-        String jwtToken = jwtService.generateToken(new CustomUserDetails(authenticatedUser));
-
+    public ResponseEntity<LoginResponse> verifyOtp(@RequestParam String identifier, @RequestParam String otp) {
+        User user = authenticationService.authenticateByOtp(identifier, otp);
+        String token = jwtService.generateToken(new CustomUserDetails(user));
         return ResponseEntity.ok(new LoginResponse()
-                .setToken(jwtToken)
+                .setToken(token)
                 .setExpiresIn(jwtService.getExpirationTime()));
     }
 }

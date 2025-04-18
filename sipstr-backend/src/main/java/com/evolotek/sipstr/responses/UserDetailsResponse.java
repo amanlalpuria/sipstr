@@ -22,7 +22,6 @@ public class UserDetailsResponse {
     private UUID uuid;
     private String username;
     private Role role;
-    private String token;
 
     // Static Mapper Method
     public static UserDetailsResponse fromUser(User user) {
