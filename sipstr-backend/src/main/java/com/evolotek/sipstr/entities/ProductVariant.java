@@ -67,7 +67,7 @@ public class ProductVariant {
     @Column(name = "carbs", precision = 10, scale = 2)
     private BigDecimal carbs;
 
-    @Column(name = "ibuValue", precision = 10, scale = 2)
+    @Column(name = "ibuvalue", precision = 10, scale = 2)
     private BigDecimal ibuValue;
 
     @Column(name = "sugars", precision = 10, scale = 2)

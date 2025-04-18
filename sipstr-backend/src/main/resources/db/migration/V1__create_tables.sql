@@ -172,6 +172,7 @@ CREATE TABLE category (
     description TEXT,
     is_taxable BOOLEAN NOT NULL,
     is_active BOOLEAN DEFAULT true,
+    image_url VARCHAR(255),
     display_order INTEGER,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP,
