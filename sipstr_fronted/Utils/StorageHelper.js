@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { UserModel } from "../models/UserModel";
 
 export const saveToken = async (token) => {
   await AsyncStorage.setItem("user_token", token);
@@ -14,7 +15,7 @@ export const saveUserData = async (user) => {
 
 export const getUserData = async () => {
   const data = await AsyncStorage.getItem("user_data");
-  return data ? JSON.parse(data) : null;
+  return data ? UserModel.fromStorage(JSON.parse(data)) : null;
 };
 
 export const clearStorage = async () => {

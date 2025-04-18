@@ -1,8 +1,9 @@
 import { Alert, Keyboard, Platform, ToastAndroid } from "react-native";
 import NetInfo from "@react-native-community/netinfo";
-import Toast from "react-native-root-toast";
+import Toast from "react-native-toast-message";
 import Swal from "sweetalert2";
 import { colors } from "../components/colors";
+import CustomToast from "../components/CustomToast ";
 
 const Utils = {
   showAlert: (title = "SipStr", message, btnText = "OK") => {
@@ -38,22 +39,31 @@ const Utils = {
   isIOS: Platform.OS === "ios",
   isWeb: Platform.OS === "web",
 
-  showToast: (msg) => {
-    if (Platform.OS === "web") {
-      Utils.showAlert(msg);
-    } else if (Platform.OS === "android") {
-      ToastAndroid.show(msg, ToastAndroid.SHORT); // Native fallback
-    } else {
-      Toast.show(msg, {
-        duration: Toast.durations.SHORT,
-        position: Toast.positions.BOTTOM,
-        shadow: true,
-        animation: true,
-        hideOnPress: true,
-        delay: 0,
-      });
-    }
+  // showToast: (msg) => {
+  //   if (Platform.OS === "web") {
+  //     Utils.showAlert(msg);
+  //   } else if (Platform.OS === "android") {
+  //     ToastAndroid.show(msg, ToastAndroid.SHORT); // Native fallback
+  //   } else {
+  //     Toast.show(msg, {
+  //       duration: Toast.durations.SHORT,
+  //       position: Toast.positions.BOTTOM,
+  //       shadow: true,
+  //       animation: true,
+  //       hideOnPress: true,
+  //       delay: 0,
+  //     });
+  //   }
+  // },
+  showToast: (msg, type = "info") => {
+    Toast.show({
+      type,
+      text1: msg,
+      position: "bottom",
+      visibilityTime: 2500,
+    });
   },
+
   isEmailValid(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);

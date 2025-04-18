@@ -17,7 +17,7 @@ const TopBar = ({
       <View style={styles.topRow}>
         <CommonAppNameLabel fontSize={30} style={styles.appNameLabel} />
         <TouchableOpacity
-          onPress={() => console.log("Cart Clicked")}
+          onPress={() => navigation.navigation("Cart")}
           style={styles.cartIcon}
         >
           <Image

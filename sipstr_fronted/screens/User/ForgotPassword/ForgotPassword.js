@@ -1,62 +1,69 @@
 import React, { useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import Utils from "../../../Utils/Utils";
 import CommonButton from "../../../components/CommonButton";
 import CommonTextField from "../../../components/CommonTextField";
 import CommonAppNameLabel from "../../../components/CommonAppNameLabel";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../../../components/colors";
+import HeaderBar from "../../../components/HeaderBar";
+import CommonTextView from "../../../components/CommonTextView";
+import { globalStyles } from "../../../components/styles";
 
-const ForgotPasswordScreen = () => {
+const ForgotPasswordScreen = ({ navigation }) => {
   const [emailOrPhone, setEmailOrPhone] = useState("");
 
   const handleResetPassword = () => {
-    var emailPhone = emailOrPhone.trim();
-    if (
-      !Utils.isEmailValid(emailOrPhone) ||
-      !Utils.isPhoneValid(emailOrPhone)
-    ) {
-      Utils.showToast("Enter a valid email or 10-digit phone number.");
+    const trimmed = emailOrPhone.trim();
+    if (!Utils.isEmailValid(trimmed) && !Utils.isPhoneValid(trimmed)) {
+      Utils.showToast("Enter a valid email or 10-digit phone number.", "error");
       return;
     }
-    Utils.showToast("Password reset email sent. Please check your inbox.");
+    Utils.showToast("Password reset link sent.");
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.inner}>
-        <CommonAppNameLabel fontSize={62} />
+    <SafeAreaView style={styles.safeArea}>
+      <HeaderBar navigation={navigation} title="Forgot Password" />
+
+      <ScrollView contentContainerStyle={styles.container}>
+        <CommonAppNameLabel fontSize={60} />
+
+        <CommonTextView
+          style={[globalStyles.textViewSemiBold, { fontSize: 20 }]}
+        >
+          Enter the Email or Phone associated with your account
+        </CommonTextView>
+
         <CommonTextField
           placeholder="Enter Email or Phone"
           value={emailOrPhone}
           onChangeText={setEmailOrPhone}
-          style={styles.emailPhoneTextField}
+          style={styles.input}
         />
-        <CommonButton
-          title="Reset Password"
-          onPress={handleResetPassword}
-          style={styles.resetButton}
-        />
-      </View>
+
+        <CommonButton title="Reset Password" onPress={handleResetPassword} />
+      </ScrollView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
     backgroundColor: colors.white,
-    justifyContent: "center", // Vertically center all
   },
-  inner: {
-    paddingHorizontal: 30,
+  container: {
     alignItems: "center",
+    justifyContent: "center",
+    padding: 24,
+    gap: 20,
   },
-  emailPhoneTextField: {
-    margin: 10,
+  input: {
+    width: "100%",
   },
-  resetButton: {
-    margin: 20,
+  button: {
+    width: "100%",
   },
 });
 

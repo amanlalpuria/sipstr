@@ -1,6 +1,5 @@
 export class UserModel {
   constructor({
-    token = "",
     expiresIn = 0,
     userId = null,
     name = "",
@@ -11,8 +10,8 @@ export class UserModel {
     role = null,
     createdAt = null,
     updatedAt = null,
+    uuid = "",
   }) {
-    this.token = token;
     this.expiresIn = expiresIn;
     this.userId = userId;
     this.name = name;
@@ -23,6 +22,7 @@ export class UserModel {
     this.role = role;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+    this.uuid = uuid;
   }
 
   // Static method to create model from Login response
@@ -36,7 +36,7 @@ export class UserModel {
   }
 
   // Static method to create model from SignUp response
-  static fromSignUpResponse(data, token = "") {
+  static fromSignUpResponse(data) {
     return new UserModel({
       userId: data.userId,
       name: data.name,
@@ -47,7 +47,33 @@ export class UserModel {
       updatedAt: data.updatedAt,
       username: data.username,
       role: data.role,
-      token: token,
+      uuid: data.uuid,
+      username: data.username,
+    });
+  }
+
+  static fromStorage(data) {
+    return new UserModel({
+      expiresIn: data.expiresIn,
+      userId: data.userId,
+      name: data.name,
+      email: data.email,
+      mobileNumber: data.mobileNumber,
+      isActive: data.isActive,
+      username: data.username,
+      role: data.role,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
+      uuid: data.uuid,
+    });
+  }
+  static fromVerifyOtpResponse(data) {
+    return new UserModel({
+      userId: data.userId,
+      email: data.email,
+      mobileNumber: data.mobileNumber,
+      isActive: data.isActive,
+      expiresIn: data.expiresIn,
     });
   }
 }

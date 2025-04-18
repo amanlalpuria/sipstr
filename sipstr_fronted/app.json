@@ -21,7 +21,8 @@
     },
     "android": {
       "package": "com.sipstr",
-      "permissions": ["ACCESS_FINE_LOCATION"],
+      "permissions": ["INTERNET","ACCESS_FINE_LOCATION"],
+      
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -35,3 +36,4 @@
     ]
   }
 }
+

@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { useFonts } from "expo-font";
 import AppNavigator from "./navigations/Navigation";
+import Toast from "react-native-toast-message";
+import { LoaderProvider } from "./Utils/LoaderContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { injectSweetAlertStyles } from "./components/styles";
-import Utils from "./Utils/Utils";
 
 export default function App() {
+  //configure Fonts
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
     "Poppins-SemiBold": require("./assets/fonts/Poppins-SemiBold.ttf"),
@@ -14,17 +15,14 @@ export default function App() {
     "ArefRuqaaInk-Regular": require("./assets/fonts/ArefRuqaaInk-Regular.ttf"),
   });
 
-  if (Utils.isWeb) {
-    useEffect(() => {
-      injectSweetAlertStyles(); // only for web
-    }, []);
-  }
-
   if (!fontsLoaded) return null;
 
   return (
     <SafeAreaProvider>
-      <AppNavigator />
+      <LoaderProvider>
+        <AppNavigator />
+        <Toast />
+      </LoaderProvider>
     </SafeAreaProvider>
   );
 }

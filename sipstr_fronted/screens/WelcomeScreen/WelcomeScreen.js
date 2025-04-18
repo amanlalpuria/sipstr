@@ -20,11 +20,10 @@ const WelcomeScreen = ({ navigation }) => {
   };
   return (
     <SafeAreaView style={styles.container}>
-      {/* Logo */}
       <View style={styles.logoContainer}>
         <CommonAppNameLabel fontSize={70} />
       </View>
-      {/* Bottom Content */}
+
       <View style={styles.bottomSection}>
         <CommonTextView style={{ fontSize: 27, margin: 20 }}>
           Are you over 21?
@@ -33,7 +32,6 @@ const WelcomeScreen = ({ navigation }) => {
           You must confirm that you are of legal drinking age to enter
         </CommonTextView>
 
-        {/* Buttons Row */}
         <View style={styles.buttonRow}>
           <CommonButton
             title="YES"
@@ -74,8 +72,9 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   button: {
-    //minWidth: 100,
+    width: "150",
     marginRight: 20,
+    alignItems: "center",
   },
 });
 

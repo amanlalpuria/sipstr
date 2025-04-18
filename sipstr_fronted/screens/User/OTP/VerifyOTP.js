@@ -1,11 +1,5 @@
-import React, { useRef, useState } from "react";
-import {
-  View,
-  StyleSheet,
-  TextInput,
-  Keyboard,
-  TouchableOpacity,
-} from "react-native";
+import React, { useRef, useState, useEffect } from "react";
+import { View, StyleSheet, Keyboard, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CommonTextView from "../../../components/CommonTextView";
 import CommonButton from "../../../components/CommonButton";
@@ -15,11 +9,19 @@ import Utils from "../../../Utils/Utils";
 import { colors } from "../../../components/colors";
 import { apiClient, handleApiResponse } from "../../../api/ApiHelper";
 import { API_ENDPOINTS } from "../../../api/ApiConstant";
+import { getUserData } from "../../../Utils/StorageHelper";
+import { useLoader } from "../../../Utils/LoaderContext";
+import { UserModel } from "../../../data/models/UserModel";
 
 const VerifyOTPScreen = ({ navigation }) => {
   const [otp, setOtp] = useState(["", "", "", ""]);
-
   const refs = [useRef(), useRef(), useRef(), useRef()];
+  const { setLoading } = useLoader();
+
+  //calling sendOTP API on page load to send otp on user's mobile number
+  useEffect(() => {
+    sendOTP();
+  }, []);
 
   const handleChange = (index, value) => {
     if (!/^\d?$/.test(value)) return; // Only allow single digit
@@ -41,16 +43,65 @@ const VerifyOTPScreen = ({ navigation }) => {
   const validateAndSubmit = () => {
     const joinedOTP = otp.join("");
     if (joinedOTP.length < 4) {
-      Utils.showToast("Please enter the full 4-digit OTP");
+      Utils.showToast("Please enter the full 4-digit OTP", "error");
       return;
     }
+    verifyOTP(joinedOTP);
+  };
 
-    Utils.showToast(`OTP Entered: ${joinedOTP}`);
-    // TODO: Call your verify API here
+  const verifyOTP = async (otp) => {
+    var user = await getUserData();
     const request = {
-      
-    }
+      mobileNumber: user?.mobileNumber,
+      otp: otp,
+    };
+    try {
+      setLoading(true);
+      const result = await handleApiResponse(() =>
+        apiClient.post(API_ENDPOINTS.verifyOTP, request)
+      );
 
+      if (result.success) {
+        console.log("success");
+        const user = UserModel.fromVerifyOtpResponse(result.data);
+        console.log(user.email);
+        await saveUserData(user); // Save in AsyncStorage
+        const token = result.data.token || result.data.data?.token;
+        console.log(token);
+        if (token) {
+          await saveToken(token); // store for later use
+          navigation.navigate("MainTabs");
+        }
+      } else {
+        Utils.showToast(result.message, "error");
+      }
+    } catch (error) {
+    } finally {
+    }
+  };
+
+  const sendOTP = async () => {
+    try {
+      setLoading(true);
+      var user = await getUserData();
+      const request = {
+        phone: user?.mobileNumber,
+      };
+
+      const result = await handleApiResponse(() =>
+        apiClient.post(API_ENDPOINTS.SEND_OTP, request)
+      );
+
+      if (result.success) {
+        Utils.showToast("OTP sent successfully!");
+      } else {
+        Utils.showToast(result.message, "error");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -92,7 +143,7 @@ export default VerifyOTPScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFF",
+    backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
     padding: 24,
@@ -103,8 +154,6 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   instruction: {
-    fontSize: 14,
-    fontFamily: "Poppins-Regular",
     textAlign: "center",
     marginVertical: 16,
     color: colors.grayText,

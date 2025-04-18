@@ -18,26 +18,29 @@ import { apiClient, handleApiResponse } from "../../../api/ApiHelper";
 import { API_ENDPOINTS } from "../../../api/ApiConstant";
 import { UserModel } from "../../../data/models/UserModel";
 import { saveUserData } from "../../../Utils/StorageHelper";
+import HeaderBar from "../../../components/HeaderBar";
+import { useLoader } from "../../../Utils/LoaderContext";
 
 const SignUpScreen = ({ navigation }) => {
   const [nameInput, setNameInput] = useState("");
   const [emailPhoneInput, setEmailPhoneInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [confirmPwdInput, setConfirmPwdInput] = useState("");
+  const { setLoading } = useLoader();
 
   const validateAndSignUp = () => {
     const name = nameInput.trim();
     const emailOrPhone = emailPhoneInput.trim();
     const password = passwordInput.trim();
     const confirmPwd = confirmPwdInput.trim();
-    const otpSignup = false;
+    var otpSignup = false;
     var email = "";
     var mobileNumber = "";
 
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/;
 
     if (!name || !emailOrPhone || !password || !confirmPwd) {
-      Utils.showToast("All fields are required.");
+      Utils.showToast("All fields are required.", "error");
       return;
     }
 
@@ -47,19 +50,20 @@ const SignUpScreen = ({ navigation }) => {
       mobileNumber = emailOrPhone;
       otpSignup = true;
     } else {
-      Utils.showToast("Enter a valid email or 10-digit phone number.");
+      Utils.showToast("Enter a valid email or 10-digit phone number.", "error");
       return;
     }
 
     if (!passwordRegex.test(password)) {
       Utils.showToast(
-        "Password must include uppercase, lowercase, digit & special char."
+        "Password must include uppercase, lowercase, digit & special char.",
+        "error"
       );
       return;
     }
 
     if (password !== confirmPwd) {
-      Utils.showToast("Passwords do not match.");
+      Utils.showToast("Passwords do not match.", "error");
       return;
     }
     const request = {
@@ -74,108 +78,104 @@ const SignUpScreen = ({ navigation }) => {
   };
 
   const signUp = async (payload, otpSignup) => {
-    const result = await handleApiResponse(() =>
-      apiClient.post(API_ENDPOINTS.REGISTER, payload)
-    );
+    try {
+      setLoading(true);
+      const result = await handleApiResponse(() =>
+        apiClient.post(API_ENDPOINTS.REGISTER, payload)
+      );
 
-    if (result.success) {
-      const user = UserModel.fromSignUpResponse(result.data);
-      await saveUserData(user); // Save in AsyncStorage
-      if (otpSignup) {
-        navigation.navigate("VerifyOTP");
+      if (result.success) {
+        const user = UserModel.fromSignUpResponse(result.data);
+        await saveUserData(user); // Save in AsyncStorage
+        if (otpSignup) {
+          navigation.navigate("VerifyOTP");
+        } else {
+          navigation.navigate("MainTabs");
+        }
       } else {
-        navigation.navigate("MainTabs");
+        Utils.showToast(result.message, "error");
       }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
-
-    // if (result.success) {
-    //   const token = result.data.token || result.data.data?.token;
-    //   if (token) {
-    //     await saveToken(token); // store for later use
-    //   }
-    //   Utils.showToast("Signup Success 🎉");
-    //   if (otpSignup) {
-    //     navigation.navigate("VerifyOTP");
-    //   } else {
-    //     navigation.navigate("Home");
-    //   }
-    // } else {
-    //   Utils.showToast(result.message || "SignUp failed");
-    // }
   };
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView
-        contentContainerStyle={styles.container}
-        keyboardShouldPersistTaps="handled"
-      >
-        <CommonAppNameLabel fontSize={60} />
-        <CommonTextView style={styles.title}>Create Account</CommonTextView>
+      <HeaderBar navigation={navigation} title="" />
+      <CommonAppNameLabel fontSize={60} />
+      <CommonTextView style={styles.title}>Create Account</CommonTextView>
 
-        <CommonTextField
-          placeholder="Enter Name"
-          value={nameInput}
-          onChangeText={setNameInput}
-          style={styles.input}
-        />
-        <CommonTextField
-          placeholder="Enter Mobile Number/Email"
-          value={emailPhoneInput}
-          onChangeText={setEmailPhoneInput}
-          style={styles.input}
-        />
-        <CommonTextField
-          placeholder="Enter Password"
-          secureTextEntry
-          value={passwordInput}
-          onChangeText={setPasswordInput}
-          style={styles.input}
-        />
-        <CommonTextField
-          placeholder="Confirm Password"
-          secureTextEntry
-          value={confirmPwdInput}
-          onChangeText={setConfirmPwdInput}
-          style={styles.input}
-        />
+      <CommonTextField
+        placeholder="Enter Name"
+        value={nameInput}
+        onChangeText={setNameInput}
+        returnKeyType="next"
+        inputMode="text"
+        style={styles.input}
+      />
+      <CommonTextField
+        placeholder="Enter Mobile Number/Email"
+        value={emailPhoneInput}
+        onChangeText={setEmailPhoneInput}
+        returnKeyType="next"
+        inputMode="text"
+        style={styles.input}
+      />
+      <CommonTextField
+        placeholder="Enter Password"
+        secureTextEntry={true}
+        value={passwordInput}
+        returnKeyType="next"
+        onChangeText={setPasswordInput}
+        style={styles.input}
+      />
+      <CommonTextField
+        placeholder="Confirm Password"
+        secureTextEntry={true}
+        value={confirmPwdInput}
+        returnKeyType="done"
+        onChangeText={setConfirmPwdInput}
+        style={styles.input}
+      />
 
-        <CommonButton
-          title="Signup"
-          onPress={validateAndSignUp}
-          style={styles.button}
-        />
+      <CommonButton
+        title="Signup"
+        onPress={validateAndSignUp}
+        style={styles.button}
+      />
 
-        <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-          <CommonTextView style={styles.loginText}>
-            Already have an account?{" "}
-            <CommonTextView style={styles.loginLink}>Login</CommonTextView>
-          </CommonTextView>
+      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+        <CommonTextView style={styles.loginText}>
+          Already have an account?{" "}
+          <CommonTextView style={styles.loginLink}>Login</CommonTextView>
+        </CommonTextView>
+      </TouchableOpacity>
+
+      <View style={styles.dividerRow}>
+        <View style={styles.divider} />
+        <CommonTextView style={styles.dividerText}>
+          Or Register with
+        </CommonTextView>
+        <View style={styles.divider} />
+      </View>
+
+      <View style={styles.socialRow}>
+        <TouchableOpacity>
+          <Image
+            source={require("../../../assets/images/google.png")}
+            style={styles.socialIcon}
+          />
         </TouchableOpacity>
-
-        <View style={styles.dividerRow}>
-          <View style={styles.divider} />
-          <CommonTextView style={styles.dividerText}>
-            Or Register with
-          </CommonTextView>
-          <View style={styles.divider} />
-        </View>
-
-        <View style={styles.socialRow}>
-          <TouchableOpacity>
-            <Image
-              source={require("../../../assets/images/google.png")}
-              style={styles.socialIcon}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image
-              source={require("../../../assets/images/apple.png")}
-              style={styles.socialIcon}
-            />
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+        <TouchableOpacity>
+          <Image
+            source={require("../../../assets/images/apple.png")}
+            style={styles.socialIcon}
+          />
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -183,13 +183,12 @@ const SignUpScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#fff",
-  },
-  container: {
+    backgroundColor: colors.white,
     padding: 24,
     alignItems: "center",
     gap: 16,
   },
+
   title: {
     fontSize: 26,
     fontFamily: "Poppins-SemiBold",
