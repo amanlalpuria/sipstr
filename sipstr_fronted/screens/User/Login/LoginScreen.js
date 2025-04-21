@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  KeyboardAvoidingView,
-} from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CommonTextView from "../../../components/CommonTextView";
 import CommonTextField from "../../../components/CommonTextField";
@@ -12,10 +7,6 @@ import CommonButton from "../../../components/CommonButton";
 import CommonAppNameLabel from "../../../components/CommonAppNameLabel";
 import { colors } from "../../../components/colors";
 import Utils from "../../../Utils/Utils";
-import { apiClient, handleApiResponse } from "../../../api/ApiHelper";
-import { API_ENDPOINTS } from "../../../api/ApiConstant";
-import { UserModel } from "../../../data/models/UserModel";
-import { saveToken, saveUserData } from "../../../Utils/StorageHelper";
 import { useLoader } from "../../../Utils/LoaderContext";
 
 const LoginScreen = ({ navigation }) => {
@@ -56,23 +47,10 @@ const LoginScreen = ({ navigation }) => {
   const loginUser = async (payload) => {
     try {
       setLoading(true);
-      const result = await handleApiResponse(() =>
-        apiClient.post(API_ENDPOINTS.LOGIN, payload)
-      );
-
+      const result = await loginUser(payload);
       if (result.success) {
-        console.log("success");
-        const user = UserModel.fromLoginResponse(result.data);
-        console.log(user.email);
-        await saveUserData(user); // Save in AsyncStorage
-
-        const token = result.data.token || result.data.data?.token;
-        console.log(token);
-        if (token) {
-          await saveToken(token); // store for later use
-        }
         Utils.showToast("Login Success!");
-        navigation.navigate("MainTabs"); // navigate after login
+        navigation.navigate("MainTabs");
       } else {
         Utils.showToast(result.message, "error");
       }

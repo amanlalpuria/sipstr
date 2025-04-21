@@ -1,23 +1,12 @@
 import React, { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  ScrollView,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import CommonButton from "../../../components/CommonButton";
 import CommonTextView from "../../../components/CommonTextView";
 import CommonTextField from "../../../components/CommonTextField";
 import CommonAppNameLabel from "../../../components/CommonAppNameLabel";
-import { globalStyles } from "../../../components/styles";
 import { colors } from "../../../components/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Utils from "../../../Utils/Utils";
-import { apiClient, handleApiResponse } from "../../../api/ApiHelper";
-import { API_ENDPOINTS } from "../../../api/ApiConstant";
-import { UserModel } from "../../../data/models/UserModel";
-import { saveUserData } from "../../../Utils/StorageHelper";
 import HeaderBar from "../../../components/HeaderBar";
 import { useLoader } from "../../../Utils/LoaderContext";
 
@@ -74,24 +63,17 @@ const SignUpScreen = ({ navigation }) => {
       roleEnum: "CUSTOMER",
       otpSignup: otpSignup,
     };
-    signUp(request, otpSignup);
+    signUp(request);
   };
 
-  const signUp = async (payload, otpSignup) => {
+  const signUp = async (payload) => {
     try {
       setLoading(true);
-      const result = await handleApiResponse(() =>
-        apiClient.post(API_ENDPOINTS.REGISTER, payload)
-      );
+      const result = await signUpUser(payload);
+      setLoading(false);
 
       if (result.success) {
-        const user = UserModel.fromSignUpResponse(result.data);
-        await saveUserData(user); // Save in AsyncStorage
-        if (otpSignup) {
-          navigation.navigate("VerifyOTP");
-        } else {
-          navigation.navigate("MainTabs");
-        }
+        navigation.navigate("VerifyOTP");
       } else {
         Utils.showToast(result.message, "error");
       }

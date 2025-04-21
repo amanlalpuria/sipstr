@@ -7,11 +7,7 @@ import CommonAppNameLabel from "../../../components/CommonAppNameLabel";
 import CommonTextField from "../../../components/CommonTextField";
 import Utils from "../../../Utils/Utils";
 import { colors } from "../../../components/colors";
-import { apiClient, handleApiResponse } from "../../../api/ApiHelper";
-import { API_ENDPOINTS } from "../../../api/ApiConstant";
-import { getUserData } from "../../../Utils/StorageHelper";
 import { useLoader } from "../../../Utils/LoaderContext";
-import { UserModel } from "../../../data/models/UserModel";
 
 const VerifyOTPScreen = ({ navigation }) => {
   const [otp, setOtp] = useState(["", "", "", ""]);
@@ -50,48 +46,26 @@ const VerifyOTPScreen = ({ navigation }) => {
   };
 
   const verifyOTP = async (otp) => {
-    var user = await getUserData();
-    const request = {
-      mobileNumber: user?.mobileNumber,
-      otp: otp,
-    };
     try {
       setLoading(true);
-      const result = await handleApiResponse(() =>
-        apiClient.post(API_ENDPOINTS.verifyOTP, request)
-      );
-
+      const result = await verifyOTP(otp);
       if (result.success) {
-        console.log("success");
-        const user = UserModel.fromVerifyOtpResponse(result.data);
-        console.log(user.email);
-        await saveUserData(user); // Save in AsyncStorage
-        const token = result.data.token || result.data.data?.token;
-        console.log(token);
-        if (token) {
-          await saveToken(token); // store for later use
-          navigation.navigate("MainTabs");
-        }
+        navigation.navigate("MainTabs");
       } else {
         Utils.showToast(result.message, "error");
       }
     } catch (error) {
+      console.log(error);
     } finally {
+      setLoading(false);
     }
   };
 
   const sendOTP = async () => {
     try {
       setLoading(true);
-      var user = await getUserData();
-      const request = {
-        phone: user?.mobileNumber,
-      };
-
-      const result = await handleApiResponse(() =>
-        apiClient.post(API_ENDPOINTS.SEND_OTP, request)
-      );
-
+      const result = await sendOTP();
+      setLoading(false);
       if (result.success) {
         Utils.showToast("OTP sent successfully!");
       } else {

@@ -39,22 +39,6 @@ const Utils = {
   isIOS: Platform.OS === "ios",
   isWeb: Platform.OS === "web",
 
-  // showToast: (msg) => {
-  //   if (Platform.OS === "web") {
-  //     Utils.showAlert(msg);
-  //   } else if (Platform.OS === "android") {
-  //     ToastAndroid.show(msg, ToastAndroid.SHORT); // Native fallback
-  //   } else {
-  //     Toast.show(msg, {
-  //       duration: Toast.durations.SHORT,
-  //       position: Toast.positions.BOTTOM,
-  //       shadow: true,
-  //       animation: true,
-  //       hideOnPress: true,
-  //       delay: 0,
-  //     });
-  //   }
-  // },
   showToast: (msg, type = "info") => {
     Toast.show({
       type,
