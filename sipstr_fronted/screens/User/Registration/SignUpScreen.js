@@ -61,7 +61,7 @@ const SignUpScreen = ({ navigation }) => {
       password: password,
       fullName: name,
       roleEnum: "CUSTOMER",
-      otpSignup: otpSignup,
+      valid: true,
       ...(email ? { email } : { mobileNumber }),
     };
     handleSignUp(request);
