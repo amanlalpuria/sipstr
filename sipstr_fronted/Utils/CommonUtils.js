@@ -1,19 +1,17 @@
-import { Alert, Keyboard, Platform, ToastAndroid } from "react-native";
+import { Platform, Alert, Keyboard } from "react-native";
 import NetInfo from "@react-native-community/netinfo";
 import Toast from "react-native-toast-message";
 import Swal from "sweetalert2";
 import { colors } from "../components/colors";
-import CustomToast from "../components/CustomToast ";
 
-const Utils = {
+const CommonUtils = {
   showAlert: (title = "SipStr", message, btnText = "OK") => {
     if (Platform.OS === "web") {
-      // Swal.fire(title, message);
       Swal.fire({
-        title: title,
+        title,
         text: message,
         confirmButtonColor: colors.orange,
-        confirmButtonText: "OK",
+        confirmButtonText: btnText,
         customClass: {
           title: "swal-title",
           popup: "swal-popup",
@@ -35,9 +33,9 @@ const Utils = {
     return state.isConnected;
   },
 
-  isAndroid: Platform.OS === "android",
-  isIOS: Platform.OS === "ios",
-  isWeb: Platform.OS === "web",
+  isAndroid: () => Platform.OS === "android",
+  isIOS: () => Platform.OS === "ios",
+  isWeb: () => Platform.OS === "web",
 
   showToast: (msg, type = "info") => {
     Toast.show({
@@ -48,14 +46,15 @@ const Utils = {
     });
   },
 
-  isEmailValid(email) {
+  isEmailValid: (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   },
-  isPhoneValid(phone) {
-    const phoneRegex = /^[0-9]{10}$/; // Modify as per format
+
+  isPhoneValid: (phone) => {
+    const phoneRegex = /^[0-9]{10}$/;
     return phoneRegex.test(phone);
   },
 };
 
-export default Utils;
+export default CommonUtils;

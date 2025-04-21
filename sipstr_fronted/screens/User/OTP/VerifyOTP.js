@@ -5,9 +5,10 @@ import CommonTextView from "../../../components/CommonTextView";
 import CommonButton from "../../../components/CommonButton";
 import CommonAppNameLabel from "../../../components/CommonAppNameLabel";
 import CommonTextField from "../../../components/CommonTextField";
-import Utils from "../../../Utils/Utils";
+import Utils from "../../../Utils/CommonUtils";
 import { colors } from "../../../components/colors";
 import { useLoader } from "../../../Utils/LoaderContext";
+import { sendOTP, verifyOTP } from "../../../viewmodels/userViewModel";
 
 const VerifyOTPScreen = ({ navigation }) => {
   const [otp, setOtp] = useState(["", "", "", ""]);
@@ -16,7 +17,7 @@ const VerifyOTPScreen = ({ navigation }) => {
 
   //calling sendOTP API on page load to send otp on user's mobile number
   useEffect(() => {
-    sendOTP();
+    handleSendOTP();
   }, []);
 
   const handleChange = (index, value) => {
@@ -42,10 +43,10 @@ const VerifyOTPScreen = ({ navigation }) => {
       Utils.showToast("Please enter the full 4-digit OTP", "error");
       return;
     }
-    verifyOTP(joinedOTP);
+    handleVerifyOTP(joinedOTP);
   };
 
-  const verifyOTP = async (otp) => {
+  const handleVerifyOTP = async (otp) => {
     try {
       setLoading(true);
       const result = await verifyOTP(otp);
@@ -61,7 +62,7 @@ const VerifyOTPScreen = ({ navigation }) => {
     }
   };
 
-  const sendOTP = async () => {
+  const handleSendOTP = async () => {
     try {
       setLoading(true);
       const result = await sendOTP();

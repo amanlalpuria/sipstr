@@ -1,12 +1,14 @@
 import axios from "axios";
-import Utils from "./Utils";
 import { getToken } from "../Utils/StorageHelper";
+import { isAndroid, isWeb } from "../Utils/CommonUtils";
 
-export const BASE_URL = Utils.isWeb
-  ? "http://localhost:8005/"
-  : Utils.isAndroid
-  ? "http://10.0.2.2:8080/"
-  : "http://192.168.40.39:8080/";
+// export const BASE_URL = isWeb
+//   ? "http://localhost:8080/"
+//   : isAndroid
+//   ? "http://10.0.2.2:8080/"
+//   : "http://192.168.40.39:8080/";
+
+export const BASE_URL = "http://localhost:8080/";
 
 const apiClient = axios.create({
   baseURL: BASE_URL,

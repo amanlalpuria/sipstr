@@ -6,8 +6,9 @@ import CommonTextField from "../../../components/CommonTextField";
 import CommonButton from "../../../components/CommonButton";
 import CommonAppNameLabel from "../../../components/CommonAppNameLabel";
 import { colors } from "../../../components/colors";
-import Utils from "../../../Utils/Utils";
+import Utils from "../../../Utils/CommonUtils";
 import { useLoader } from "../../../Utils/LoaderContext";
+import { loginUser } from "../../../viewmodels/userViewModel";
 
 const LoginScreen = ({ navigation }) => {
   const [emailPhoneInput, SetEmailPhoneInput] = useState("");
@@ -41,10 +42,10 @@ const LoginScreen = ({ navigation }) => {
       password: password,
     };
 
-    loginUser(loginRequest);
+    handleLogin(loginRequest);
   };
 
-  const loginUser = async (payload) => {
+  const handleLogin = async (payload) => {
     try {
       setLoading(true);
       const result = await loginUser(payload);

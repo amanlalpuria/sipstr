@@ -6,9 +6,10 @@ import CommonTextField from "../../../components/CommonTextField";
 import CommonAppNameLabel from "../../../components/CommonAppNameLabel";
 import { colors } from "../../../components/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Utils from "../../../Utils/Utils";
+import Utils from "../../../Utils/CommonUtils";
 import HeaderBar from "../../../components/HeaderBar";
 import { useLoader } from "../../../Utils/LoaderContext";
+import { signUpUser } from "../../../viewmodels/userViewModel";
 
 const SignUpScreen = ({ navigation }) => {
   const [nameInput, setNameInput] = useState("");
@@ -55,18 +56,18 @@ const SignUpScreen = ({ navigation }) => {
       Utils.showToast("Passwords do not match.", "error");
       return;
     }
+
     const request = {
-      email: email,
       password: password,
       fullName: name,
-      mobileNumber: mobileNumber,
       roleEnum: "CUSTOMER",
       otpSignup: otpSignup,
+      ...(email ? { email } : { mobileNumber }),
     };
-    signUp(request);
+    handleSignUp(request);
   };
 
-  const signUp = async (payload) => {
+  const handleSignUp = async (payload) => {
     try {
       setLoading(true);
       const result = await signUpUser(payload);

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
-import Utils from "../../../Utils/Utils";
+import Utils from "../../../Utils/CommonUtils";
 import CommonButton from "../../../components/CommonButton";
 import CommonTextField from "../../../components/CommonTextField";
 import CommonAppNameLabel from "../../../components/CommonAppNameLabel";
