@@ -32,9 +32,9 @@ public class StoreRegisterDTO {
     private String liquorLicenseUrl;
 
     // store timings and holidays
-    private Time weekendStartTime;
+    private Time weekendOpenTime;
     private Time weekendCloseTime;
-    private Time weekDaysStartTime;
+    private Time weekDaysOpenTime;
     private Time weekDaysCloseTime;
     private List<LocalDate> holidayDates;
 }

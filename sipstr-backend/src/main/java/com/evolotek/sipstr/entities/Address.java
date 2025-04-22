@@ -30,7 +30,7 @@ public class Address {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "address_type", nullable = false)
+    @Column(name = "address_type")
     private String addressType;
 
     @Column(name = "address1", nullable = false)

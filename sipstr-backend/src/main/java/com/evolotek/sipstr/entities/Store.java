@@ -1,7 +1,10 @@
 package com.evolotek.sipstr.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -31,10 +34,10 @@ public class Store {
     @Column(name = "corporation_name", nullable = false)
     private String corporationName;
 
-    @Column(name = "ein", nullable = false)
+    @Column(name = "ein", nullable = false, unique = true)
     private Long ein;
 
-    @Column(name = "license_number", nullable = false)
+    @Column(name = "license_number", nullable = false, unique = true    )
     private String licenseNumber;
 
     @Column(name = "liquor_license_url", nullable = false)
@@ -81,15 +84,19 @@ public class Store {
     @Column(name = "is_active")
     private Boolean isActive = true;
 
+    @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @LastModifiedDate
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<StoreOperatingHours> operatingHoursList;
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<StoreHolidayHours> holidayHoursList;
 }

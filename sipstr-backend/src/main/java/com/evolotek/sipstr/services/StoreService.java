@@ -7,9 +7,11 @@ import com.evolotek.sipstr.repositories.AddressRepository;
 import com.evolotek.sipstr.repositories.StoreInventoryRepository;
 import com.evolotek.sipstr.repositories.StoreRepository;
 import com.evolotek.sipstr.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -69,12 +71,19 @@ public class StoreService {
                 .owner(owner)
                 .isCurrentlyAcceptingOrders(true)
                 .isActive(true)
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
 
         // Map Operating Hours
         List<StoreOperatingHours> operatingHours = List.of(
-                new StoreOperatingHours(store, 0, dto.getWeekendStartTime(), dto.getWeekendCloseTime(), false),
-                new StoreOperatingHours(store, 1, dto.getWeekDaysStartTime(), dto.getWeekDaysCloseTime(), false)
+                new StoreOperatingHours(store, 0, dto.getWeekendOpenTime(), dto.getWeekendCloseTime(), false),
+                new StoreOperatingHours(store, 1, dto.getWeekDaysOpenTime(), dto.getWeekDaysCloseTime(), false),
+                new StoreOperatingHours(store, 2, dto.getWeekDaysOpenTime(), dto.getWeekDaysCloseTime(), false),
+                new StoreOperatingHours(store, 3, dto.getWeekDaysOpenTime(), dto.getWeekDaysCloseTime(), false),
+                new StoreOperatingHours(store, 4, dto.getWeekDaysOpenTime(), dto.getWeekDaysCloseTime(), false),
+                new StoreOperatingHours(store, 5, dto.getWeekendOpenTime(), dto.getWeekendCloseTime(), false),
+                new StoreOperatingHours(store, 6, dto.getWeekendOpenTime(), dto.getWeekendCloseTime(), false)
         );
 
         store.setOperatingHoursList(operatingHours);
@@ -127,11 +136,22 @@ public class StoreService {
                 .collect(Collectors.toList());
     }*/
 
-    public void deleteStore(UUID uuid) {
-        Store store = storeRepository.findByUuid(uuid)
-                .orElseThrow(() -> new ResourceNotFoundException("Store not found with UUID: " + uuid));
-        storeRepository.delete(store);
+    @Transactional
+    public void deleteStoreByUuid(UUID storeUuid) {
+        Store store = storeRepository.findByUuid(storeUuid)
+                .orElseThrow(() -> new EntityNotFoundException("Store not found with UUID: " + storeUuid));
+
+        Long storeId = store.getStoreId();
+
+        List<StoreInventory> inventoryList = storeInventoryRepository.findByStore_StoreId(storeId);
+
+        if (!inventoryList.isEmpty()) {
+            storeInventoryRepository.deleteAllByStoreId(storeId);
+        }
+
+        storeRepository.deleteById(storeId);
     }
+
 
     // ✅ Haversine Formula for Distance Calculation
     private double calculateDistance(Double lat1, Double lon1, Double lat2, Double lon2) {
