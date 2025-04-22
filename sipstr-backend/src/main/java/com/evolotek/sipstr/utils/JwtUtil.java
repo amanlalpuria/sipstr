@@ -21,6 +21,6 @@ public class JwtUtil {
         }
 
         token = token.substring(7); // Remove "Bearer " prefix
-        return jwtService.extractClaim(token, claims -> claims.get("user_id", String.class));
+        return jwtService.extractClaim(token, claims -> claims.get("uuid", String.class));
     }
 }

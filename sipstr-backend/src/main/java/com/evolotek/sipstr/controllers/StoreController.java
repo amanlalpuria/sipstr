@@ -32,7 +32,7 @@ public class StoreController {
             @ApiResponse(responseCode = "403", description = "Access denied (Only SUPPLIER users can create stores)")
     })
     @PostMapping
-    @PreAuthorize("hasRole('STORE_ADMIN')")
+    @PreAuthorize("hasRole('STORE_OWNER')")
     public ResponseEntity<Store> registerStore(@RequestHeader("Authorization") String token, @RequestBody StoreRegisterDTO store) {
 
         String userId = jwtUtil.extractUserId(token);

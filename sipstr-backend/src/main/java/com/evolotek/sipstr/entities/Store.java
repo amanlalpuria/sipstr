@@ -32,7 +32,7 @@ public class Store {
     private String corporationName;
 
     @Column(name = "ein", nullable = false)
-    private Long ein;
+    private Integer ein;
 
     @Column(name = "license_number", nullable = false)
     private String licenseNumber;

@@ -1,9 +1,10 @@
 package com.evolotek.sipstr.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
-import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -14,7 +15,7 @@ import java.util.List;
 public class StoreRegisterDTO {
     private String storeName;
     private String corporationName;
-    private Long ein;
+    private Integer ein;
     private String licenseNumber;
     private String description;
     private String storeEmail;
@@ -32,9 +33,13 @@ public class StoreRegisterDTO {
     private String liquorLicenseUrl;
 
     // store timings and holidays
-    private Time weekendStartTime;
-    private Time weekendCloseTime;
-    private Time weekDaysStartTime;
-    private Time weekDaysCloseTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    private LocalTime weekendStartTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    private LocalTime weekendCloseTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    private LocalTime weekDaysStartTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    private LocalTime  weekDaysCloseTime;
     private List<LocalDate> holidayDates;
 }

@@ -9,7 +9,7 @@ import com.evolotek.sipstr.repositories.StoreRepository;
 import com.evolotek.sipstr.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -50,6 +50,7 @@ public class StoreService {
                 .zipcode(dto.getZipcode())
                 .country(dto.getCountry())
                 .user(owner)
+                .addressType("")
                 .build();
 
         address = addressRepository.save(address);
@@ -69,6 +70,7 @@ public class StoreService {
                 .owner(owner)
                 .isCurrentlyAcceptingOrders(true)
                 .isActive(true)
+                .createdAt(LocalDateTime.now()) // current time
                 .build();
 
         // Map Operating Hours
