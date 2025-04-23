@@ -27,8 +27,6 @@ const SignUpScreen = ({ navigation }) => {
     var email = "";
     var mobileNumber = "";
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/;
-
     if (!name || !emailOrPhone || !password || !confirmPwd) {
       Utils.showToast("All fields are required.", "error");
       return;
@@ -44,7 +42,7 @@ const SignUpScreen = ({ navigation }) => {
       return;
     }
 
-    if (!passwordRegex.test(password)) {
+    if (!Utils.isPasswordValid(password)) {
       Utils.showToast(
         "Password must include uppercase, lowercase, digit & special char.",
         "error"

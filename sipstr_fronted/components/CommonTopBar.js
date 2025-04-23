@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Image } from "react-native";
 import CommonTextView from "./CommonTextView";
 import CommonAppNameLabel from "./CommonAppNameLabel";
 import { Ionicons, Feather } from "@expo/vector-icons";

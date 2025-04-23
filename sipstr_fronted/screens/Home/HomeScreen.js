@@ -18,10 +18,7 @@ import { openSettings } from "expo-linking";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../../components/colors";
 
-export default function HomeScreen({
-  navigation,
-  onProductDetailsPress = () => {},
-}) {
+export default function HomeScreen({ navigation }) {
   const [activeCategory, setActiveCategory] = useState("all");
   const [city, setCity] = useState("Loading...");
   const [showLocation, setShowLocation] = useState(true);

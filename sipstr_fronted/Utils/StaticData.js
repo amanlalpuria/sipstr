@@ -73,3 +73,25 @@ export const topPicksData = [
     image: "https://via.placeholder.com/70x130.png?text=Kingfisher",
   },
 ];
+
+export const savedAddresses = [
+  {
+    id: "1",
+    type: "home",
+    label: "Home",
+    address: "123, Main Street, Apt 4B New York, NY 10001",
+    isPrimary: true,
+  },
+  {
+    id: "2",
+    type: "work",
+    label: "Work",
+    address: "143 Starbridge Drive, Piscataway, NJ 08867, USA",
+  },
+  {
+    id: "3",
+    type: "other",
+    label: "Sturbridge Drive",
+    address: "28 Glenview Drive, Edison, NJ 08854, USA",
+  },
+];

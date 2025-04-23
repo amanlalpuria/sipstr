@@ -76,4 +76,19 @@ export class UserModel {
       expiresIn: data.expiresIn,
     });
   }
+  static fromGetMyProfileResponse(data) {
+    return new UserModel({
+      userId: data.userId,
+      name: data.name,
+      email: data.email,
+      mobileNumber: data.mobileNumber,
+      isActive: data.isActive,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
+      username: data.username,
+      role: data.role,
+      uuid: data.uuid,
+      username: data.username,
+    });
+  }
 }

@@ -6,70 +6,81 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
-  Image,
+  FlatList,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../../../components/colors";
-import { globalStyles } from "../../../components/styles";
+import CommonUtils from "../../../Utils/CommonUtils";
+import HeaderBar from "../../../components/HeaderBar";
+import CommonTextView from "../../../components/CommonTextView";
+import { savedAddresses } from "../../../Utils/StaticData";
+import CommonTextField from "../../../components/CommonTextField";
 
 const AddressesScreen = ({ navigation }) => {
-  // State for search input
   const [searchText, setSearchText] = useState("");
 
-  // Mock data for saved addresses
-  const savedAddresses = [
-    {
-      id: "1",
-      type: "home",
-      label: "Home",
-      address: "123, Main Street, Apt 4B New York, NY 10001",
-      isPrimary: true,
-    },
-  ];
+  const homeAddress = savedAddresses.find((addr) => addr.type === "home");
+  const otherAddresses = savedAddresses.filter((addr) => addr.type !== "home");
 
-  // Handle navigation back to the account screen
-  const handleBack = () => {
-    navigation.goBack();
-  };
-
-  // Handle adding a new address label
   const handleAddLabel = () => {
-    console.log("Add new address label");
-    // Implementation for adding a new address would go here
+    CommonUtils.showToast("Add New Address clicked");
   };
 
-  // Handle using current location
-  const handleUseCurrentLocation = () => {
-    console.log("Use current location");
-    // Implementation for using current location would go here
-  };
-
-  // Handle editing an address
   const handleEditAddress = (id) => {
-    console.log(`Edit address with id: ${id}`);
-    // Implementation for editing an address would go here
+    CommonUtils.showToast(`Edit address with ID: ${id}`);
   };
+
+  const renderAddressItem = (item) => (
+    <TouchableOpacity
+      key={item.id}
+      style={[
+        styles.addressItem,
+        item.type === "home" && styles.selectedAddress,
+      ]}
+    >
+      <View style={styles.addressLeft}>
+        <View style={styles.addressIconContainer}>
+          <Ionicons
+            name={item.type === "home" ? "home" : "location-outline"}
+            size={20}
+            color={colors.orange}
+          />
+        </View>
+        <View style={styles.addressDetails}>
+          <CommonTextView style={styles.addressLabel}>
+            {item.label}
+          </CommonTextView>
+          <CommonTextView style={styles.addressText}>
+            {item.address}
+          </CommonTextView>
+        </View>
+      </View>
+      <TouchableOpacity onPress={() => handleEditAddress(item.id)}>
+        <Ionicons name="pencil" size={20} color={colors.orange} />
+      </TouchableOpacity>
+    </TouchableOpacity>
+  );
 
   return (
-    <View style={styles.container}>
-      <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
-      
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Addresses</Text>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="close" size={24} color="#000" />
-        </TouchableOpacity>
-      </View>
+    <SafeAreaView style={styles.container}>
+      <HeaderBar navigation={navigation} title="Addresses" />
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Search Bar */}
-        <View style={styles.searchContainer}>
-          <Ionicons name="search-outline" size={20} color="#666" />
-          <TextInput
+        <View style={styles.searchWrapper}>
+          <Ionicons
+            name="search-outline"
+            size={18}
+            color="#666"
+            style={styles.searchIcon}
+          />
+          <CommonTextField
             style={styles.searchInput}
             placeholder="Search for an address"
             placeholderTextColor="#666"
+            value={searchText}
+            onChangeText={setSearchText}
           />
         </View>
 
@@ -78,105 +89,114 @@ const AddressesScreen = ({ navigation }) => {
           <View style={styles.labelRow}>
             <TouchableOpacity style={styles.labelButton}>
               <Ionicons name="home-outline" size={20} color="#000" />
-              <Text style={styles.labelText}>Home</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity style={styles.labelButton}>
-              <Ionicons name="business-outline" size={20} color="#000" />
-              <Text style={styles.labelText}>Work</Text>
+              <CommonTextView style={styles.labelText}>Home</CommonTextView>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.addLabelButton}>
-              <Text style={styles.addLabelText}>+ Add Label</Text>
+            <TouchableOpacity style={styles.labelButton}>
+              <Ionicons name="business-outline" size={20} color="#000" />
+              <CommonTextView style={styles.labelText}>Work</CommonTextView>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.addLabelButton}
+              onPress={handleAddLabel}
+            >
+              <CommonTextView style={styles.addLabelText}>
+                + Add Label
+              </CommonTextView>
             </TouchableOpacity>
           </View>
         </View>
 
         {/* Explore Nearby */}
         <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Explore Nearby</Text>
+          <CommonTextView style={styles.sectionTitle}>
+            Explore Nearby
+          </CommonTextView>
           <TouchableOpacity style={styles.currentLocationButton}>
             <Ionicons name="locate-outline" size={22} color="#000" />
             <View>
-              <Text style={styles.currentLocationText}>Use current location</Text>
-              <Text style={styles.locationSubtext}>Auto fill your address here</Text>
+              <CommonTextView style={styles.currentLocationText}>
+                Use current location
+              </CommonTextView>
+              <CommonTextView style={styles.locationSubtext}>
+                Add your address later
+              </CommonTextView>
             </View>
           </TouchableOpacity>
         </View>
 
         {/* Saved Addresses */}
         <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Saved Address</Text>
-          
-          {/* Home Address */}
-          <TouchableOpacity style={[styles.addressItem, styles.selectedAddress]}>
-            <View style={styles.addressLeft}>
-              <View style={styles.addressIconContainer}>
-                <Ionicons name="home" size={20} color="#F86E1E" />
-              </View>
-              <View style={styles.addressDetails}>
-                <Text style={styles.addressLabel}>Home</Text>
-                <Text style={styles.addressText}>123, Main Street, Apt 4B New York, NY 10001</Text>
-              </View>
-            </View>
-            <TouchableOpacity>
-              <Ionicons name="pencil" size={20} color="#F86E1E" />
-            </TouchableOpacity>
-          </TouchableOpacity>
+          <CommonTextView style={styles.sectionTitle}>
+            Saved Address
+          </CommonTextView>
+
+          {homeAddress && renderAddressItem(homeAddress)}
+
+          <FlatList
+            data={otherAddresses}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => renderAddressItem(item)}
+            scrollEnabled={false}
+          />
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 50,
-    paddingBottom: 20,
-    backgroundColor: '#FFFFFF',
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontFamily: 'Poppins-SemiBold',
-    color: '#000000',
+    backgroundColor: colors.white,
+    padding: "10",
   },
   searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F5F5F5',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F5F5F5",
     marginHorizontal: 20,
+    marginTop: 16,
     marginBottom: 20,
     paddingHorizontal: 15,
     paddingVertical: 12,
     borderRadius: 8,
   },
+  searchWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F5F5F5", // or whatever light gray you want
+    paddingHorizontal: 12,
+    borderRadius: 24,
+    marginHorizontal: 20,
+    marginTop: 16,
+    marginBottom: 20,
+  },
+
+  searchIcon: {
+    marginRight: 8,
+  },
+
   searchInput: {
     flex: 1,
-    marginLeft: 10,
     fontSize: 15,
-    fontFamily: 'Poppins-Regular',
-    color: '#000',
+    fontFamily: "Poppins-Regular",
+    color: colors.black,
+    paddingVertical: 10,
   },
   labelsContainer: {
     paddingHorizontal: 20,
     marginBottom: 20,
   },
   labelRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   labelButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F5F5F5',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F5F5F5",
     paddingHorizontal: 15,
     paddingVertical: 8,
     borderRadius: 20,
@@ -185,19 +205,19 @@ const styles = StyleSheet.create({
   labelText: {
     marginLeft: 5,
     fontSize: 14,
-    fontFamily: 'Poppins-Regular',
-    color: '#000',
+    fontFamily: "Poppins-Regular",
+    color: "#000",
   },
   addLabelButton: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
     paddingHorizontal: 15,
     paddingVertical: 8,
     borderRadius: 20,
   },
   addLabelText: {
     fontSize: 14,
-    fontFamily: 'Poppins-Regular',
-    color: '#000',
+    fontFamily: "Poppins-Regular",
+    color: "#000",
   },
   sectionContainer: {
     paddingHorizontal: 20,
@@ -205,49 +225,48 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    fontFamily: 'Poppins-SemiBold',
-    color: '#000',
+    fontFamily: "Poppins-SemiBold",
+    color: "#000",
     marginBottom: 10,
   },
   currentLocationButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 12,
+    gap: 12,
   },
   currentLocationText: {
     fontSize: 15,
-    fontFamily: 'Poppins-Regular',
-    color: '#000',
-    marginLeft: 12,
+    fontFamily: "Poppins-Regular",
+    color: "#000",
   },
   locationSubtext: {
     fontSize: 13,
-    fontFamily: 'Poppins-Regular',
-    color: '#666',
-    marginLeft: 12,
+    fontFamily: "Poppins-Regular",
+    color: "#666",
   },
   addressItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: 15,
     borderRadius: 8,
     marginBottom: 10,
   },
   selectedAddress: {
-    backgroundColor: '#FFF5F0',
+    backgroundColor: "#FFF5F0",
   },
   addressLeft: {
-    flexDirection: 'row',
+    flexDirection: "row",
     flex: 1,
   },
   addressIconContainer: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#FFFFFF',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#FFFFFF",
+    justifyContent: "center",
+    alignItems: "center",
     marginRight: 12,
   },
   addressDetails: {
@@ -255,14 +274,14 @@ const styles = StyleSheet.create({
   },
   addressLabel: {
     fontSize: 15,
-    fontFamily: 'Poppins-SemiBold',
-    color: '#000',
+    fontFamily: "Poppins-SemiBold",
+    color: "#000",
     marginBottom: 2,
   },
   addressText: {
     fontSize: 13,
-    fontFamily: 'Poppins-Regular',
-    color: '#666',
+    fontFamily: "Poppins-Regular",
+    color: "#666",
   },
 });
 

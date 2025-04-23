@@ -13,6 +13,7 @@ const BottomTabs = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+        lazy: true,
         tabBarActiveTintColor: colors.orange,
         tabBarInactiveTintColor: "#666",
         headerShown: false,

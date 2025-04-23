@@ -1,149 +1,153 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
-  StatusBar,
   Image,
   ScrollView,
+  StatusBar,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { colors } from "../../../components/colors";
-import { globalStyles } from "../../../components/styles";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { getUserData, clearStorage } from "../../../Utils/StorageHelper";
 import CommonTwoButtonAlertBox from "../../../components/CommonTwoButtonAlertBox";
+import CommonUtils from "../../../Utils/CommonUtils";
+import { colors } from "../../../components/colors";
+import CommonTextView from "../../../components/CommonTextView";
 
 const AccountSettings = ({ navigation }) => {
-  // States
+  const [userData, setUserData] = useState({});
   const [showSignOutAlert, setShowSignOutAlert] = useState(false);
 
-  // Mock user data
-  const userData = {
-    name: "Name",
-    phone: "+1 (505) ***-***",
-  };
+  useEffect(() => {
+    const fetchUser = async () => {
+      const user = await getUserData();
+      setUserData(user);
+    };
+    fetchUser();
+  }, []);
 
-  // Navigation functions
-  const goToHome = () => navigation.navigate("Home");
-  const goToOrders = () => navigation.navigate("MyOrders");
-
-  // Sign out handler
-  const handleSignOut = () => {
-    setShowSignOutAlert(false);
-    // Handle sign out logic here
-    // This is where you would clear user data, tokens, etc.
-    navigation.navigate("Welcome");
-  };
-
-  // Menu option handler
   const handleOptionPress = (option) => {
-    // For demonstration purposes, we'll just log the option
-    console.log(`Selected option: ${option}`);
-
-    // Here you would implement navigation to respective screens
     switch (option) {
       case "address":
         navigation.navigate("Addresses");
         break;
       case "wishlist":
-        // navigation.navigate('WishList');
-        break;
       case "security":
-        // navigation.navigate('Security');
-        break;
       case "referral":
-        // navigation.navigate('ReferralCode');
-        break;
       case "faq":
-        // navigation.navigate('FAQ');
-        break;
       case "rate":
-        // Open app rating
+        CommonUtils.showToast(`${option} clicked`);
         break;
       case "signout":
         setShowSignOutAlert(true);
         break;
-      default:
-        break;
     }
   };
 
-  const renderMenuItem = (icon, title, onPress, hasEditButton = false) => (
+  const handleSignOut = async () => {
+    setShowSignOutAlert(false);
+    await clearStorage();
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Welcome" }],
+    });
+  };
+
+  const LinkRow = ({ icon, label, onPress, isLast = false }) => (
     <TouchableOpacity
-      style={styles.menuItem}
-      activeOpacity={0.7}
+      style={[styles.linkRow, !isLast && styles.linkRowDivider]}
       onPress={onPress}
     >
-      <View style={styles.menuItemLeft}>
-        <Ionicons name={icon} size={22} color="#333" style={styles.menuIcon} />
-        <Text style={styles.menuText}>{title}</Text>
-      </View>
-      {hasEditButton && (
-        <Text style={styles.editButton}>Edit</Text>
-      )}
+      <Ionicons name={icon} size={20} color="#333" style={styles.menuIcon} />
+      <CommonTextView style={styles.menuText}>{label}</CommonTextView>
     </TouchableOpacity>
   );
 
   return (
-    <View style={styles.container}>
-      <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
-
+    <SafeAreaView style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Text style={styles.header}>My Profile</Text>
+        <CommonTextView style={styles.header}>My Profile</CommonTextView>
 
-        {/* User Info Section */}
-        <View style={styles.userInfoContainer}>
-          <View style={styles.userInfoRow}>
-            <View style={styles.iconContainer}>
-              <Ionicons name="person-outline" size={28} color="#333" />
-            </View>
-            <View style={styles.userTextContainer}>
-              <Text style={styles.userName}>Name</Text>
-              <Text style={styles.userPhone}>{userData.phone}</Text>
-            </View>
+        {/* Profile Info */}
+        <View style={styles.profileCard}>
+          <Image
+            source={require("../../../assets/images/profile_placeholder.png")}
+            style={styles.avatar}
+          />
+          <View style={styles.profileInfo}>
+            <CommonTextView style={styles.userName}>
+              {userData?.name || "Name"}
+            </CommonTextView>
+            <CommonTextView style={styles.userPhone}>
+              {userData?.email
+                ? userData.email
+                : userData?.mobileNumber
+                ? `+1 ${userData.mobileNumber}`
+                : "+1 (xxx) xxx-xxxx"}
+            </CommonTextView>
           </View>
           <TouchableOpacity>
-            <Ionicons name="pencil" size={20} color="#F86E1E" />
+            <Ionicons name="pencil" size={20} color={colors.orange} />
           </TouchableOpacity>
         </View>
 
-        {/* Menu Items */}
-        {renderMenuItem("location-outline", "Delivery address", () =>
-          handleOptionPress("address")
-        )}
-        {renderMenuItem("heart-outline", "Wish List", () =>
-          handleOptionPress("wishlist")
-        )}
-        {renderMenuItem("shield-outline", "Security", () =>
-          handleOptionPress("security")
-        )}
+        <View style={styles.cardGroup}>
+          <LinkRow
+            icon="location-outline"
+            label="Delivery address"
+            onPress={() => handleOptionPress("address")}
+          />
+          <LinkRow
+            icon="heart-outline"
+            label="Wish List"
+            onPress={() => handleOptionPress("wishlist")}
+          />
+          <LinkRow
+            icon="shield-outline"
+            label="Security"
+            onPress={() => handleOptionPress("security")}
+            isLast
+          />
+        </View>
 
-        {/* Referral Code Section */}
-        {renderMenuItem("gift-outline", "Referral code", () =>
-          handleOptionPress("referral")
-        )}
+        <View style={styles.cardGroup}>
+          <LinkRow
+            icon="gift-outline"
+            label="Referral code"
+            onPress={() => handleOptionPress("referral")}
+            isLast
+          />
+        </View>
 
-        {renderMenuItem("help-circle-outline", "FAQ", () =>
-          handleOptionPress("faq")
-        )}
-        {renderMenuItem("star-outline", "Rate our Application", () =>
-          handleOptionPress("rate")
-        )}
+        {/* Group 3: FAQ / Rate App */}
+        <View style={styles.cardGroup}>
+          <LinkRow
+            icon="help-circle-outline"
+            label="FAQ"
+            onPress={() => handleOptionPress("faq")}
+          />
+          <LinkRow
+            icon="star-outline"
+            label="Rate our Application"
+            onPress={() => handleOptionPress("rate")}
+            isLast
+          />
+        </View>
 
-        {/* Log Out Button */}
+        {/* Log Out */}
         <TouchableOpacity
-          style={styles.logOutButton}
-          activeOpacity={0.7}
+          style={styles.logoutButton}
           onPress={() => handleOptionPress("signout")}
         >
-          <View style={styles.logOutContent}>
-            <Ionicons name="log-out-outline" size={22} color="#FFFFFF" />
-            <Text style={styles.logOutText}>Log out</Text>
+          <View style={styles.logoutContent}>
+            <Ionicons name="log-out-outline" size={20} color={colors.white} />
+            <CommonTextView style={styles.logoutText}>Log out</CommonTextView>
           </View>
         </TouchableOpacity>
       </ScrollView>
 
-      {/* Sign Out Confirmation Alert */}
+      {/* Alert */}
       <CommonTwoButtonAlertBox
         visible={showSignOutAlert}
         title="Sign Out"
@@ -153,140 +157,117 @@ const AccountSettings = ({ navigation }) => {
         onConfirm={handleSignOut}
         onCancel={() => setShowSignOutAlert(false)}
       />
-    </View>
+    </SafeAreaView>
   );
 };
+
+// 🔁 Reusable row
+const LinkRow = ({ icon, label, onPress }) => (
+  <TouchableOpacity style={styles.linkRow} onPress={onPress}>
+    <Ionicons name={icon} size={20} color="#333" style={styles.menuIcon} />
+    <CommonTextView style={styles.menuText}>{label}</CommonTextView>
+  </TouchableOpacity>
+);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.white,
   },
   header: {
-    fontSize: 24,
+    fontSize: 32,
     fontFamily: "Poppins-SemiBold",
     textAlign: "center",
-    marginTop: 50,
+    marginTop: 40,
     marginBottom: 20,
-    color: "#000000",
   },
-  userInfoContainer: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 12,
-    padding: 15,
-    marginHorizontal: 20,
-    marginBottom: 15,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  userInfoRow: {
+  profileCard: {
     flexDirection: "row",
     alignItems: "center",
+    backgroundColor: colors.white,
+    borderRadius: 8,
+    elevation: 4, // Android shadow
+    shadowColor: colors.black, // iOS shadow
+    shadowOffset: { width: 0, height: 2 }, // iOS shadow
+    shadowOpacity: 0.2, // iOS shadow
+    shadowRadius: 2, // iOS shadow
+    margin: 10,
+    padding: 16,
   },
-  iconContainer: {
-    width: 45,
-    height: 45,
-    borderRadius: 22.5,
-    backgroundColor: "#F0F0F0",
-    justifyContent: "center",
-    alignItems: "center",
+  avatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     marginRight: 12,
   },
-  userTextContainer: {
-    justifyContent: "center",
+  profileInfo: {
+    flex: 1,
   },
   userName: {
     fontSize: 16,
-    fontFamily: "Poppins-SemiBold",
-    color: "#333333",
+    fontFamily: "Poppins-Bold",
   },
   userPhone: {
     fontSize: 14,
     fontFamily: "Poppins-Regular",
-    color: "#777777",
+    color: "#888",
+    marginTop: 2,
   },
-  editButton: {
-    color: "#333333",
-    fontSize: 14,
-    fontFamily: "Poppins-Regular",
-  },
-  menuItem: {
-    backgroundColor: "#FFFFFF",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 15,
-    paddingHorizontal: 20,
+
+  cardGroup: {
+    //backgroundColor: "#fff",
+    borderRadius: 12,
     marginHorizontal: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#F5F5F5",
+    marginBottom: 16,
+    paddingVertical: 4,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
   },
-  menuItemLeft: {
+
+  linkRow: {
     flexDirection: "row",
     alignItems: "center",
+    paddingVertical: 14,
+    paddingHorizontal: 16,
   },
+
+  linkRowDivider: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#5B5B5B",
+  },
+
   menuIcon: {
     marginRight: 12,
     width: 24,
   },
+
   menuText: {
     fontSize: 15,
-    fontFamily: "Poppins-Regular",
-    color: "#333333",
+    fontFamily: "Poppins-Medium",
+    color: "#333",
   },
-  logOutButton: {
-    backgroundColor: "#F86E1E",
+
+  logoutButton: {
+    backgroundColor: colors.orange,
+    borderRadius: 10,
     marginHorizontal: 20,
-    marginTop: 20,
-    marginBottom: 20,
-    borderRadius: 8,
-    padding: 15,
+    paddingVertical: 14,
+    marginTop: 10,
+    marginBottom: 30,
   },
-  logOutContent: {
+  logoutContent: {
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "center",
+    alignItems: "center",
   },
-  logOutText: {
-    color: "#FFFFFF",
+  logoutText: {
+    color: colors.white,
     fontSize: 16,
     fontFamily: "Poppins-Regular",
     marginLeft: 8,
-  },
-  bottomTabBar: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    backgroundColor: "#FFFFFF",
-    borderTopWidth: 1,
-    borderColor: "#EEE",
-    paddingTop: 10,
-    paddingBottom: 20,
-  },
-  tabItem: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  tabItemActive: {
-    fontSize: 12,
-    fontFamily: "Poppins-SemiBold",
-    color: colors.orange,
-    marginTop: 2,
-  },
-  tabItemLabel: {
-    fontSize: 12,
-    fontFamily: "Poppins-Regular",
-    color: "#333",
-    marginTop: 2,
   },
 });
 

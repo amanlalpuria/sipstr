@@ -10,7 +10,10 @@ export default function App() {
   const [fontsLoaded] = useFonts({
     "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
     "Poppins-SemiBold": require("./assets/fonts/Poppins-SemiBold.ttf"),
+    "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
+    "Poppins-Medium": require("./assets/fonts/Poppins-Medium.ttf"),
     "ReggaeOne-Regular": require("./assets/fonts/ReggaeOne-Regular.ttf"),
+
     "ArefRuqaaInk-Bold": require("./assets/fonts/ArefRuqaaInk-Bold.ttf"),
     "ArefRuqaaInk-Regular": require("./assets/fonts/ArefRuqaaInk-Regular.ttf"),
   });

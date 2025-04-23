@@ -84,7 +84,7 @@ export const alertStyles = StyleSheet.create({
   },
   title: {
     fontFamily: "Poppins-Bold",
-    fontSize: 22,
+    fontSize: 24,
     color: colors.black,
     marginBottom: 10,
   },

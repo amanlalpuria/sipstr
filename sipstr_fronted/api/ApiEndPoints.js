@@ -3,4 +3,5 @@ export const API_ENDPOINTS = {
   REGISTER: "auth/signup",
   OTP_VERIFY: "auth/otp/verify",
   OTP_SEND: "auth/otp/send",
+  GET_MY_PROFILE: "/users/me",
 };
