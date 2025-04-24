@@ -1,5 +1,6 @@
 package com.evolotek.sipstr.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ public class StoreOperatingHours {
 
     @ManyToOne
     @JoinColumn(name = "store_id", nullable = false)
+    @JsonBackReference
     private Store store;
 
     @Column(name = "day_of_week", nullable = false)
