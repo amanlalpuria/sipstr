@@ -87,7 +87,7 @@ const AccountSettings = ({ navigation }) => {
                 : "+1 (xxx) xxx-xxxx"}
             </CommonTextView>
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("UserProfile")}>
             <Ionicons name="pencil" size={20} color={colors.orange} />
           </TouchableOpacity>
         </View>

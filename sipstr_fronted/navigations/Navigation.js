@@ -13,6 +13,7 @@ import AccountSettings from "../screens/User/AccountSettings/AccountSettings";
 import CategoriesScreen from "../screens/Products/CategoriesScreen";
 import VerifyOTPScreen from "../screens/User/OTP/VerifyOTP";
 import CartScreen from "../screens/Cart/CartScreen";
+import UserProfile from "../screens/User/Profile/UserProfile";
 
 const Stack = createStackNavigator();
 
@@ -31,6 +32,7 @@ const AppNavigator = () => {
         <Stack.Screen name="Categories" component={CategoriesScreen} />
         <Stack.Screen name="VerifyOTP" component={VerifyOTPScreen} />
         <Stack.Screen name="Cart" component={CartScreen} />
+        <Stack.Screen name="UserProfile" component={UserProfile} />
 
         {/* Bottom Tab Container */}
         <Stack.Screen name="MainTabs" component={BottomTabs} />

@@ -68,17 +68,17 @@ const AddressesScreen = ({ navigation }) => {
 
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Search Bar */}
-        <View style={styles.searchWrapper}>
+        <View style={styles.searchContainer}>
           <Ionicons
             name="search-outline"
-            size={18}
-            color="#666"
+            size={20}
+            color="#888"
             style={styles.searchIcon}
           />
-          <CommonTextField
+          <TextInput
             style={styles.searchInput}
-            placeholder="Search for an address"
-            placeholderTextColor="#666"
+            placeholder="Search"
+            placeholderTextColor="#888"
             value={searchText}
             onChangeText={setSearchText}
           />
@@ -152,38 +152,31 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     padding: "10",
   },
+  innerContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#F5F5F5",
-    marginHorizontal: 20,
-    marginTop: 16,
-    marginBottom: 20,
+    borderRadius: 25,
     paddingHorizontal: 15,
-    paddingVertical: 12,
-    borderRadius: 8,
-  },
-  searchWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#F5F5F5", // or whatever light gray you want
-    paddingHorizontal: 12,
-    borderRadius: 24,
+    height: 48,
     marginHorizontal: 20,
-    marginTop: 16,
-    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
   },
 
   searchIcon: {
-    marginRight: 8,
+    marginRight: 10,
   },
 
   searchInput: {
     flex: 1,
-    fontSize: 15,
+    fontSize: 14,
     fontFamily: "Poppins-Regular",
-    color: colors.black,
-    paddingVertical: 10,
+    color: "#000",
   },
   labelsContainer: {
     paddingHorizontal: 20,

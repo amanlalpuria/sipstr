@@ -15,7 +15,7 @@ export const loginUser = async (request) => {
       //after saving token, call getMyProfile api to get loggedIn user's data to save in storage
       const profileResult = await handleApiResponse(() => api.getMyProfile());
       if (profileResult.success) {
-        const user = UserModel.fromGetMyProfileResponse(profileResult.data);
+        const user = UserModel.fromProfileResponse(profileResult.data);
         console.log(user.email);
         await saveUserData(user);
       }
@@ -87,7 +87,7 @@ export const getMyProfile = async () => {
   const result = await handleApiResponse(() => api.getMyProfile());
 
   if (result.success) {
-    const user = result.data;
+    const user = UserModel.fromProfileResponse(result.data);
     await saveUserData(user);
     return { success: true, user };
   } else {

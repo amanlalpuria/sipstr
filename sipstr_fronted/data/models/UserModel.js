@@ -1,94 +1,92 @@
 export class UserModel {
   constructor({
-    expiresIn = 0,
-    userId = null,
-    name = "",
+    id = null,
+    uuid = "",
+    fullName = "",
     email = "",
     mobileNumber = "",
     isActive = false,
-    username = "",
+    emailVerified = false,
+    mobileVerified = false,
+    accountStatus = "",
     role = null,
     createdAt = null,
     updatedAt = null,
-    uuid = "",
+    expiresIn = 0,
   }) {
-    this.expiresIn = expiresIn;
-    this.userId = userId;
-    this.name = name;
+    this.id = id;
+    this.uuid = uuid;
+    this.fullName = fullName;
     this.email = email;
     this.mobileNumber = mobileNumber;
     this.isActive = isActive;
-    this.username = username;
+    this.emailVerified = emailVerified;
+    this.mobileVerified = mobileVerified;
+    this.accountStatus = accountStatus;
     this.role = role;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
-    this.uuid = uuid;
+    this.expiresIn = expiresIn;
   }
 
-  // Static method to create model from Login response
-  static fromLoginResponse(data) {
+  static fromSignUpResponse(data) {
     return new UserModel({
-      userId: data.userId,
+      id: data.id,
+      uuid: data.uuid,
+      fullName: data.fullName,
       email: data.email,
       mobileNumber: data.mobileNumber,
-      isActive: data.isActive,
+      emailVerified: data.emailVerified,
+      mobileVerified: data.mobileVerified,
+      accountStatus: data.accountStatus,
+      role: data.role?.name ?? null,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
     });
   }
 
-  // Static method to create model from SignUp response
-  static fromSignUpResponse(data) {
+  static fromVerifyOtpResponse(data) {
     return new UserModel({
-      userId: data.userId,
-      name: data.name,
+      id: data.id,
+      uuid: data.uuid,
       email: data.email,
       mobileNumber: data.mobileNumber,
       isActive: data.isActive,
+      expiresIn: data.expiresIn,
+    });
+  }
+
+  static fromProfileResponse(data) {
+    return new UserModel({
+      id: data.id,
+      uuid: data.uuid,
+      fullName: data.fullName,
+      email: data.email,
+      mobileNumber: data.mobileNumber,
+      emailVerified: data.emailVerified,
+      mobileVerified: data.mobileVerified,
+      accountStatus: data.accountStatus,
+      role: data.role?.name ?? "CUSTOMER",
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
-      username: data.username,
-      role: data.role,
-      uuid: data.uuid,
-      username: data.username,
     });
   }
 
   static fromStorage(data) {
     return new UserModel({
-      expiresIn: data.expiresIn,
-      userId: data.userId,
-      name: data.name,
+      id: data.id,
+      uuid: data.uuid,
+      fullName: data.fullName,
       email: data.email,
       mobileNumber: data.mobileNumber,
       isActive: data.isActive,
-      username: data.username,
+      emailVerified: data.emailVerified,
+      mobileVerified: data.mobileVerified,
+      accountStatus: data.accountStatus,
       role: data.role,
       createdAt: data.createdAt,
       updatedAt: data.updatedAt,
-      uuid: data.uuid,
-    });
-  }
-  static fromVerifyOtpResponse(data) {
-    return new UserModel({
-      userId: data.userId,
-      email: data.email,
-      mobileNumber: data.mobileNumber,
-      isActive: data.isActive,
       expiresIn: data.expiresIn,
-    });
-  }
-  static fromGetMyProfileResponse(data) {
-    return new UserModel({
-      userId: data.userId,
-      name: data.name,
-      email: data.email,
-      mobileNumber: data.mobileNumber,
-      isActive: data.isActive,
-      createdAt: data.createdAt,
-      updatedAt: data.updatedAt,
-      username: data.username,
-      role: data.role,
-      uuid: data.uuid,
-      username: data.username,
     });
   }
 }
