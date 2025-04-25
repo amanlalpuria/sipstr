@@ -91,7 +91,19 @@ export const savedAddresses = [
   {
     id: "3",
     type: "other",
-    label: "Sturbridge Drive",
+    label: "Glenview Drive",
     address: "28 Glenview Drive, Edison, NJ 08854, USA",
+  },
+  {
+    id: "4",
+    type: "other",
+    label: "Nimmo Drive",
+    address: "208 Nimmo Drive, Oldbridge, NJ 08845, USA",
+  },
+  {
+    id: "5",
+    type: "other",
+    label: "Beaufin Court",
+    address: "118 Beaufin Ct, Westfield, NJ 08876, USA",
   },
 ];

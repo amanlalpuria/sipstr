@@ -4,6 +4,7 @@ import AppNavigator from "./navigations/Navigation";
 import Toast from "react-native-toast-message";
 import { LoaderProvider } from "./Utils/LoaderContext";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import BottomTabs from "./components/BottomTabs";
 
 export default function App() {
   //configure Fonts
@@ -13,7 +14,6 @@ export default function App() {
     "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
     "Poppins-Medium": require("./assets/fonts/Poppins-Medium.ttf"),
     "ReggaeOne-Regular": require("./assets/fonts/ReggaeOne-Regular.ttf"),
-
     "ArefRuqaaInk-Bold": require("./assets/fonts/ArefRuqaaInk-Bold.ttf"),
     "ArefRuqaaInk-Regular": require("./assets/fonts/ArefRuqaaInk-Regular.ttf"),
   });

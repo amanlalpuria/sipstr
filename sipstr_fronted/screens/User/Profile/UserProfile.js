@@ -51,7 +51,7 @@ const UserProfile = ({ navigation }) => {
     var email = "";
     var mobileNumber = "";
 
-    if (!name || !emailOrPhone || !password || !confirmPwd) {
+    if (!name || !emailOrPhone) {
       Utils.showToast("All fields are required.", "error");
       return;
     }

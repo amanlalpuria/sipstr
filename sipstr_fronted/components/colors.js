@@ -10,4 +10,5 @@ export const colors = {
   storeDetailsBoxColor: "#99A0AC",
   grayText: "#9CA3AF",
   lightOrange: "#FFD8C8",
+  inActiveTabColor: "#6B7280",
 };
