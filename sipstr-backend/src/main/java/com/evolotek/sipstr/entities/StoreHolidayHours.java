@@ -3,6 +3,8 @@ package com.evolotek.sipstr.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -43,8 +45,8 @@ public class StoreHolidayHours {
     public StoreHolidayHours(Store store, LocalDate holidayDate) {
         this.store = store;
         this.holidayDate = holidayDate;
-        this.openingTime = LocalTime.of(0, 0); // 00:00:00 (midnight)
-        this.closingTime = LocalTime.of(23, 59, 59); // 23:59:59
+        this.openingTime = LocalTime.parse("00:00:00"); // 24 hours open
+        this.closingTime = LocalTime.parse("23:59:59"); // 24 hours close
         this.isClosed = true;
     }
 }

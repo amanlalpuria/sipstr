@@ -1,5 +1,6 @@
 package com.evolotek.sipstr.controllers;
 
+import com.evolotek.sipstr.dtos.*;
 import com.evolotek.sipstr.entities.CartItem;
 import com.evolotek.sipstr.services.CartService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,14 +35,11 @@ public class CartController {
             @ApiResponse(responseCode = "401", description = "User not authenticated")
     })
     @PostMapping("/add-item")
-    public ResponseEntity<CartItem> addCartItem(
+    public ResponseEntity<StatusResponseDTO> addCartItem(
             @Parameter(description = "User ID", example = "1") @RequestParam Long userId,
-            @Parameter(description = "Store Inventory ID", example = "100") @RequestParam Long storeInventoryId,
-            @Parameter(description = "Quantity of the item", example = "2") @RequestParam Integer quantity,
-            @Parameter(description = "Optional special instructions") @RequestParam(required = false) String specialInstructions) {
-
-        CartItem cartItem = cartService.addCartItem(userId, storeInventoryId, quantity, specialInstructions);
-        return ResponseEntity.status(HttpStatus.CREATED).body(cartItem);
+        @RequestBody AddToCartRequestDTO requestDTO) {
+        StatusResponseDTO statusResponseDTO = cartService.addCartItem(userId,  requestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(statusResponseDTO);
     }
 
     @Operation(
@@ -54,15 +52,10 @@ public class CartController {
             @ApiResponse(responseCode = "401", description = "User not authenticated")
     })
     @PostMapping("/batch-add")
-    public ResponseEntity<List<CartItem>> batchAddCartItems(
+    public ResponseEntity<BatchCartItemResponseDTO> batchAddCartItems(
             @Parameter(description = "User ID", example = "1") @RequestParam Long userId,
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "List of cart items",
-                    required = true,
-                    content = @Content(schema = @Schema(implementation = CartItem.class))
-            ) @RequestBody List<CartItem> cartItems) {
-
-        return ResponseEntity.ok(cartService.batchAddCartItems(userId, cartItems));
+            @RequestBody List<AddToCartRequestDTO> requests) {
+        return ResponseEntity.ok(cartService.batchUpdateCartItems(userId, requests));
     }
 
     @Operation(
@@ -75,13 +68,11 @@ public class CartController {
             @ApiResponse(responseCode = "401", description = "User not authenticated")
     })
     @PutMapping("/update-item/{cartItemId}")
-    public ResponseEntity<CartItem> updateCartItem(
+    public ResponseEntity<CartItemResponseDTO> updateCartItem(
             @Parameter(description = "Cart Item ID", example = "10") @PathVariable Long cartItemId,
-            @Parameter(description = "Updated quantity", example = "3") @RequestParam Integer quantity,
-            @Parameter(description = "Updated special instructions") @RequestParam(required = false) String specialInstructions) {
-
-        CartItem updatedItem = cartService.updateCartItem(cartItemId, quantity, specialInstructions);
-        return ResponseEntity.ok(updatedItem);
+            @RequestBody UpdateCartItemRequestDTO request) {
+        CartItemResponseDTO cartResponseDTO = cartService.updateCartItem(cartItemId, request);
+        return ResponseEntity.ok(cartResponseDTO);
     }
 
     @Operation(
@@ -94,29 +85,16 @@ public class CartController {
             @ApiResponse(responseCode = "401", description = "User not authenticated")
     })
     @DeleteMapping("/remove-item/{cartItemId}")
-    public ResponseEntity<Void> removeCartItem(
+    public ResponseEntity<StatusResponseDTO> removeCartItem(
             @Parameter(description = "Cart Item ID", example = "10") @PathVariable Long cartItemId) {
-        cartService.removeCartItem(cartItemId);
-        return ResponseEntity.noContent().build();
+        StatusResponseDTO statusResponseDTO  =  cartService.removeCartItem(cartItemId);
+        return ResponseEntity.ok(statusResponseDTO);
     }
 
-    @Operation(
-            summary = "Batch remove multiple cart items",
-            description = "Removes multiple items from the user's cart."
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "204", description = "Items successfully removed"),
-            @ApiResponse(responseCode = "404", description = "One or more cart items not found"),
-            @ApiResponse(responseCode = "401", description = "User not authenticated")
-    })
-    @DeleteMapping("/batch-remove")
-    public ResponseEntity<Void> batchRemoveCartItems(
-            @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    description = "List of Cart Item IDs to remove",
-                    required = true,
-                    content = @Content(schema = @Schema(implementation = Long.class))
-            ) @RequestBody List<Long> cartItemIds) {
-        cartService.batchRemoveCartItems(cartItemIds);
-        return ResponseEntity.noContent().build();
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<CartResponseDTO> getCartItems(@PathVariable Long userId) {
+        CartResponseDTO response = cartService.getCartByUserId(userId);
+        return ResponseEntity.ok(response);
     }
 }

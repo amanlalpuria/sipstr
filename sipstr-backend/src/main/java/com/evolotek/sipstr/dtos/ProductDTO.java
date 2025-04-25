@@ -1,7 +1,5 @@
 package com.evolotek.sipstr.dtos;
 
-import com.evolotek.sipstr.entities.Category;
-import com.evolotek.sipstr.entities.ProductVariant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

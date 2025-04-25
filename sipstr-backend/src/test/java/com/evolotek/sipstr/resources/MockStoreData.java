@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class MockStoreData {
                 .uuid(UUID.randomUUID())
                 .storeName("Sips & Bites")
                 .corporationName("Sips & Bites Corp")
-                .ein(Long.valueOf(123456789))
+                .ein(Integer.valueOf(123456789))
                 .licenseNumber("987654321")
                 .description("A cozy neighborhood café offering organic beverages and snacks.")
                 .address(address)
@@ -72,8 +73,8 @@ public class MockStoreData {
                     .id((long) day + 1)
                     .store(store)
                     .dayOfWeek(day)
-                    .openingTime(Time.valueOf("09:00"))
-                    .closingTime(Time.valueOf("18:00"))
+                    .openingTime(LocalTime.parse("09:00"))
+                    .closingTime(LocalTime.parse("18:00"))
                     .isClosed(false)
                     .createdAt(LocalDateTime.now())
                     .updatedAt(LocalDateTime.now())

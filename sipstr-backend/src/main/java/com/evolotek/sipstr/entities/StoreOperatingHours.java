@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.sql.Time;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "store_operating_hours")
@@ -28,11 +29,11 @@ public class StoreOperatingHours {
     @Column(name = "day_of_week", nullable = false)
     private Integer dayOfWeek; // 0 = Sunday, 6 = Saturday
 
-    @Column(name = "opening_time", nullable = false)
-    private Time openingTime;
-
-    @Column(name = "closing_time", nullable = false)
+    @Column(name = "closing_time")
     private Time closingTime;
+
+    @Column(name = "opening_time")
+    private Time openingTime;
 
     @Column(name = "is_closed", nullable = false)
     private Boolean isClosed = false;

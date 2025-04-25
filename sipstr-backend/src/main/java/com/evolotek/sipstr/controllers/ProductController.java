@@ -2,6 +2,7 @@ package com.evolotek.sipstr.controllers;
 
 import com.evolotek.sipstr.dtos.ProductDTO;
 import com.evolotek.sipstr.dtos.ProductVariantDTO;
+import com.evolotek.sipstr.dtos.VariantInventoryDTO;
 import com.evolotek.sipstr.entities.Product;
 import com.evolotek.sipstr.services.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
