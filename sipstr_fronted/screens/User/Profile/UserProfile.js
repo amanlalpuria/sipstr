@@ -10,7 +10,7 @@ import { useLoader } from "../../../Utils/LoaderContext";
 import { getUserData, saveUserData } from "../../../Utils/StorageHelper";
 import { getMyProfile } from "../../../viewmodels/userViewModel";
 
-const UserProfile = ({ navigation }) => {
+const EditProfile = ({ navigation }) => {
   const [nameInput, setNameInput] = useState("");
   const [emailPhoneInput, setEmailPhoneInput] = useState("");
   const { setLoading } = useLoader();
@@ -138,4 +138,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserProfile;
+export default EditProfile;

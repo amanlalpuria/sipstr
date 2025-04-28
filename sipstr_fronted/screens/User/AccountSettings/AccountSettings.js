@@ -33,7 +33,11 @@ const AccountSettings = ({ navigation }) => {
         navigation.navigate("Addresses");
         break;
       case "wishlist":
+        navigation.navigate("NoLocationSupport");
+        break;
       case "security":
+        navigation.navigate("OrderTracking");
+        break;
       case "referral":
       case "faq":
       case "rate":
@@ -87,7 +91,7 @@ const AccountSettings = ({ navigation }) => {
                 : "+1 (xxx) xxx-xxxx"}
             </CommonTextView>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("UserProfile")}>
+          <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
             <Ionicons name="pencil" size={20} color={colors.orange} />
           </TouchableOpacity>
         </View>

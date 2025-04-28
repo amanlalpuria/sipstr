@@ -9,16 +9,14 @@ import {
   StyleSheet,
 } from "react-native";
 import * as Location from "expo-location";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import TopBar from "../../components/CommonTopBar";
 import CommonTextView from "../../components/CommonTextView";
-import CommonTwoButtonAlertBox from "../../components/CommonTwoButtonAlertBox";
 import { categories, featuredData, topPicksData } from "../../Utils/StaticData";
 import { openSettings } from "expo-linking";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../../components/colors";
 
-export default function HomeScreen({ navigation }) {
+const HomeScreen = ({ navigation }) => {
   const [activeCategory, setActiveCategory] = useState("all");
   const [city, setCity] = useState("Loading...");
   const [showLocation, setShowLocation] = useState(true);
@@ -41,7 +39,7 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+    <SafeAreaView style={styles.safeArea}>
       {showAlert && (
         <CommonAlertBox
           visible={true}
@@ -154,9 +152,13 @@ export default function HomeScreen({ navigation }) {
       </ScrollView>
     </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
   searchBar: {
     flexDirection: "row",
     alignItems: "center",
@@ -267,3 +269,4 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
 });
+export default HomeScreen;
