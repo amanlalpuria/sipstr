@@ -6,7 +6,7 @@ import LoginScreen from "../screens/User/Login/LoginScreen";
 import SignUpScreen from "../screens/User/Registration/SignUpScreen";
 import HomeScreen from "../screens/Home/HomeScreen";
 import SorryScreen from "../screens/WelcomeScreen/SorryScreen";
-import AddressesScreen from "../screens/User/AccountSettings/AddressesScreen";
+import AddressesScreen from "../screens/User/Address/AddressesScreen";
 import ForgotPasswordScreen from "../screens/User/ForgotPassword/ForgotPassword";
 import BottomTabs from "../components/BottomTabs";
 import AccountSettings from "../screens/User/AccountSettings/AccountSettings";
@@ -16,6 +16,9 @@ import CartScreen from "../screens/Cart/CartScreen";
 import EditProfile from "../screens/User/Profile/UserProfile";
 import NotLocationSupportScreen from "../screens/Home/NoLocationSupport";
 import OrderTrackingScreen from "../screens/OrderTracking/OrderTracking";
+import AddAddressScreen from "../screens/User/Address/AddAddressScreen";
+import WishListScreen from "../screens/User/WishList/WishListScreen";
+import OrderHistoryScreen from "../screens/OrderTracking/OrderHistory";
 
 const Stack = createStackNavigator();
 
@@ -40,7 +43,9 @@ const AppNavigator = () => {
           component={NotLocationSupportScreen}
         />
         <Stack.Screen name="OrderTracking" component={OrderTrackingScreen} />
-
+        <Stack.Screen name="AddAddress" component={AddAddressScreen} />
+        <Stack.Screen name="WishList" component={WishListScreen} />
+        <Stack.Screen name="OrderHistory" component={OrderHistoryScreen} />
         {/* Bottom Tab Container */}
         <Stack.Screen name="MainTabs" component={BottomTabs} />
       </Stack.Navigator>

@@ -24,7 +24,7 @@ const AddressesScreen = ({ navigation }) => {
   const otherAddresses = savedAddresses.filter((addr) => addr.type !== "home");
 
   const handleAddLabel = () => {
-    CommonUtils.showToast("Add New Address clicked");
+    navigation.navigate("AddAddress");
   };
 
   const handleEditAddress = (id) => {
@@ -109,7 +109,7 @@ const AddressesScreen = ({ navigation }) => {
             onPress={handleAddLabel}
           >
             <CommonTextView style={styles.addLabelText}>
-              + Add Label
+              + Add Address
             </CommonTextView>
           </TouchableOpacity>
         </View>
@@ -153,6 +153,7 @@ const AddressesScreen = ({ navigation }) => {
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => renderAddressItem(item)}
             scrollEnabled={false}
+            removeClippedSubviews={false}
           />
         </View>
       </ScrollView>

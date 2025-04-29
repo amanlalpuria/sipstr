@@ -33,11 +33,12 @@ const AccountSettings = ({ navigation }) => {
         navigation.navigate("Addresses");
         break;
       case "wishlist":
-        navigation.navigate("NoLocationSupport");
+        navigation.navigate("WishList");
+        break;
+      case "orders":
+        navigation.navigate("OrderHistory");
         break;
       case "security":
-        navigation.navigate("OrderTracking");
-        break;
       case "referral":
       case "faq":
       case "rate":
@@ -165,7 +166,6 @@ const AccountSettings = ({ navigation }) => {
   );
 };
 
-// 🔁 Reusable row
 const LinkRow = ({ icon, label, onPress }) => (
   <TouchableOpacity style={styles.linkRow} onPress={onPress}>
     <Ionicons name={icon} size={20} color="#333" style={styles.menuIcon} />
