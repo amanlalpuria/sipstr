@@ -15,10 +15,11 @@ import VerifyOTPScreen from "../screens/User/OTP/VerifyOTP";
 import CartScreen from "../screens/Cart/CartScreen";
 import EditProfile from "../screens/User/Profile/UserProfile";
 import NotLocationSupportScreen from "../screens/Home/NoLocationSupport";
-import OrderTrackingScreen from "../screens/OrderTracking/OrderTracking";
 import AddAddressScreen from "../screens/User/Address/AddAddressScreen";
 import WishListScreen from "../screens/User/WishList/WishListScreen";
-import OrderHistoryScreen from "../screens/OrderTracking/OrderHistory";
+import OrderHistoryScreen from "../screens/Orders/OrderHistory";
+import OrderTrackingScreen from "../screens/Orders/OrderTracking";
+import OrderHistoryDetailsScreen from "../screens/Orders/OrderHistoryDetailsScreen";
 
 const Stack = createStackNavigator();
 
@@ -46,6 +47,10 @@ const AppNavigator = () => {
         <Stack.Screen name="AddAddress" component={AddAddressScreen} />
         <Stack.Screen name="WishList" component={WishListScreen} />
         <Stack.Screen name="OrderHistory" component={OrderHistoryScreen} />
+        <Stack.Screen
+          name="OrderHistoryDetailsScreen"
+          component={OrderHistoryDetailsScreen}
+        />
         {/* Bottom Tab Container */}
         <Stack.Screen name="MainTabs" component={BottomTabs} />
       </Stack.Navigator>

@@ -12,7 +12,8 @@ import { getMyProfile } from "../../../viewmodels/userViewModel";
 
 const EditProfile = ({ navigation }) => {
   const [nameInput, setNameInput] = useState("");
-  const [emailPhoneInput, setEmailPhoneInput] = useState("");
+  const [emailInput, setEmailInput] = useState("");
+  const [PhoneInput, setPhoneInput] = useState("");
   const { setLoading } = useLoader();
 
   const [userData, setUserData] = useState(null);
@@ -21,18 +22,25 @@ const EditProfile = ({ navigation }) => {
     const loadUser = async () => {
       setLoading(true);
       const localUser = await getUserData();
-      console.log("Local :  " + localUser.fullName);
-      setNameInput(localUser.fullName);
-      setEmailPhoneInput(localUser?.email ?? localUser.mobileNumber);
-      setUserData(localUser);
+
+      if (localUser) {
+        console.log("Local :  " + localUser.fullName);
+        setNameInput(localUser.fullName);
+        setEmailInput(localUser?.email);
+        setPhoneInput(localUser?.mobileNumber);
+        setUserData(localUser);
+      } else {
+        console.log("Local user not found");
+      }
 
       try {
         const result = await getMyProfile();
-        if (result.success) {
+        if (result.success && result.data) {
           console.log(result.data);
           setUserData(result.data);
           setNameInput(result.data.fullName);
-          setEmailPhoneInput(result.data?.email ?? result.data.mobileNumber);
+          setEmailInput(result.data?.email);
+          setPhoneInput(result.data.mobileNumber);
           await saveUserData(result.data);
         }
       } catch (error) {
@@ -47,7 +55,7 @@ const EditProfile = ({ navigation }) => {
 
   const validateAndSubmit = () => {
     const name = nameInput.trim();
-    const emailOrPhone = emailPhoneInput.trim();
+    const emailOrPhone = emailInput.trim();
     var email = "";
     var mobileNumber = "";
 
@@ -95,11 +103,20 @@ const EditProfile = ({ navigation }) => {
           style={styles.input}
         />
         <CommonTextField
-          placeholder="Enter Mobile Number/Email"
-          value={emailPhoneInput}
-          onChangeText={setEmailPhoneInput}
+          placeholder="Enter Email"
+          value={emailInput}
+          onChangeText={setEmailInput}
           returnKeyType="done"
           inputMode="text"
+          style={styles.input}
+        />
+
+        <CommonTextField
+          placeholder="Enter Mobile Number"
+          value={PhoneInput}
+          onChangeText={setPhoneInput}
+          returnKeyType="done"
+          inputMode="phone-pad"
           style={styles.input}
         />
 

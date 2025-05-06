@@ -17,6 +17,7 @@ const WelcomeScreen = ({ navigation }) => {
       index: 0,
       routes: [{ name: screenName }],
     });
+    //navigation.navigate("AccountSettings");
   };
   return (
     <SafeAreaView style={styles.container}>

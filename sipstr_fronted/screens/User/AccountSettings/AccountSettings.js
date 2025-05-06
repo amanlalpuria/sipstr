@@ -82,15 +82,20 @@ const AccountSettings = ({ navigation }) => {
           />
           <View style={styles.profileInfo}>
             <CommonTextView style={styles.userName}>
-              {userData?.name || "Name"}
+              {userData?.fullName || "Name"}
             </CommonTextView>
             <CommonTextView style={styles.userPhone}>
+              {userData?.mobileNumber
+                ? `+1 ${userData?.mobileNumber}`
+                : "+1 (xxx) xxx-xxxx"}
+            </CommonTextView>
+            {/* <CommonTextView style={styles.userPhone}>
               {userData?.email
                 ? userData.email
                 : userData?.mobileNumber
                 ? `+1 ${userData.mobileNumber}`
                 : "+1 (xxx) xxx-xxxx"}
-            </CommonTextView>
+            </CommonTextView> */}
           </View>
           <TouchableOpacity onPress={() => navigation.navigate("EditProfile")}>
             <Ionicons name="pencil" size={20} color={colors.orange} />
@@ -107,6 +112,11 @@ const AccountSettings = ({ navigation }) => {
             icon="heart-outline"
             label="Wish List"
             onPress={() => handleOptionPress("wishlist")}
+          />
+          <LinkRow
+            icon="heart-outline"
+            label="Your Orders"
+            onPress={() => handleOptionPress("orders")}
           />
           <LinkRow
             icon="shield-outline"

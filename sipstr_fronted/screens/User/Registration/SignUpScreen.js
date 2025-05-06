@@ -13,54 +13,47 @@ import { signUpUser } from "../../../viewmodels/userViewModel";
 
 const SignUpScreen = ({ navigation }) => {
   const [nameInput, setNameInput] = useState("");
-  const [emailPhoneInput, setEmailPhoneInput] = useState("");
+  const [emailInput, setEmailInput] = useState("");
+  const [PhoneInput, setPhoneInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
   const [confirmPwdInput, setConfirmPwdInput] = useState("");
   const { setLoading } = useLoader();
 
   const validateAndSignUp = () => {
     const name = nameInput.trim();
-    const emailOrPhone = emailPhoneInput.trim();
+    const email = emailInput.trim();
     const password = passwordInput.trim();
     const confirmPwd = confirmPwdInput.trim();
-    var otpSignup = false;
-    var email = "";
-    var mobileNumber = "";
+    const mobileNumber = PhoneInput.trim();
 
-    if (!name || !emailOrPhone || !password || !confirmPwd) {
+    if (!name || !email || !mobileNumber || !password || !confirmPwd) {
       Utils.showToast("All fields are required.", "error");
       return;
     }
 
-    if (Utils.isEmailValid(emailOrPhone)) {
-      email = emailOrPhone;
-    } else if (Utils.isPhoneValid(emailOrPhone)) {
-      mobileNumber = emailOrPhone;
-      otpSignup = true;
-    } else {
-      Utils.showToast("Enter a valid email or 10-digit phone number.", "error");
+    if (!Utils.isEmailValid(email)) {
+      Utils.showToast("Enter a valid email", "error");
       return;
-    }
-
-    if (!Utils.isPasswordValid(password)) {
+    } else if (!Utils.isPhoneValid(mobileNumber)) {
+      Utils.showToast("Enter a valid 10-digit USA phone number.", "error");
+      return;
+    } else if (!Utils.isPasswordValid(password)) {
       Utils.showToast(
         "Password must include uppercase, lowercase, digit & special char.",
         "error"
       );
       return;
-    }
-
-    if (password !== confirmPwd) {
+    } else if (password !== confirmPwd) {
       Utils.showToast("Passwords do not match.", "error");
       return;
     }
 
     const request = {
+      email: email,
       password: password,
       fullName: name,
+      mobileNumber: mobileNumber,
       roleEnum: "CUSTOMER",
-      valid: true,
-      ...(email ? { email } : { mobileNumber }),
     };
     handleSignUp(request);
   };
@@ -98,11 +91,19 @@ const SignUpScreen = ({ navigation }) => {
         style={styles.input}
       />
       <CommonTextField
-        placeholder="Enter Mobile Number/Email"
-        value={emailPhoneInput}
-        onChangeText={setEmailPhoneInput}
+        placeholder="Enter Email"
+        value={emailInput}
+        onChangeText={setEmailInput}
         returnKeyType="next"
         inputMode="text"
+        style={styles.input}
+      />
+      <CommonTextField
+        placeholder="Enter Mobile Number"
+        value={PhoneInput}
+        onChangeText={setPhoneInput}
+        returnKeyType="next"
+        inputMode="phone-pad"
         style={styles.input}
       />
       <CommonTextField
